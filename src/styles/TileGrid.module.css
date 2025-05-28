@@ -1,0 +1,106 @@
+.tileGrid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--main-color);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+}
+
+.sortControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.sortControls select {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.viewControls {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.gridViewBtn,
+.listViewBtn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gridViewBtn:hover,
+.listViewBtn:hover {
+  background: var(--gray-light);
+}
+
+.gridViewBtn.active,
+.listViewBtn.active {
+  background: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+}
+
+.canvasContainer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--main-color);
+}
+
+.canvasContainer canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--gray-medium);
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+  
+  .sortControls {
+    justify-content: center;
+  }
+  
+  .viewControls {
+    justify-content: center;
+  }
+}

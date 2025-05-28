@@ -1,0 +1,153 @@
+.studentProjectPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+}
+
+.backLink {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  transition: var(--transition);
+}
+
+.backLink:hover {
+  color: var(--highlight-color);
+}
+
+.header h2 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  flex: 1;
+  min-height: calc(100vh - 60px);
+}
+
+.projectsPanel {
+  padding: var(--spacing-lg);
+  border-right: var(--border-width) solid var(--border-color);
+  overflow-y: auto;
+  background: var(--main-color);
+}
+
+.projectsPanel h2 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.projectGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.projectLink {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+.projectLink:hover {
+  transform: translateX(4px);
+}
+
+.projectDetails {
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  background: var(--main-color);
+}
+
+.projectHeader {
+  margin-bottom: var(--spacing-xl);
+}
+
+.projectHeader h2 {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.3;
+}
+
+.projectMeta {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: 12px;
+  color: var(--gray-medium);
+}
+
+.projectDescription {
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.studentInfo {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--gray-light);
+  border: var(--border-width) solid var(--border-color);
+}
+
+.studentInfo h3 {
+  margin-bottom: var(--spacing-md);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.studentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: 13px;
+}
+
+.artifactsSection h3 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.noProject {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--gray-medium);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  
+  .projectsPanel {
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--border-color);
+    max-height: 40vh;
+  }
+  
+  .projectGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}

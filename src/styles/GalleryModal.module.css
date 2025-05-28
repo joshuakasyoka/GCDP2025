@@ -1,0 +1,233 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-lg);
+}
+
+.modalContent {
+  background: var(--main-color);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 1200px;
+  height: 800px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.imageSection {
+  position: relative;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mainImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--gray-medium);
+  font-size: 14px;
+}
+
+.imageNavigation {
+  position: absolute;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.7);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 20px;
+  color: white;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  transition: var(--transition);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.imageCounter {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.metadataSection {
+  padding: var(--spacing-xl);
+  overflow-y: auto;
+  border-left: var(--border-width) solid var(--border-color);
+}
+
+.artifactHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+}
+
+.artifactHeader h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.artifactNumber {
+  font-size: 12px;
+  color: var(--gray-medium);
+  font-weight: 500;
+}
+
+.artifactDescription {
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.studentInfo,
+.projectInfo {
+  margin-bottom: var(--spacing-lg);
+}
+
+.studentInfo h3,
+.projectInfo h3 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-xs);
+  color: var(--gray-medium);
+}
+
+.studentInfo p,
+.projectInfo p {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tagsSection {
+  margin-bottom: var(--spacing-xl);
+}
+
+.tagGroup {
+  margin-bottom: var(--spacing-lg);
+}
+
+.tagGroup h4 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-medium);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.tag {
+  background: var(--highlight-color);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.metadata {
+  border-top: var(--border-width) solid var(--border-color);
+  padding-top: var(--spacing-lg);
+}
+
+.metadataItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+  font-size: 12px;
+}
+
+.metadataItem strong {
+  color: var(--gray-medium);
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .modalContent {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    width: 95vw;
+    height: 95vh;
+  }
+  
+  .metadataSection {
+    border-left: none;
+    border-top: var(--border-width) solid var(--border-color);
+    max-height: 40vh;
+  }
+}

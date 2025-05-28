@@ -1,0 +1,88 @@
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
+
+:root {
+  --highlight-color: #78E752;
+  --main-color: #ffffff;
+  --text-color: #000000;
+  --border-color: #e5e5e5;
+  --gray-light: #f8f8f8;
+  --gray-medium: #cccccc;
+  --transition: 300ms ease;
+  --border-width: 0.5px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-color);
+  background-color: var(--main-color);
+  line-height: 1.6;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+h1 { font-size: 18px; }
+h2 { font-size: 16px; }
+h3 { font-size: 14px; }
+h4 { font-size: 12px; }
+
+/* Utility classes */
+.highlight {
+  color: var(--highlight-color);
+}
+
+.border-thin {
+  border: var(--border-width) solid var(--border-color);
+}
+
+.transition {
+  transition: var(--transition);
+}
+
+/* Form elements */
+input, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition);
+}
+
+button:hover {
+  opacity: 0.7;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--highlight-color);
+}

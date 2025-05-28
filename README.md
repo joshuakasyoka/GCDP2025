@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Design Archive - Student Projects
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application for displaying and managing student design project archives with interactive tile-based interface.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Interactive tile grid with drag-and-drop functionality using P5.js
+- Search and filter system for artifacts by materials, themes, and techniques
+- Gallery modal for detailed artifact viewing
+- Student project pages with artifact collections
+- Responsive design with minimalist aesthetic
+- Color scheme: #78E752 (highlight), white (main)
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm test`
+## Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `/components` - React components
+- `/data` - Sample student and project data
+- `/styles` - CSS modules for styling
+- `/utils` - Utility functions for search and filtering
+- `/hooks` - Custom React hooks
 
-### `npm run build`
+## Design System
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Font: General Sans from Fontshare
+- Highlight Color: #78E752
+- Border Width: 0.5px
+- Spacing: 8px grid system
+- Transitions: 300ms ease
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Navigation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `/` or `/archive` - Main archive page with searchable tiles
+- `/students/:studentId` - Individual student project page
+- `/students/:studentId/:projectId` - Direct project link
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with React, React Router, and P5.js for interactive visualizations.
