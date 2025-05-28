@@ -32,7 +32,7 @@ const StudentProjectPage = () => {
         <Link to="/archive" className={styles.backLink}>
           ← BACK TO ARCHIVE
         </Link>
-        <span>{student.name.display_name}</span>
+        <h2>{student.name.display_name}</h2>
       </header>
 
       <div className={styles.mainContent}>

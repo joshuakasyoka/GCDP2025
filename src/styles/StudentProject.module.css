@@ -94,7 +94,6 @@
   display: flex;
   gap: var(--spacing-md);
   font-size: 12px;
-  color: var(--gray-medium);
 }
 
 .projectDescription {
@@ -107,7 +106,7 @@
 
 .studentInfo {
   padding: var(--spacing-lg);
-  background: var(--gray-light);
+  background: var(--white);
   border: var(--border-width) solid var(--border-color);
   height: 100%;
 }
@@ -128,7 +127,7 @@
 
 .artifactsSection {
   padding: var(--spacing-lg);
-  background: var(--gray-light);
+  background: var(--white);
   border: var(--border-width) solid var(--border-color);
   height: 100%;
 }
