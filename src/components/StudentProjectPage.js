@@ -10,6 +10,7 @@ const StudentProjectPage = () => {
   const { studentId, projectId } = useParams();
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const student = studentsData.students.find(s => s.student_id === studentId);
 
@@ -32,7 +33,7 @@ const StudentProjectPage = () => {
         <Link to="/archive" className={styles.backLink}>
           ← BACK TO ARCHIVE
         </Link>
-        <h2>{student.name.display_name}</h2>
+        <span>{student.name.display_name}</span>
       </header>
 
       <div className={styles.mainContent}>
@@ -69,7 +70,7 @@ const StudentProjectPage = () => {
                 <p>{selectedProject.description}</p>
               </div>
 
-              <div className={styles.studentInfo}>
+              <div className={styles.artifactsSection}>
                 <h3>STUDENT INFORMATION</h3>
                 <div className={styles.studentDetails}>
                   <p><strong>Program:</strong> {student.program}</p>
@@ -85,6 +86,30 @@ const StudentProjectPage = () => {
                   onArtifactClick={setSelectedArtifact}
                 />
               </div>
+
+              {selectedProject.project_photos && selectedProject.project_photos.length > 0 && (
+                <>
+                  <div className={styles.projectPhotos}>
+                    <h3>PROJECT PHOTOS</h3>
+                    <div className={styles.photoGrid}>
+                      {selectedProject.project_photos.map(photo => (
+                        <div 
+                          key={photo.id} 
+                          className={styles.photoItem}
+                          onClick={() => setSelectedPhoto(photo)}
+                        >
+                          <img 
+                            src={photo.url} 
+                            alt={photo.caption}
+                            className={styles.projectPhoto}
+                          />
+                          <p className={styles.photoCaption}>{photo.caption}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           ) : (
             <div className={styles.noProject}>
@@ -102,6 +127,17 @@ const StudentProjectPage = () => {
             projectTitle: selectedProject?.title
           }}
           onClose={() => setSelectedArtifact(null)}
+        />
+      )}
+
+      {selectedPhoto && (
+        <GalleryModal
+          artifact={{
+            ...selectedPhoto,
+            student: student.name.display_name,
+            projectTitle: selectedProject?.title
+          }}
+          onClose={() => setSelectedPhoto(null)}
         />
       )}
     </div>

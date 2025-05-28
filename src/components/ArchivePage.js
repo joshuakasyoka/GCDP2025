@@ -41,7 +41,7 @@ const ArchivePage = () => {
         </div>
         <div className={styles.headerRight}>
           <span>ARCHIVE DISPLAY</span>
-          <span>MA GCDP</span>
+          <span>GCDP 2025</span>
         </div>
       </header>
       

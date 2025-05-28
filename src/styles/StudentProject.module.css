@@ -2,6 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header {
@@ -11,6 +12,9 @@
   padding: var(--spacing-md) var(--spacing-lg);
   border-bottom: var(--border-width) solid var(--border-color);
   background: var(--main-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .backLink {
@@ -34,7 +38,8 @@
   display: grid;
   grid-template-columns: 300px 1fr;
   flex: 1;
-  min-height: calc(100vh - 60px);
+  height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 .projectsPanel {
@@ -42,6 +47,7 @@
   border-right: var(--border-width) solid var(--border-color);
   overflow-y: auto;
   background: var(--main-color);
+  height: 100%;
 }
 
 .projectsPanel h2 {
@@ -73,8 +79,9 @@
   background: var(--main-color);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   gap: var(--spacing-lg);
+  height: 100%;
 }
 
 .projectHeader {
@@ -139,6 +146,48 @@
   letter-spacing: 0.1em;
 }
 
+.projectPhotos {
+  grid-column: 1 / -1;
+  padding: var(--spacing-lg);
+  background: var(--white);
+  border: var(--border-width) solid var(--border-color);
+}
+
+.projectPhotos h3 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.photoItem {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.photoItem:hover {
+  transform: scale(1.02);
+}
+
+.projectPhoto {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border: var(--border-width) solid var(--border-color);
+}
+
+.photoCaption {
+  margin-top: var(--spacing-sm);
+  font-size: 12px;
+  color: var(--gray-medium);
+}
+
 .noProject {
   display: flex;
   align-items: center;
@@ -169,5 +218,9 @@
   .projectDetails {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+  }
+
+  .photoGrid {
+    grid-template-columns: 1fr;
   }
 }

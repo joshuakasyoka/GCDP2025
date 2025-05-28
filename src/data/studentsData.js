@@ -22,6 +22,22 @@ export const studentsData = {
           submission_date: "2024-12-15T23:59:00Z",
           grade: "A-",
           status: "completed",
+          project_photos: [
+            {
+              id: "photo_001",
+              url: "/images/circular-communities-1.jpg",
+              caption: "Community workshop exploring circular economy principles",
+              width: 1200,
+              height: 800
+            },
+            {
+              id: "photo_002",
+              url: "/images/circular-communities-2.jpg",
+              caption: "Prototype of resource sharing platform",
+              width: 1200,
+              height: 800
+            }
+          ],
           artifacts: [
             {
               artifact_id: "artifact_001",
@@ -526,6 +542,22 @@ export const studentsData = {
           description: "Creating an interactive digital archive that captures and presents diverse perspectives on artificial intelligence from London's communities, exploring how AI impacts different cultural and social groups.",
           course_code: "DESIGN401",
           semester: "Fall 2024",
+          project_photos: [
+            {
+              id: "photo_001",
+              url: "/StudentPhotos/GreenJosh/GJ-1.png",
+              caption: "Community workshop exploring circular economy principles",
+              width: 1200,
+              height: 800
+            },
+            {
+              id: "photo_002",
+              url: "/StudentPhotos/GreenJosh/GJ-2.png",
+              caption: "Prototype of resource sharing platform",
+              width: 1200,
+              height: 800
+            }
+          ],
           artifacts: [
             {
               artifact_id: "artifact_019",
@@ -543,6 +575,7 @@ export const studentsData = {
                 categories: ["web_design", "archive_design"]
               }
             },
+            
             {
               artifact_id: "artifact_020",
               title: "Community Engagement Documentation",
