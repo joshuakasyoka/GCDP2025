@@ -24,7 +24,7 @@
   color: var(--highlight-color);
 }
 
-.header h2 {
+.header span {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -71,10 +71,16 @@
   padding: var(--spacing-lg);
   overflow-y: auto;
   background: var(--main-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--spacing-lg);
 }
 
 .projectHeader {
-  margin-bottom: var(--spacing-xl);
+  grid-column: 1 / -1;
+  padding-bottom: var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .projectHeader h2 {
@@ -92,16 +98,18 @@
 }
 
 .projectDescription {
-  margin-bottom: var(--spacing-xl);
+  grid-column: 1 / -1;
+  padding-bottom: var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
   line-height: 1.6;
   font-size: 14px;
 }
 
 .studentInfo {
-  margin-bottom: var(--spacing-xl);
   padding: var(--spacing-lg);
   background: var(--gray-light);
   border: var(--border-width) solid var(--border-color);
+  height: 100%;
 }
 
 .studentInfo h3 {
@@ -118,6 +126,13 @@
   font-size: 13px;
 }
 
+.artifactsSection {
+  padding: var(--spacing-lg);
+  background: var(--gray-light);
+  border: var(--border-width) solid var(--border-color);
+  height: 100%;
+}
+
 .artifactsSection h3 {
   margin-bottom: var(--spacing-lg);
   font-size: 14px;
@@ -132,6 +147,7 @@
   height: 100%;
   color: var(--gray-medium);
   font-size: 14px;
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {
@@ -149,5 +165,10 @@
   .projectGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .projectDetails {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 }
