@@ -13,7 +13,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const tileSize = 200;
   const gridGap = 20;
   const canvasPadding = 40;
-  const randomGridSize = 50; // Tighter grid for random view
+  const overlapOffset = 20; // Amount to offset each tile in list view
 
   // Initialize tiles when artifacts change
   useEffect(() => {
@@ -33,13 +33,11 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           x = canvasPadding + (col * (tileSize + gridGap));
           y = canvasPadding + (row * (tileSize + gridGap));
         } else {
-          // Random view with tighter grid
-          const maxGridX = Math.floor((availableWidth - tileSize) / randomGridSize);
-          const maxGridY = Math.floor((availableHeight - tileSize) / randomGridSize);
-          const gridX = Math.floor(Math.random() * maxGridX);
-          const gridY = Math.floor(Math.random() * maxGridY);
-          x = canvasPadding + (gridX * randomGridSize);
-          y = canvasPadding + (gridY * randomGridSize);
+          // List view with organized overlapping
+          const baseX = canvasPadding;
+          const baseY = canvasPadding;
+          x = baseX + (index * overlapOffset);
+          y = baseY + (index * overlapOffset);
         }
 
         return {
@@ -50,13 +48,14 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           w: tileSize,
           h: tileSize,
           targetX: x,
-          targetY: y
+          targetY: y,
+          zIndex: index // Add zIndex property
         };
       });
 
       setTiles(newTiles);
     }
-  }, [artifacts, viewMode, tileSize, gridGap, canvasPadding, randomGridSize]);
+  }, [artifacts, viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
 
   const sketch = useCallback(p5 => {
     p5.setup = () => {
@@ -81,14 +80,28 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           p5.line(0, y, p5.width, y);
         }
       } else {
-        // Draw tighter grid lines for random view
+        // Draw diagonal grid lines for list view
         p5.stroke(240);
         p5.strokeWeight(0.5);
-        for (let x = canvasPadding; x < p5.width; x += randomGridSize) {
+        
+        // Calculate how many grid lines we need based on container size
+        const maxLines = Math.max(
+          Math.ceil((p5.width - canvasPadding) / overlapOffset),
+          Math.ceil((p5.height - canvasPadding) / overlapOffset)
+        );
+
+        // Draw diagonal grid lines
+        for (let i = 0; i < maxLines; i++) {
+          const x = canvasPadding + (i * overlapOffset);
+          const y = canvasPadding + (i * overlapOffset);
+          
+          // Draw horizontal and vertical lines
           p5.line(x, 0, x, p5.height);
-        }
-        for (let y = canvasPadding; y < p5.height; y += randomGridSize) {
           p5.line(0, y, p5.width, y);
+          
+          // Draw diagonal lines
+          p5.line(x, 0, 0, y);
+          p5.line(x, p5.height, p5.width, y);
         }
       }
     };
@@ -101,7 +114,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         );
       }
     };
-  }, [viewMode, tileSize, gridGap, canvasPadding, randomGridSize]);
+  }, [viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
 
   const handleMouseMove = useCallback(e => {
     if (!containerRef.current || !draggedTile) return;
@@ -121,7 +134,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           ? { 
               ...tile, 
               x: mouseX - draggedTile.offsetX, 
-              y: mouseY - draggedTile.offsetY
+              y: mouseY - draggedTile.offsetY,
+              zIndex: 1000 // Set highest z-index while dragging
             } 
           : tile
       )
@@ -161,29 +175,32 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
               ? { 
                   ...tile, 
                   x: canvasPadding + Math.round((tile.x - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
-                  y: canvasPadding + Math.round((tile.y - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap)
+                  y: canvasPadding + Math.round((tile.y - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
+                  zIndex: tile.id // Reset z-index
                 } 
               : tile
           )
         );
       } else {
-        // Snap to tighter grid in random view
-        setTiles(prevTiles => 
-          prevTiles.map(tile => 
+        // Snap to overlap offset in list view
+        setTiles(prevTiles => {
+          const index = prevTiles.findIndex(t => t.id === draggedTile.id);
+          return prevTiles.map(tile => 
             tile.id === draggedTile.id 
               ? { 
                   ...tile, 
-                  x: canvasPadding + Math.round((tile.x - canvasPadding) / randomGridSize) * randomGridSize,
-                  y: canvasPadding + Math.round((tile.y - canvasPadding) / randomGridSize) * randomGridSize
+                  x: canvasPadding + (index * overlapOffset),
+                  y: canvasPadding + (index * overlapOffset),
+                  zIndex: index // Reset z-index
                 } 
               : tile
-          )
-        );
+          );
+        });
       }
     }
     setDraggedTile(null);
     setIsDragging(false);
-  }, [draggedTile, viewMode, tileSize, gridGap, canvasPadding, randomGridSize]);
+  }, [draggedTile, viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
 
   const handleTileClick = useCallback((tile) => {
     // Only trigger click if we're not dragging
@@ -191,6 +208,26 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
       onTileClick(tile);
     }
   }, [isDragging, onTileClick]);
+
+  const handleTileHover = useCallback((tileId, isHovered) => {
+    if (isHovered) {
+      setTiles(prevTiles => 
+        prevTiles.map(tile => 
+          tile.id === tileId 
+            ? { ...tile, zIndex: 1000 } // Bring hovered tile to front
+            : tile
+        )
+      );
+    } else {
+      setTiles(prevTiles => 
+        prevTiles.map(tile => 
+          tile.id === tileId 
+            ? { ...tile, zIndex: prevTiles.findIndex(t => t.id === tileId) } // Reset z-index
+            : tile
+        )
+      );
+    }
+  }, []);
 
   const toggleViewMode = useCallback(() => {
     setViewMode(prevMode => prevMode === 'grid' ? 'random' : 'grid');
@@ -253,6 +290,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
                 isDragging={draggedTile && draggedTile.id === tile.id}
                 isHovered={hoveredTile && hoveredTile.id === tile.id}
                 onClick={() => handleTileClick(tile)}
+                onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                style={{ zIndex: tile.zIndex }}
               />
             ))}
           </>

@@ -1,7 +1,7 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 
 :root {
-  --highlight-color: #89d271;
+  --highlight-color: #A1EE86;
   --main-color: #ffffff;
   --text-color: #000000;
   --border-color: #e5e5e5;

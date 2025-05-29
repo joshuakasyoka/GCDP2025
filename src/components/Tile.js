@@ -1,10 +1,18 @@
 import React from 'react';
 import styles from '../styles/Tile.module.css';
 
-const Tile = ({ tile, isDragging, isHovered, onClick }) => {
+const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(tile);
+  };
+
+  const handleMouseEnter = () => {
+    onHover(true);
+  };
+
+  const handleMouseLeave = () => {
+    onHover(false);
   };
 
   // Use fixed square dimensions
@@ -19,9 +27,12 @@ const Tile = ({ tile, isDragging, isHovered, onClick }) => {
         top: tile.y,
         width: tileSize,
         height: tileSize,
-        zIndex: isDragging ? 1000 : 1
+        zIndex: style?.zIndex || 1,
+        transition: isDragging ? 'none' : 'z-index 0.2s ease-in-out'
       }}
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className={styles.tileContent}>
         {/* <div className={styles.tileImage}>
