@@ -1,4 +1,71 @@
 export const studentsData = {
+  "student_1": {
+    "student_id": "student_1",
+    "name": {
+      "en": {
+        "first_name": "John",
+        "last_name": "Doe",
+        "display_name": "John Doe"
+      },
+      "ja": {
+        "first_name": "ジョン",
+        "last_name": "ドウ",
+        "display_name": "ジョン・ドウ"
+      }
+    },
+    "about": {
+      "en": "A third-year student in the Product Design program, focusing on sustainable materials and user-centered design. Their work explores the intersection of traditional craftsmanship and modern technology.",
+      "ja": "プロダクトデザイン専攻の3年生。持続可能な素材とユーザー中心のデザインに焦点を当てています。伝統的な職人技と現代技術の交差点を探求しています。"
+    },
+    "projects": [
+      {
+        "project_id": "project_1",
+        "title": {
+          "en": "Sustainable Furniture Collection",
+          "ja": "サステナブル家具コレクション"
+        },
+        "description": {
+          "en": "A collection of furniture pieces made from recycled materials, exploring sustainable design practices.",
+          "ja": "リサイクル素材を使用した家具のコレクション。サステナブルデザインの実践を探求しています。"
+        },
+        "project_photos": [
+          {
+            "photo_id": "photo_1",
+            "file_path": "/images/projects/project_1_photo_1.jpg",
+            "caption": {
+              "en": "Main piece from the collection",
+              "ja": "コレクションのメインピース"
+            }
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      {
+        "artifact_id": "artifact_1",
+        "title": {
+          "en": "Recycled Wood Chair",
+          "ja": "リサイクルウッドチェア"
+        },
+        "description": {
+          "en": "A chair made from reclaimed wood, showcasing sustainable design principles.",
+          "ja": "再生木材を使用した椅子。サステナブルデザインの原則を示しています。"
+        },
+        "file_paths": ["/images/artifacts/artifact_1.jpg"],
+        "type": "physical",
+        "tags": {
+          "materials": {
+            "en": ["recycled_wood", "metal"],
+            "ja": ["再生木材", "金属"]
+          },
+          "themes": {
+            "en": ["sustainability", "furniture"],
+            "ja": ["サステナビリティ", "家具"]
+          }
+        }
+      }
+    ]
+  },
   students: [
     {
       student_id: "student_001",
@@ -534,14 +601,15 @@ export const studentsData = {
       student_number: "STU123010",
       enrollment_year: 2023,
       program: "Design Research",
+      about: "Josh is an interdisciplinary designer based in Glasgow who explores the critical intersection between technology and civic agency. His practice examines how digital tools and systems can either empower or marginalize communities, with a particular focus on creating more technologically equitable futures. Through research, design, and community engagement, Josh investigates power structures embedded within technological systems and works to develop inclusive alternatives. His interdisciplinary approach draws from design thinking, social theory, and civic innovation to address questions of accessibility, democratic participation, and digital justice. By centering community voices and needs, Josh's work advocates for technological solutions that strengthen rather than undermine civic agency and social equity.",
       year_level: 3,
       projects: [
         {
-          project_id: "project_010",
+          project_id: "project_01",
           title: "London AI Voices Archive",
           description: "Creating an interactive digital archive that captures and presents diverse perspectives on artificial intelligence from London's communities, exploring how AI impacts different cultural and social groups.",
-          course_code: "DESIGN401",
-          semester: "Fall 2024",
+          course_code: "Unit 6",
+          semester: "2025",
           project_photos: [
             {
               id: "photo_001",
@@ -564,7 +632,7 @@ export const studentsData = {
               title: "Interactive Voice Archive",
               description: "Web-based archive interface for browsing AI community voices",
               type: "digital_prototype",
-              file_paths: ["/images/voice-archive-1.jpg", "/images/voice-archive-2.jpg"],
+              file_paths: ["/StudentPhotos/GreenJosh/GJ-4.png"],
               creation_date: "2024-11-25T17:30:00Z",
               w: 200,
               h: 150,
@@ -578,10 +646,10 @@ export const studentsData = {
             
             {
               artifact_id: "artifact_020",
-              title: "Community Engagement Documentation",
+              title: "Participatory AI Framework Book",
               description: "Photo and video documentation of community interview sessions",
               type: "documentation",
-              file_paths: ["/images/community-doc-1.jpg", "/images/community-doc-2.jpg"],
+              file_paths: ["/StudentPhotos/GreenJosh/GJ-5.png"],
               creation_date: "2024-11-18T14:45:00Z",
               w: 170,
               h: 130,
@@ -590,6 +658,47 @@ export const studentsData = {
                 themes: ["community", "engagement", "documentation"],
                 techniques: ["photography", "interviewing", "ethnography"],
                 categories: ["documentation", "social_research"]
+              }
+            }
+          ]
+        },
+        {
+          project_id: "project_02",
+          title: "Junction Worms",
+          description: "A playbook designed in collaboration with Lougborugh Junction Action Group to support workshops through play",
+          course_code: "Unit 3",
+          semester: "2024",
+          project_photos: [
+            {
+              id: "photo_001",
+              url: "/StudentPhotos/GreenJosh/GJ-6.png",
+              caption: "Community workshop exploring circular economy principles",
+              width: 1200,
+              height: 800
+            },
+            {
+              id: "photo_002",
+              url: "/StudentPhotos/GreenJosh/GJ-7.png",
+              caption: "Prototype of resource sharing platform",
+              width: 1200,
+              height: 800
+            }
+          ],
+          artifacts: [
+            {
+              artifact_id: "artifact_019",
+              title: "Playbook for Composting",
+              description: "Web-based archive interface for browsing AI community voices",
+              type: "digital_prototype",
+              file_paths: ["/StudentPhotos/GreenJosh/GJ-8.png"],
+              creation_date: "2024-11-25T17:30:00Z",
+              w: 200,
+              h: 150,
+              tags: {
+                materials: ["web", "audio", "database"],
+                themes: ["artificial_intelligence", "community", "voices"],
+                techniques: ["web_development", "audio_design", "database_design"],
+                categories: ["web_design", "archive_design"]
               }
             }
           ]

@@ -73,9 +73,9 @@ const StudentProjectPage = () => {
               <div className={styles.artifactsSection}>
                 <h3>STUDENT INFORMATION</h3>
                 <div className={styles.studentDetails}>
-                  <p><strong>Program:</strong> {student.program}</p>
-                  <p><strong>Year:</strong> {student.year_level}</p>
-                  <p><strong>Email:</strong> {student.email}</p>
+                  <p> {student.about}</p>
+                  {/* <p><strong>Year:</strong> {student.year_level}</p>
+                  <p><strong>Email:</strong> {student.email}</p> */}
                 </div>
               </div>
 
