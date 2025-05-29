@@ -194,7 +194,7 @@
   background: var(--highlight-color);
   color: white;
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 3px;
+  border-radius: 0px;
   font-size: 10px;
   font-weight: 500;
   text-transform: lowercase;
