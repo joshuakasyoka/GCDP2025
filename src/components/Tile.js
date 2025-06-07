@@ -35,7 +35,7 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className={styles.tileContent}>
-        {/* <div className={styles.tileImage}>
+        <div className={styles.tileImage}>
           {tile.file_paths && tile.file_paths[0] ? (
             <img src={tile.file_paths[0]} alt={tile.title} />
           ) : (
@@ -43,7 +43,7 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
               <span>{tile.type}</span>
             </div>
           )}
-        </div> */}
+        </div>
         <div className={styles.tileInfo}>
           <h3 className={styles.tileTitle}>{tile.title}</h3>
           <div className={styles.tileTags}>

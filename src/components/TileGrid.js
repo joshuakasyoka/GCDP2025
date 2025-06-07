@@ -7,13 +7,18 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [tiles, setTiles] = useState([]);
   const [draggedTile, setDraggedTile] = useState(null);
   const [hoveredTile, setHoveredTile] = useState(null);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'random'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'random', or 'cluster'
   const [isDragging, setIsDragging] = useState(false);
+  const [dragStartTime, setDragStartTime] = useState(null);
+  const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
   const tileSize = 200;
   const gridGap = 20;
   const canvasPadding = 40;
-  const overlapOffset = 20; // Amount to offset each tile in list view
+  const overlapOffset = 20;
+  const clusterRadius = 300; // Maximum distance from cluster center
+  const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
+  const CLICK_THRESHOLD = 200; // Maximum milliseconds to consider it a click
 
   // Initialize tiles when artifacts change
   useEffect(() => {
@@ -32,12 +37,23 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           const col = index % tilesPerRow;
           x = canvasPadding + (col * (tileSize + gridGap));
           y = canvasPadding + (row * (tileSize + gridGap));
-        } else {
-          // List view with organized overlapping
+        } else if (viewMode === 'random') {
           const baseX = canvasPadding;
           const baseY = canvasPadding;
           x = baseX + (index * overlapOffset);
           y = baseY + (index * overlapOffset);
+        } else if (viewMode === 'cluster') {
+          // Create random clusters
+          const numClusters = Math.ceil(artifacts.length / 5); // 5 items per cluster
+          const clusterIndex = Math.floor(index / 5);
+          const clusterX = canvasPadding + (Math.random() * (availableWidth - tileSize));
+          const clusterY = canvasPadding + (Math.random() * (availableHeight - tileSize));
+          
+          // Add some randomness within the cluster
+          const angle = Math.random() * Math.PI * 2;
+          const distance = Math.random() * clusterRadius;
+          x = clusterX + (Math.cos(angle) * distance);
+          y = clusterY + (Math.sin(angle) * distance);
         }
 
         return {
@@ -49,13 +65,13 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           h: tileSize,
           targetX: x,
           targetY: y,
-          zIndex: index // Add zIndex property
+          zIndex: index
         };
       });
 
       setTiles(newTiles);
     }
-  }, [artifacts, viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
+  }, [artifacts, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, clusterRadius]);
 
   const sketch = useCallback(p5 => {
     p5.setup = () => {
@@ -79,29 +95,36 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         for (let y = canvasPadding; y < p5.height; y += tileSize + gridGap) {
           p5.line(0, y, p5.width, y);
         }
-      } else {
+      } else if (viewMode === 'random') {
         // Draw diagonal grid lines for list view
         p5.stroke(240);
         p5.strokeWeight(0.5);
         
-        // Calculate how many grid lines we need based on container size
         const maxLines = Math.max(
           Math.ceil((p5.width - canvasPadding) / overlapOffset),
           Math.ceil((p5.height - canvasPadding) / overlapOffset)
         );
 
-        // Draw diagonal grid lines
         for (let i = 0; i < maxLines; i++) {
           const x = canvasPadding + (i * overlapOffset);
           const y = canvasPadding + (i * overlapOffset);
           
-          // Draw horizontal and vertical lines
           p5.line(x, 0, x, p5.height);
           p5.line(0, y, p5.width, y);
-          
-          // Draw diagonal lines
           p5.line(x, 0, 0, y);
           p5.line(x, p5.height, p5.width, y);
+        }
+      } else if (viewMode === 'cluster') {
+        // Draw cluster visualization
+        p5.stroke(240);
+        p5.strokeWeight(0.5);
+        p5.noFill();
+        
+        const numClusters = Math.ceil(artifacts.length / 5);
+        for (let i = 0; i < numClusters; i++) {
+          const clusterX = canvasPadding + (Math.random() * (p5.width - canvasPadding * 2));
+          const clusterY = canvasPadding + (Math.random() * (p5.height - canvasPadding * 2));
+          p5.circle(clusterX, clusterY, clusterRadius * 2);
         }
       }
     };
@@ -114,33 +137,40 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         );
       }
     };
-  }, [viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
+  }, [viewMode, tileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, artifacts.length]);
 
   const handleMouseMove = useCallback(e => {
-    if (!containerRef.current || !draggedTile) return;
+    if (!containerRef.current || !draggedTile || !dragStartPosition) return;
     
     const rect = containerRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Set dragging state to true when mouse moves
-    if (!isDragging) {
+    // Calculate distance moved
+    const dx = mouseX - dragStartPosition.x;
+    const dy = mouseY - dragStartPosition.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Only set dragging state if we've moved past the threshold
+    if (!isDragging && distance > DRAG_THRESHOLD) {
       setIsDragging(true);
     }
 
-    setTiles(prevTiles => 
-      prevTiles.map(tile => 
-        tile.id === draggedTile.id 
-          ? { 
-              ...tile, 
-              x: mouseX - draggedTile.offsetX, 
-              y: mouseY - draggedTile.offsetY,
-              zIndex: 1000 // Set highest z-index while dragging
-            } 
-          : tile
-      )
-    );
-  }, [draggedTile, isDragging]);
+    if (isDragging) {
+      setTiles(prevTiles => 
+        prevTiles.map(tile => 
+          tile.id === draggedTile.id 
+            ? { 
+                ...tile, 
+                x: mouseX - draggedTile.offsetX, 
+                y: mouseY - draggedTile.offsetY,
+                zIndex: 1000
+              } 
+            : tile
+        )
+      );
+    }
+  }, [draggedTile, isDragging, dragStartPosition]);
 
   const handleMouseDown = useCallback(e => {
     if (!containerRef.current) return;
@@ -160,6 +190,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         const offsetX = mouseX - tile.x;
         const offsetY = mouseY - tile.y;
         setDraggedTile({ ...tile, offsetX, offsetY });
+        setDragStartTime(Date.now());
+        setDragStartPosition({ x: mouseX, y: mouseY });
         break;
       }
     }
@@ -167,47 +199,69 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
 
   const handleMouseUp = useCallback(() => {
     if (draggedTile) {
-      if (viewMode === 'grid') {
-        // Snap to grid in grid view
-        setTiles(prevTiles => 
-          prevTiles.map(tile => 
-            tile.id === draggedTile.id 
-              ? { 
-                  ...tile, 
-                  x: canvasPadding + Math.round((tile.x - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
-                  y: canvasPadding + Math.round((tile.y - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
-                  zIndex: tile.id // Reset z-index
-                } 
-              : tile
-          )
-        );
-      } else {
-        // Snap to overlap offset in list view
-        setTiles(prevTiles => {
-          const index = prevTiles.findIndex(t => t.id === draggedTile.id);
-          return prevTiles.map(tile => 
-            tile.id === draggedTile.id 
-              ? { 
-                  ...tile, 
-                  x: canvasPadding + (index * overlapOffset),
-                  y: canvasPadding + (index * overlapOffset),
-                  zIndex: index // Reset z-index
-                } 
-              : tile
+      const dragDuration = Date.now() - dragStartTime;
+      
+      if (isDragging) {
+        // This was a drag operation
+        if (viewMode === 'grid') {
+          setTiles(prevTiles => 
+            prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: canvasPadding + Math.round((tile.x - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
+                    y: canvasPadding + Math.round((tile.y - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
+                    zIndex: tile.id
+                  } 
+                : tile
+            )
           );
-        });
+        } else if (viewMode === 'random') {
+          setTiles(prevTiles => {
+            const index = prevTiles.findIndex(t => t.id === draggedTile.id);
+            return prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: canvasPadding + (index * overlapOffset),
+                    y: canvasPadding + (index * overlapOffset),
+                    zIndex: index
+                  } 
+                : tile
+            );
+          });
+        } else if (viewMode === 'cluster') {
+          setTiles(prevTiles => 
+            prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: tile.x,
+                    y: tile.y,
+                    zIndex: 1000
+                  } 
+                : tile
+            )
+          );
+        }
+      } else if (dragDuration < CLICK_THRESHOLD) {
+        // This was a click operation
+        onTileClick(draggedTile);
       }
     }
+    
     setDraggedTile(null);
     setIsDragging(false);
-  }, [draggedTile, viewMode, tileSize, gridGap, canvasPadding, overlapOffset]);
+    setDragStartTime(null);
+    setDragStartPosition(null);
+  }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, onTileClick]);
 
   const handleTileClick = useCallback((tile) => {
-    // Only trigger click if we're not dragging
-    if (!isDragging) {
+    // Only trigger click if we're not dragging and it's a quick click
+    if (!isDragging && Date.now() - dragStartTime < CLICK_THRESHOLD) {
       onTileClick(tile);
     }
-  }, [isDragging, onTileClick]);
+  }, [isDragging, dragStartTime, onTileClick]);
 
   const handleTileHover = useCallback((tileId, isHovered) => {
     if (isHovered) {
@@ -227,10 +281,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         )
       );
     }
-  }, []);
-
-  const toggleViewMode = useCallback(() => {
-    setViewMode(prevMode => prevMode === 'grid' ? 'random' : 'grid');
   }, []);
 
   useEffect(() => {
@@ -263,15 +313,21 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         <div className={styles.viewControls}>
           <button 
             className={`${styles.gridViewBtn} ${viewMode === 'grid' ? styles.active : ''}`}
-            onClick={toggleViewMode}
+            onClick={() => setViewMode('grid')}
           >
             ⊞
           </button>
           <button 
             className={`${styles.listViewBtn} ${viewMode === 'random' ? styles.active : ''}`}
-            onClick={toggleViewMode}
+            onClick={() => setViewMode('random')}
           >
             ☰
+          </button>
+          <button 
+            className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
+            onClick={() => setViewMode('cluster')}
+          >
+            ⊙
           </button>
         </div>
       </div>
