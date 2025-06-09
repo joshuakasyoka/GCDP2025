@@ -13,6 +13,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
   const tileSize = 200;
+  const vectorTileSize = 60; // Size of squares in vector view
   const gridGap = 20;
   const canvasPadding = 40;
   const overlapOffset = 20;
@@ -54,6 +55,12 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           const distance = Math.random() * clusterRadius;
           x = clusterX + (Math.cos(angle) * distance);
           y = clusterY + (Math.sin(angle) * distance);
+        } else if (viewMode === 'vector') {
+          const tilesPerRow = 8;
+          const row = Math.floor(index / tilesPerRow);
+          const col = index % tilesPerRow;
+          x = canvasPadding + (col * (vectorTileSize + gridGap));
+          y = canvasPadding + (row * (vectorTileSize + gridGap));
         }
 
         return {
@@ -61,8 +68,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           id: artifact.artifact_id,
           x: x,
           y: y,
-          w: tileSize,
-          h: tileSize,
+          w: viewMode === 'vector' ? vectorTileSize : tileSize,
+          h: viewMode === 'vector' ? vectorTileSize : tileSize,
           targetX: x,
           targetY: y,
           zIndex: index
@@ -71,7 +78,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
 
       setTiles(newTiles);
     }
-  }, [artifacts, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, clusterRadius]);
+  }, [artifacts, viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius]);
 
   const sketch = useCallback(p5 => {
     p5.setup = () => {
@@ -126,6 +133,24 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           const clusterY = canvasPadding + (Math.random() * (p5.height - canvasPadding * 2));
           p5.circle(clusterX, clusterY, clusterRadius * 2);
         }
+      } else if (viewMode === 'vector') {
+        p5.stroke(240);
+        p5.strokeWeight(0.5);
+        p5.noFill();
+        
+        // Draw grid lines for vector view
+        const tilesPerRow = 8;
+        const numRows = Math.ceil(artifacts.length / tilesPerRow);
+        
+        for (let i = 0; i <= numRows; i++) {
+          const y = canvasPadding + (i * (vectorTileSize + gridGap));
+          p5.line(0, y, p5.width, y);
+        }
+        
+        for (let i = 0; i <= tilesPerRow; i++) {
+          const x = canvasPadding + (i * (vectorTileSize + gridGap));
+          p5.line(x, 0, x, p5.height);
+        }
       }
     };
 
@@ -137,7 +162,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         );
       }
     };
-  }, [viewMode, tileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, artifacts.length]);
+  }, [viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, artifacts.length]);
 
   const handleMouseMove = useCallback(e => {
     if (!containerRef.current || !draggedTile || !dragStartPosition) return;
@@ -243,6 +268,19 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
                 : tile
             )
           );
+        } else if (viewMode === 'vector') {
+          setTiles(prevTiles => 
+            prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: tile.x,
+                    y: tile.y,
+                    zIndex: 1000
+                  } 
+                : tile
+            )
+          );
         }
       } else if (dragDuration < CLICK_THRESHOLD) {
         // This was a click operation
@@ -265,23 +303,14 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
 
   const handleTileHover = useCallback((tileId, isHovered) => {
     if (isHovered) {
-      setTiles(prevTiles => 
-        prevTiles.map(tile => 
-          tile.id === tileId 
-            ? { ...tile, zIndex: 1000 } // Bring hovered tile to front
-            : tile
-        )
-      );
+      const tile = tiles.find(t => t.id === tileId);
+      if (tile) {
+        setHoveredTile(tile);
+      }
     } else {
-      setTiles(prevTiles => 
-        prevTiles.map(tile => 
-          tile.id === tileId 
-            ? { ...tile, zIndex: prevTiles.findIndex(t => t.id === tileId) } // Reset z-index
-            : tile
-        )
-      );
+      setHoveredTile(null);
     }
-  }, []);
+  }, [tiles]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -329,6 +358,12 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           >
             ⊙
           </button>
+          <button 
+            className={`${styles.vectorViewBtn} ${viewMode === 'vector' ? styles.active : ''}`}
+            onClick={() => setViewMode('vector')}
+          >
+            □
+          </button>
         </div>
       </div>
       
@@ -340,16 +375,57 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           <>
             <ReactP5Wrapper sketch={sketch} />
             {tiles.map(tile => (
-              <Tile
-                key={tile.id}
-                tile={tile}
-                isDragging={draggedTile && draggedTile.id === tile.id}
-                isHovered={hoveredTile && hoveredTile.id === tile.id}
-                onClick={() => handleTileClick(tile)}
-                onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
-                style={{ zIndex: tile.zIndex }}
-              />
+              viewMode === 'vector' ? (
+                <div
+                  key={tile.id}
+                  className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
+                  style={{
+                    position: 'absolute',
+                    left: tile.x,
+                    top: tile.y,
+                    width: tile.w,
+                    height: tile.h,
+                    zIndex: tile.zIndex,
+                    cursor: 'move'
+                  }}
+                  onClick={() => handleTileClick(tile)}
+                  onMouseEnter={() => handleTileHover(tile.id, true)}
+                  onMouseLeave={() => handleTileHover(tile.id, false)}
+                >
+                  <span className={styles.vectorTileNumber}>
+                    {tiles.findIndex(t => t.id === tile.id) + 1}
+                  </span>
+                </div>
+              ) : (
+                <Tile
+                  key={tile.id}
+                  tile={tile}
+                  isDragging={draggedTile && draggedTile.id === tile.id}
+                  isHovered={hoveredTile && hoveredTile.id === tile.id}
+                  onClick={() => handleTileClick(tile)}
+                  onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                  style={{ zIndex: tile.zIndex }}
+                />
+              )
             ))}
+            {viewMode === 'vector' && hoveredTile && (
+              <div 
+                className={styles.floatingTile}
+                style={{
+                  position: 'absolute',
+                  left: hoveredTile.x + hoveredTile.w + 10,
+                  top: hoveredTile.y - (tileSize / 2),
+                  zIndex: 1000
+                }}
+              >
+                <Tile
+                  tile={hoveredTile}
+                  isHovered={true}
+                  onClick={() => handleTileClick(hoveredTile)}
+                  onHover={() => {}}
+                />
+              </div>
+            )}
           </>
         ) : (
           <div className={styles.noData}>
