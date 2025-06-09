@@ -413,8 +413,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
                 className={styles.floatingTile}
                 style={{
                   position: 'absolute',
-                  left: hoveredTile.x + hoveredTile.w + 10,
-                  top: hoveredTile.y - (tileSize / 2),
                   zIndex: 1000
                 }}
               >
