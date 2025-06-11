@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
 import GalleryModal from './GalleryModal';
@@ -40,6 +41,7 @@ const ArchivePage = () => {
           <span className={styles.initials}>JP</span>
         </div>
         <div className={styles.headerRight}>
+          <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
           <span>ARCHIVE DISPLAY</span>
           <span>GCDP 2025</span>
         </div>

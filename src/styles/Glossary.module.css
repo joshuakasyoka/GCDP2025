@@ -1,0 +1,83 @@
+.glossaryPage {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.backLink {
+  color: #666;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.backLink:hover {
+  color: #000;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.category {
+  
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  filter: blur(4px); 
+}
+
+.category:hover {
+    /* background: rgba(240, 240, 240, 0.8); */
+    filter: blur(0);
+    transform: translateY(-1px);
+  } 
+
+.category h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.rem;
+  color: #333;
+  
+}
+
+.description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #333;
+  outline: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+
+.tag:hover {
+  background: rgba(240, 240, 240, 0.8);
+  filter: blur(0);
+  transform: translateY(-1px);
+  outline: 0.5px solid rgba(0, 0, 0, 0.4);
+} 
