@@ -43,7 +43,7 @@ const ArchivePage = () => {
         <div className={styles.headerRight}>
           <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
           <span>ARCHIVE DISPLAY</span>
-          <span>GCDP 2025</span>
+          {/* <span>GCDP 2025</span> */}
         </div>
       </header>
       

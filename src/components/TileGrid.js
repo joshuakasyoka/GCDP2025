@@ -11,6 +11,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartTime, setDragStartTime] = useState(null);
   const [dragStartPosition, setDragStartPosition] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const containerRef = useRef(null);
   const tileSize = 200;
   const vectorTileSize = 60; // Size of squares in vector view
@@ -327,10 +329,30 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
     };
   }, [handleMouseMove, handleMouseDown, handleMouseUp]);
 
+  // Filter tiles based on search query
+  const filteredTiles = tiles.filter(tile => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      tile.title.toLowerCase().includes(query) ||
+      tile.tags.materials.some(material => material.toLowerCase().includes(query)) ||
+      tile.student?.toLowerCase().includes(query)
+    );
+  });
+
   return (
-    <div className={styles.tileGrid}>
+    <div className={`${styles.tileGrid} ${isFullscreen ? styles.fullscreen : ''}`}>
       <div className={styles.controls}>
         <div className={styles.sortControls}>
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search artifacts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </div>
           <span>SORT BY</span>
           <select value={sortBy} onChange={(e) => onSortChange(e.target.value)}>
             <option value="date">DATE ADDED</option>
@@ -364,6 +386,12 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           >
             □
           </button>
+          <button 
+            className={`${styles.fullscreenBtn} ${isFullscreen ? styles.active : ''}`}
+            onClick={() => setIsFullscreen(!isFullscreen)}
+          >
+            {isFullscreen ? '⤓' : '⤢'}
+          </button>
         </div>
       </div>
       
@@ -371,10 +399,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         ref={containerRef} 
         className={styles.canvasContainer}
       >
-        {artifacts.length > 0 ? (
+        {filteredTiles.length > 0 ? (
           <>
             <ReactP5Wrapper sketch={sketch} />
-            {tiles.map(tile => (
+            {filteredTiles.map(tile => (
               viewMode === 'vector' ? (
                 <div
                   key={tile.id}

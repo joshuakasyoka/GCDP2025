@@ -3,6 +3,17 @@
   display: flex;
   flex-direction: column;
   background: var(--main-color);
+  transition: all 0.3s ease;
+}
+
+.tileGrid.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--main-color);
 }
 
 .controls {
@@ -21,6 +32,36 @@
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
+}
+
+.searchContainer {
+  position: relative;
+  margin-right: var(--spacing-md);
+  display: none;
+}
+
+.tileGrid.fullscreen .searchContainer {
+  display: block;
+}
+
+.searchInput {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+  font-size: 11px;
+  width: 200px;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--highlight-color);
+  background: var(--white);
+}
+
+.searchInput::placeholder {
+  color: var(--gray-medium);
+  font-style: italic;
 }
 
 .sortControls select {
@@ -161,6 +202,30 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.fullscreenBtn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreenBtn:hover {
+  background: var(--gray-light);
+}
+
+.fullscreenBtn.active {
+  background: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
 }
 
 @media (max-width: 768px) {
