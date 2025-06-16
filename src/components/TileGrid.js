@@ -390,7 +390,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
             className={`${styles.fullscreenBtn} ${isFullscreen ? styles.active : ''}`}
             onClick={() => setIsFullscreen(!isFullscreen)}
           >
-            {isFullscreen ? '⤓' : '⤢'}
+            {isFullscreen ? '⤢' : '⤢'}
           </button>
         </div>
       </div>
