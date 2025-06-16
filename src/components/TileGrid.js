@@ -11,17 +11,50 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartTime, setDragStartTime] = useState(null);
   const [dragStartPosition, setDragStartPosition] = useState(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const containerRef = useRef(null);
-  const tileSize = 200;
-  const vectorTileSize = 60; // Size of squares in vector view
-  const gridGap = 20;
-  const canvasPadding = 40;
-  const overlapOffset = 20;
-  const clusterRadius = 300; // Maximum distance from cluster center
+  
+  // Constants for drag and click detection
   const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
   const CLICK_THRESHOLD = 200; // Maximum milliseconds to consider it a click
+  
+  // Check if device is mobile
+  const isMobileDevice = () => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 768;
+  };
+
+  // Initialize fullscreen state based on device
+  const [isFullscreen, setIsFullscreen] = useState(isMobileDevice());
+  
+  // Responsive tile sizes
+  const getTileSize = () => {
+    if (typeof window === 'undefined') return 200; // Default for SSR
+    if (window.innerWidth <= 480) return 120; // Mobile
+    if (window.innerWidth <= 768) return 160; // Tablet
+    return 200; // Desktop
+  };
+
+  const [tileSize, setTileSize] = useState(getTileSize());
+  const vectorTileSize = Math.floor(tileSize * 0.3); // Scale vector tiles proportionally
+  const gridGap = Math.floor(tileSize * 0.1); // Scale gap proportionally
+  const canvasPadding = Math.floor(tileSize * 0.2); // Scale padding proportionally
+  const overlapOffset = Math.floor(tileSize * 0.1); // Scale offset proportionally
+  const clusterRadius = Math.floor(tileSize * 1.5); // Scale cluster radius proportionally
+
+  // Update tile size and fullscreen state on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setTileSize(getTileSize());
+      // Only auto-fullscreen on mobile devices
+      if (isMobileDevice()) {
+        setIsFullscreen(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Initialize tiles when artifacts change
   useEffect(() => {
