@@ -80,7 +80,8 @@
 .gridViewBtn,
 .listViewBtn,
 .clusterViewBtn,
-.vectorViewBtn {
+.vectorViewBtn,
+.fullscreenBtn {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: var(--border-width) solid var(--border-color);
   background: var(--main-color);
@@ -97,14 +98,16 @@
 .gridViewBtn:hover,
 .listViewBtn:hover,
 .clusterViewBtn:hover,
-.vectorViewBtn:hover {
+.vectorViewBtn:hover,
+.fullscreenBtn:hover {
   background: var(--gray-light);
 }
 
 .gridViewBtn.active,
 .listViewBtn.active,
 .clusterViewBtn.active,
-.vectorViewBtn.active {
+.vectorViewBtn.active,
+.fullscreenBtn.active {
   background: var(--highlight-color);
   color: white;
   border-color: var(--highlight-color);
@@ -204,42 +207,103 @@
   }
 }
 
-.fullscreenBtn {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: var(--border-width) solid var(--border-color);
-  background: var(--main-color);
-  font-size: 12px;
-  cursor: pointer;
-  transition: var(--transition);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fullscreenBtn:hover {
-  background: var(--gray-light);
-}
-
-.fullscreenBtn.active {
-  background: var(--highlight-color);
-  color: white;
-  border-color: var(--highlight-color);
-}
-
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
     gap: var(--spacing-sm);
-    align-items: stretch;
+    padding: var(--spacing-sm);
   }
   
   .sortControls {
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+    width: 100%;
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .searchInput {
+    width: 100%;
+    font-size: 14px;
+    padding: var(--spacing-sm);
+  }
+
+  .sortControls select {
+    width: 100%;
+    padding: var(--spacing-sm);
+    font-size: 14px;
   }
   
   .viewControls {
     justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .gridViewBtn,
+  .listViewBtn,
+  .clusterViewBtn,
+  .vectorViewBtn,
+  .fullscreenBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .tile {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1;
+  }
+
+  .tileImage {
+    aspect-ratio: 1;
+  }
+
+  .tileInfo {
+    height: auto;
+    min-height: 60px;
+    padding: var(--spacing-sm);
+  }
+
+  .tileTitle {
+    font-size: 14px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 2px var(--spacing-xs);
+  }
+}
+
+/* Additional breakpoint for very small screens */
+@media (max-width: 480px) {
+  .controls {
+    padding: var(--spacing-xs);
+  }
+
+  .viewControls {
+    gap: var(--spacing-xs);
+  }
+
+  .gridViewBtn,
+  .listViewBtn,
+  .clusterViewBtn,
+  .vectorViewBtn,
+  .fullscreenBtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tileInfo {
+    padding: var(--spacing-xs);
+  }
+
+  .tileTitle {
+    font-size: 12px;
   }
 }

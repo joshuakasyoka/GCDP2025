@@ -314,20 +314,139 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
     }
   }, [tiles]);
 
+  // Add touch event handlers
+  const handleTouchStart = useCallback(e => {
+    if (!containerRef.current) return;
+    
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+
+    for (let i = tiles.length - 1; i >= 0; i--) {
+      const tile = tiles[i];
+      if (
+        touchX >= tile.x && 
+        touchX <= tile.x + tile.w && 
+        touchY >= tile.y && 
+        touchY <= tile.y + tile.h
+      ) {
+        const offsetX = touchX - tile.x;
+        const offsetY = touchY - tile.y;
+        setDraggedTile({ ...tile, offsetX, offsetY });
+        setDragStartTime(Date.now());
+        setDragStartPosition({ x: touchX, y: touchY });
+        break;
+      }
+    }
+  }, [tiles]);
+
+  const handleTouchMove = useCallback(e => {
+    if (!containerRef.current || !draggedTile || !dragStartPosition) return;
+    
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+
+    // Calculate distance moved
+    const dx = touchX - dragStartPosition.x;
+    const dy = touchY - dragStartPosition.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Only set dragging state if we've moved past the threshold
+    if (!isDragging && distance > DRAG_THRESHOLD) {
+      setIsDragging(true);
+    }
+
+    if (isDragging) {
+      setTiles(prevTiles => 
+        prevTiles.map(tile => 
+          tile.id === draggedTile.id 
+            ? { 
+                ...tile, 
+                x: touchX - draggedTile.offsetX, 
+                y: touchY - draggedTile.offsetY,
+                zIndex: 1000
+              } 
+            : tile
+        )
+      );
+    }
+  }, [draggedTile, isDragging, dragStartPosition]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (draggedTile) {
+      const dragDuration = Date.now() - dragStartTime;
+      
+      if (isDragging) {
+        // Handle drag end similar to mouse up
+        if (viewMode === 'grid') {
+          setTiles(prevTiles => 
+            prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: canvasPadding + Math.round((tile.x - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
+                    y: canvasPadding + Math.round((tile.y - canvasPadding) / (tileSize + gridGap)) * (tileSize + gridGap),
+                    zIndex: tile.id
+                  } 
+                : tile
+            )
+          );
+        } else if (viewMode === 'random') {
+          setTiles(prevTiles => {
+            const index = prevTiles.findIndex(t => t.id === draggedTile.id);
+            return prevTiles.map(tile => 
+              tile.id === draggedTile.id 
+                ? { 
+                    ...tile, 
+                    x: canvasPadding + (index * overlapOffset),
+                    y: canvasPadding + (index * overlapOffset),
+                    zIndex: index
+                  } 
+                : tile
+            );
+          });
+        }
+      } else if (dragDuration < CLICK_THRESHOLD) {
+        // This was a tap operation
+        onTileClick(draggedTile);
+      }
+    }
+    
+    setDraggedTile(null);
+    setIsDragging(false);
+    setDragStartTime(null);
+    setDragStartPosition(null);
+  }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, onTileClick]);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
     
+    // Mouse events
     container.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mouseup', handleMouseUp);
     
+    // Touch events
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd);
+    
     return () => {
+      // Mouse events
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mousedown', handleMouseDown);
       container.removeEventListener('mouseup', handleMouseUp);
+      
+      // Touch events
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [handleMouseMove, handleMouseDown, handleMouseUp]);
+  }, [handleMouseMove, handleMouseDown, handleMouseUp, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   // Filter tiles based on search query
   const filteredTiles = tiles.filter(tile => {
