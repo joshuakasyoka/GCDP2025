@@ -30,17 +30,17 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   // Responsive tile sizes
   const getTileSize = () => {
     if (typeof window === 'undefined') return 200; // Default for SSR
-    if (window.innerWidth <= 480) return 120; // Mobile
+    if (window.innerWidth <= 480) return 140; // Mobile
     if (window.innerWidth <= 768) return 160; // Tablet
     return 200; // Desktop
   };
 
   const [tileSize, setTileSize] = useState(getTileSize());
   const vectorTileSize = Math.floor(tileSize * 0.3); // Scale vector tiles proportionally
-  const gridGap = Math.floor(tileSize * 0.1); // Scale gap proportionally
-  const canvasPadding = Math.floor(tileSize * 0.2); // Scale padding proportionally
+  const gridGap = Math.floor(tileSize * 0.05); // Reduced gap for mobile
+  const canvasPadding = Math.floor(tileSize * 0.1); // Reduced padding for mobile
   const overlapOffset = Math.floor(tileSize * 0.1); // Scale offset proportionally
-  const clusterRadius = Math.floor(tileSize * 1.5); // Scale cluster radius proportionally
+  const clusterRadius = Math.floor(tileSize * 1.2); // Reduced cluster radius for mobile
 
   // Update tile size and fullscreen state on window resize
   useEffect(() => {

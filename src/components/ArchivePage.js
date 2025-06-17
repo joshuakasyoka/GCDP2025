@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
 import GalleryModal from './GalleryModal';
@@ -8,7 +8,9 @@ import { useSearch } from '../hooks/useSearch';
 import styles from '../styles/Archive.module.css';
 
 const ArchivePage = () => {
-  const [selectedArtifact, setSelectedArtifact] = useState(null);
+  const { artifactId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Flatten all artifacts from all students and projects
   const allArtifacts = studentsData.students.flatMap(student =>
@@ -32,6 +34,19 @@ const ArchivePage = () => {
     toggleFilter,
     filteredAndSortedArtifacts
   } = useSearch(allArtifacts);
+
+  const handleArtifactClick = (artifact) => {
+    navigate(`/archive/artifact/${artifact.artifact_id}`);
+  };
+
+  const handleCloseModal = () => {
+    navigate('/archive');
+  };
+
+  // Find the current artifact based on URL
+  const currentArtifact = artifactId 
+    ? allArtifacts.find(a => a.artifact_id === artifactId)
+    : null;
 
   return (
     <div className={styles.archivePage}>
@@ -61,16 +76,17 @@ const ArchivePage = () => {
         
         <TileGrid
           artifacts={filteredAndSortedArtifacts}
-          onTileClick={setSelectedArtifact}
+          onTileClick={handleArtifactClick}
           sortBy={sortBy}
           onSortChange={setSortBy}
         />
       </div>
 
-      {selectedArtifact && (
+      {currentArtifact && (
         <GalleryModal
-          artifact={selectedArtifact}
-          onClose={() => setSelectedArtifact(null)}
+          key={`modal-${currentArtifact.artifact_id}-${location.pathname}`}
+          artifact={currentArtifact}
+          onClose={handleCloseModal}
         />
       )}
     </div>

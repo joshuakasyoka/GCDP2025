@@ -19,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ArchivePage />} />
             <Route path="/archive" element={<ArchivePage />} />
+            <Route path="/archive/artifact/:artifactId" element={<ArchivePage />} />
             <Route path="/students/:studentId" element={<StudentProjectPage />} />
             <Route path="/students/:studentId/:projectId" element={<StudentProjectPage />} />
             <Route path="/glossary" element={<GlossaryPage />} />

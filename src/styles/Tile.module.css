@@ -63,10 +63,11 @@
 }
 
 .tileInfo {
-  padding: var(--spacing-sm);
+  padding: var(--spacing-xs);
   border-top: var(--border-width) solid var(--border-color);
   background: var(--main-color);
-  height: 60px; /* Fixed height for info section */
+  height: auto;
+  min-height: 45px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -75,26 +76,60 @@
 .tileTitle {
   font-size: 11px;
   font-weight: 500;
-  margin-bottom: var(--spacing-xs);
-  line-height: 1.3;
+  margin-bottom: 2px;
+  line-height: 1.2;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
 .tileTags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: 2px;
 }
 
 .tag {
   background: var(--highlight-color);
   color: white;
-  padding: 1px var(--spacing-xs);
+  padding: 1px 4px;
   border-radius: 0;
   font-size: 8px;
   font-weight: 500;
   text-transform: lowercase;
+}
+
+@media (max-width: 768px) {
+  .tileInfo {
+    padding: 6px;
+    min-height: 40px;
+  }
+
+  .tileTitle {
+    font-size: 10px;
+    margin-bottom: 1px;
+  }
+
+  .tag {
+    font-size: 7px;
+    padding: 1px 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tileInfo {
+    padding: 4px;
+    min-height: 35px;
+  }
+
+  .tileTitle {
+    font-size: 9px;
+    margin-bottom: 1px;
+  }
+
+  .tag {
+    font-size: 6px;
+    padding: 1px 2px;
+  }
 }

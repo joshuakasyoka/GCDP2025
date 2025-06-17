@@ -5,20 +5,37 @@ const GalleryModal = ({ artifact, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
+      } else if (artifact.file_paths) {
+        if (e.key === 'ArrowRight' && currentImageIndex < artifact.file_paths.length - 1) {
+          setCurrentImageIndex(currentImageIndex + 1);
+        } else if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
+          setCurrentImageIndex(currentImageIndex - 1);
+        }
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [onClose]);
+  }, [onClose, artifact.file_paths, currentImageIndex]);
+
+  const handleOverlayClick = (e) => {
+    e.preventDefault();
+    onClose();
+  };
+
+  const handleContentClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   const nextImage = () => {
     if (artifact.file_paths && currentImageIndex < artifact.file_paths.length - 1) {
@@ -33,9 +50,17 @@ const GalleryModal = ({ artifact, onClose }) => {
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+      <div className={styles.modalContent} onClick={handleContentClick}>
+        <button 
+          className={styles.closeButton} 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onClose();
+          }}
+          aria-label="Close modal"
+        >
           ×
         </button>
 
@@ -53,6 +78,7 @@ const GalleryModal = ({ artifact, onClose }) => {
                     onClick={prevImage} 
                     disabled={currentImageIndex === 0}
                     className={styles.navButton}
+                    aria-label="Previous image"
                   >
                     ‹
                   </button>
@@ -63,6 +89,7 @@ const GalleryModal = ({ artifact, onClose }) => {
                     onClick={nextImage} 
                     disabled={currentImageIndex === artifact.file_paths.length - 1}
                     className={styles.navButton}
+                    aria-label="Next image"
                   >
                     ›
                   </button>
