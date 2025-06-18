@@ -489,6 +489,9 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
     return (
       tile.title.toLowerCase().includes(query) ||
       tile.tags.materials.some(material => material.toLowerCase().includes(query)) ||
+      tile.tags.themes.some(theme => theme.toLowerCase().includes(query)) ||
+      tile.tags.techniques.some(technique => technique.toLowerCase().includes(query)) ||
+      tile.tags.categories.some(category => category.toLowerCase().includes(query)) ||
       tile.student?.toLowerCase().includes(query)
     );
   });
