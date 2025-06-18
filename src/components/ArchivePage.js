@@ -87,6 +87,8 @@ const ArchivePage = () => {
           onTileClick={handleArtifactClick}
           sortBy={sortBy}
           onSortChange={setSortBy}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
       </div>
 

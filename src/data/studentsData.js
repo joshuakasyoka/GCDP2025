@@ -640,7 +640,7 @@ export const studentsData = {
                 materials: ["web", "audio", "database"],
                 themes: ["artificial_intelligence", "community", "voices"],
                 techniques: ["web_development", "audio_design", "database_design"],
-                categories: ["web_design", "archive_design"]
+                categories: ["materials", "themes", "techniques"]
               }
             }
           ]
@@ -681,7 +681,7 @@ export const studentsData = {
                 materials: ["paper", "cardboard", "ink"],
                 themes: ["sustainability", "community", "education"],
                 techniques: ["book_design", "workshop_design"],
-                categories: ["educational_design", "sustainable_design"]
+                categories: ["materials", "themes"]
               }
             }
           ]
@@ -718,10 +718,10 @@ export const studentsData = {
               w: 210,
               h: 140,
               tags: {
-                materials: ["web", "multimedia", "database"],
-                themes: ["heritage", "preservation", "culture"],
+                materials: ["paper", "multimedia", "database"],
+                themes: ["sustainability", "preservation", "culture"],
                 techniques: ["web_design", "multimedia_production"],
-                categories: ["cultural_design", "digital_heritage"]
+                categories: ["materials", "themes"]
               }
             },
             {
@@ -777,7 +777,7 @@ export const studentsData = {
                 materials: ["mobile", "interface", "app"],
                 themes: ["mindfulness", "wellbeing", "technology"],
                 techniques: ["app_design", "behavioral_design"],
-                categories: ["mobile_design", "wellbeing_design"]
+                categories: ["themes", "wellbeing_design"]
               }
             },
             {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/Tile.module.css';
 
-const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
+const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(tile);
@@ -17,6 +17,23 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
 
   // Use fixed square dimensions
   const tileSize = 200; // pixels
+
+  // Get tags to display based on the active category
+  const getDisplayTags = () => {
+    console.log('Display tags category:', displayTags);
+    console.log('Tile tags:', tile.tags);
+    
+    if (!displayTags || !tile.tags || !tile.tags[displayTags]) {
+      console.log('No tags to display');
+      return [];
+    }
+    
+    const tags = tile.tags[displayTags];
+    console.log('Tags to display:', tags);
+    return tags.slice(0, 2); // Return only the first two tags
+  };
+
+  const displayTagsList = getDisplayTags();
 
   return (
     <div
@@ -47,7 +64,7 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style }) => {
         <div className={styles.tileInfo}>
           <h3 className={styles.tileTitle}>{tile.title}</h3>
           <div className={styles.tileTags}>
-            {tile.tags.materials && tile.tags.materials.slice(0, 2).map((tag, index) => (
+            {displayTagsList.map((tag, index) => (
               <span key={index} className={styles.tag}>
                 #{tag.replace(/_/g, '')}
               </span>

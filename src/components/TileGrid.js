@@ -3,7 +3,7 @@ import { ReactP5Wrapper } from 'react-p5-wrapper';
 import Tile from './Tile';
 import styles from '../styles/TileGrid.module.css';
 
-const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
+const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, onSearchChange }) => {
   const [tiles, setTiles] = useState([]);
   const [draggedTile, setDraggedTile] = useState(null);
   const [hoveredTile, setHoveredTile] = useState(null);
@@ -11,7 +11,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartTime, setDragStartTime] = useState(null);
   const [dragStartPosition, setDragStartPosition] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const containerRef = useRef(null);
   const [tilePositions, setTilePositions] = useState({});
   
@@ -486,15 +485,60 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const filteredTiles = tiles.filter(tile => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
+    
+    // Check if the search query is a category name
+    const isCategorySearch = ['materials', 'techniques', 'themes', 'categories'].includes(query);
+    
+    if (isCategorySearch) {
+      // If searching for a category, show all tiles that have any tags in that category
+      switch (query) {
+        case 'materials':
+          return tile.tags.materials && tile.tags.materials.length > 0;
+        case 'techniques':
+          return tile.tags.techniques && tile.tags.techniques.length > 0;
+        case 'themes':
+          return tile.tags.themes && tile.tags.themes.length > 0;
+        case 'categories':
+          return tile.tags.categories && tile.tags.categories.length > 0;
+        default:
+          return true;
+      }
+    }
+
+    // Regular search for specific tags, titles, or students
     return (
       tile.title.toLowerCase().includes(query) ||
-      tile.tags.materials.some(material => material.toLowerCase().includes(query)) ||
-      tile.tags.themes.some(theme => theme.toLowerCase().includes(query)) ||
-      tile.tags.techniques.some(technique => technique.toLowerCase().includes(query)) ||
-      tile.tags.categories.some(category => category.toLowerCase().includes(query)) ||
-      tile.student?.toLowerCase().includes(query)
+      tile.student?.toLowerCase().includes(query) ||
+      (tile.tags.materials || []).some(material => material.toLowerCase().includes(query)) ||
+      (tile.tags.themes || []).some(theme => theme.toLowerCase().includes(query)) ||
+      (tile.tags.techniques || []).some(technique => technique.toLowerCase().includes(query)) ||
+      (tile.tags.categories || []).some(category => category.toLowerCase().includes(query))
     );
   });
+
+  // Get the active category for tag display
+  const getActiveCategory = () => {
+    if (!searchQuery) return 'materials'; // Default to materials if no search
+    const query = searchQuery.toLowerCase().trim();
+    
+    // Check if the search query exactly matches a category
+    if (query === 'materials') return 'materials';
+    if (query === 'techniques') return 'techniques';
+    if (query === 'themes') return 'themes';
+    if (query === 'categories') return 'categories';
+    
+    // If the search query contains a category name, use that category
+    if (query.includes('materials')) return 'materials';
+    if (query.includes('techniques')) return 'techniques';
+    if (query.includes('themes')) return 'themes';
+    if (query.includes('categories')) return 'categories';
+    
+    return 'materials'; // Default to materials if no category match
+  };
+
+  // Debug log to check what's being passed to Tile
+  console.log('Search query:', searchQuery);
+  console.log('Active category:', getActiveCategory());
 
   useEffect(() => {
     const container = containerRef.current;
@@ -502,81 +546,9 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
 
     // Create canvas element if it doesn't exist
     let canvas = container.querySelector('canvas');
-    if (!canvas) {
-      canvas = document.createElement('canvas');
-      canvas.className = styles.connectionCanvas;
-      container.appendChild(canvas);
+    if (canvas && canvas.parentNode) {
+      canvas.parentNode.removeChild(canvas);
     }
-
-    // Set canvas size to match container
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
-
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Only draw lines if we have filtered artifacts
-    if (filteredTiles.length > 0 && filteredTiles.length < 100) {
-      const positions = filteredTiles.map(tile => ({
-        x: tile.x + tile.w / 2,
-        y: tile.y + tile.h / 2,
-        width: tile.w,
-        height: tile.h
-      }));
-      
-      // Draw lines between tiles
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(120, 231, 82, 0.9)'; // #78E752 with 30% opacity
-      ctx.lineWidth = 1;
-
-      // Create a minimum spanning tree to avoid crossing lines
-      const edges = [];
-      for (let i = 0; i < positions.length; i++) {
-        for (let j = i + 1; j < positions.length; j++) {
-          const dx = positions[i].x - positions[j].x;
-          const dy = positions[i].y - positions[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          edges.push({ from: i, to: j, distance });
-        }
-      }
-
-      // Sort edges by distance
-      edges.sort((a, b) => a.distance - b.distance);
-
-      // Kruskal's algorithm for minimum spanning tree
-      const parent = Array(positions.length).fill().map((_, i) => i);
-      const find = (x) => {
-        if (parent[x] !== x) {
-          parent[x] = find(parent[x]);
-        }
-        return parent[x];
-      };
-      const union = (x, y) => {
-        parent[find(x)] = find(y);
-      };
-
-      // Draw the minimum spanning tree
-      edges.forEach(edge => {
-        if (find(edge.from) !== find(edge.to)) {
-          const from = positions[edge.from];
-          const to = positions[edge.to];
-          
-          ctx.moveTo(from.x, from.y);
-          ctx.lineTo(to.x, to.y);
-          
-          union(edge.from, edge.to);
-        }
-      });
-
-      ctx.stroke();
-    }
-
-    // Cleanup function
-    return () => {
-      if (canvas && canvas.parentNode) {
-        canvas.parentNode.removeChild(canvas);
-      }
-    };
   }, [filteredTiles]);
 
   const handleTileMount = (id, element) => {
@@ -603,9 +575,9 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
           <div className={styles.searchContainer}>
             <input
               type="text"
-              placeholder="Search artifacts..."
+              placeholder="Search artifacts, students, materials, techniques, themes, categories..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => onSearchChange(e.target.value)}
               className={styles.searchInput}
             />
           </div>
@@ -658,7 +630,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         >
           {filteredTiles.length > 0 ? (
             <>
-              <ReactP5Wrapper sketch={sketch} />
               {filteredTiles.map(tile => (
                 viewMode === 'vector' ? (
                   <div
@@ -690,6 +661,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
                     onClick={() => handleTileClick(tile)}
                     onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
                     style={{ zIndex: tile.zIndex }}
+                    displayTags={getActiveCategory()}
                   />
                 )
               ))}
