@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/GalleryModal.module.css';
 
 const GalleryModal = ({ artifact, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -49,6 +51,21 @@ const GalleryModal = ({ artifact, onClose }) => {
     }
   };
 
+  const getTranslatedText = (text) => {
+    if (typeof text === 'object' && text[language]) {
+      return text[language];
+    }
+    return text;
+  };
+
+  const getTranslatedTags = (tags) => {
+    if (!tags) return [];
+    if (typeof tags === 'object' && tags[language]) {
+      return tags[language];
+    }
+    return tags;
+  };
+
   return (
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent} onClick={handleContentClick}>
@@ -69,7 +86,7 @@ const GalleryModal = ({ artifact, onClose }) => {
             <>
               <img 
                 src={artifact.file_paths[currentImageIndex]} 
-                alt={artifact.title}
+                alt={getTranslatedText(artifact.title)}
                 className={styles.mainImage}
               />
               {artifact.file_paths.length > 1 && (
@@ -105,29 +122,29 @@ const GalleryModal = ({ artifact, onClose }) => {
 
         <div className={styles.metadataSection}>
           <div className={styles.artifactHeader}>
-            <h2>{artifact.title}</h2>
+            <h2>{getTranslatedText(artifact.title)}</h2>
             <span className={styles.artifactNumber}>#{artifact.artifact_id}</span>
           </div>
 
           <div className={styles.artifactDescription}>
-            <p>{artifact.description}</p>
+            <p>{getTranslatedText(artifact.description)}</p>
           </div>
 
           <div className={styles.studentInfo}>
             <h3>STUDENT</h3>
-            <p>{artifact.student}</p>
+            <p>{getTranslatedText(artifact.student)}</p>
           </div>
 
           <div className={styles.projectInfo}>
             <h3>PROJECT</h3>
-            <p>{artifact.projectTitle}</p>
+            <p>{getTranslatedText(artifact.projectTitle)}</p>
           </div>
 
           <div className={styles.tagsSection}>
             <div className={styles.tagGroup}>
               <h4>MATERIALS</h4>
               <div className={styles.tags}>
-                {artifact.tags.materials?.map((tag, index) => (
+                {getTranslatedTags(artifact.tags?.materials).map((tag, index) => (
                   <span key={index} className={styles.tag}>
                     #{tag.replace(/_/g, '')}
                   </span>
@@ -138,7 +155,7 @@ const GalleryModal = ({ artifact, onClose }) => {
             <div className={styles.tagGroup}>
               <h4>THEMES</h4>
               <div className={styles.tags}>
-                {artifact.tags.themes?.map((tag, index) => (
+                {getTranslatedTags(artifact.tags?.themes).map((tag, index) => (
                   <span key={index} className={styles.tag}>
                     #{tag.replace(/_/g, '')}
                   </span>
@@ -149,7 +166,7 @@ const GalleryModal = ({ artifact, onClose }) => {
             <div className={styles.tagGroup}>
               <h4>TECHNIQUES</h4>
               <div className={styles.tags}>
-                {artifact.tags.techniques?.map((tag, index) => (
+                {getTranslatedTags(artifact.tags?.techniques).map((tag, index) => (
                   <span key={index} className={styles.tag}>
                     #{tag.replace(/_/g, '')}
                   </span>
@@ -160,7 +177,7 @@ const GalleryModal = ({ artifact, onClose }) => {
 
           <div className={styles.metadata}>
             <div className={styles.metadataItem}>
-              <strong>Type:</strong> {artifact.type}
+              <strong>Type:</strong> {getTranslatedText(artifact.type)}
             </div>
             <div className={styles.metadataItem}>
               <strong>Created:</strong> {new Date(artifact.creation_date).toLocaleDateString()}

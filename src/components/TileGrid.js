@@ -13,6 +13,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const containerRef = useRef(null);
+  const [tilePositions, setTilePositions] = useState({});
   
   // Constants for drag and click detection
   const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
@@ -492,6 +493,106 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
     );
   });
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Create canvas element if it doesn't exist
+    let canvas = container.querySelector('canvas');
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.className = styles.connectionCanvas;
+      container.appendChild(canvas);
+    }
+
+    // Set canvas size to match container
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Only draw lines if we have filtered artifacts
+    if (filteredTiles.length > 0 && filteredTiles.length < 100) {
+      const positions = filteredTiles.map(tile => ({
+        x: tile.x + tile.w / 2,
+        y: tile.y + tile.h / 2,
+        width: tile.w,
+        height: tile.h
+      }));
+      
+      // Draw lines between tiles
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(120, 231, 82, 0.9)'; // #78E752 with 30% opacity
+      ctx.lineWidth = 1;
+
+      // Create a minimum spanning tree to avoid crossing lines
+      const edges = [];
+      for (let i = 0; i < positions.length; i++) {
+        for (let j = i + 1; j < positions.length; j++) {
+          const dx = positions[i].x - positions[j].x;
+          const dy = positions[i].y - positions[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          edges.push({ from: i, to: j, distance });
+        }
+      }
+
+      // Sort edges by distance
+      edges.sort((a, b) => a.distance - b.distance);
+
+      // Kruskal's algorithm for minimum spanning tree
+      const parent = Array(positions.length).fill().map((_, i) => i);
+      const find = (x) => {
+        if (parent[x] !== x) {
+          parent[x] = find(parent[x]);
+        }
+        return parent[x];
+      };
+      const union = (x, y) => {
+        parent[find(x)] = find(y);
+      };
+
+      // Draw the minimum spanning tree
+      edges.forEach(edge => {
+        if (find(edge.from) !== find(edge.to)) {
+          const from = positions[edge.from];
+          const to = positions[edge.to];
+          
+          ctx.moveTo(from.x, from.y);
+          ctx.lineTo(to.x, to.y);
+          
+          union(edge.from, edge.to);
+        }
+      });
+
+      ctx.stroke();
+    }
+
+    // Cleanup function
+    return () => {
+      if (canvas && canvas.parentNode) {
+        canvas.parentNode.removeChild(canvas);
+      }
+    };
+  }, [filteredTiles]);
+
+  const handleTileMount = (id, element) => {
+    if (!element) return;
+    
+    const rect = element.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+    
+    setTilePositions(prev => ({
+      ...prev,
+      [id]: {
+        x: rect.left - containerRect.left,
+        y: rect.top - containerRect.top,
+        width: rect.width,
+        height: rect.height
+      }
+    }));
+  };
+
   return (
     <div className={`${styles.tileGrid} ${isFullscreen ? styles.fullscreen : ''}`}>
       <div className={styles.controls}>
@@ -547,70 +648,72 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange }) => {
         </div>
       </div>
       
-      <div 
-        ref={containerRef} 
-        className={styles.canvasContainer}
-      >
-        {filteredTiles.length > 0 ? (
-          <>
-            <ReactP5Wrapper sketch={sketch} />
-            {filteredTiles.map(tile => (
-              viewMode === 'vector' ? (
-                <div
-                  key={tile.id}
-                  className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
+      <div className={styles.canvasContainer}>
+        <div 
+          ref={containerRef} 
+          className={styles.tilesContainer}
+        >
+          {filteredTiles.length > 0 ? (
+            <>
+              <ReactP5Wrapper sketch={sketch} />
+              {filteredTiles.map(tile => (
+                viewMode === 'vector' ? (
+                  <div
+                    key={tile.id}
+                    className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
+                    style={{
+                      position: 'absolute',
+                      left: tile.x,
+                      top: tile.y,
+                      width: tile.w,
+                      height: tile.h,
+                      zIndex: tile.zIndex,
+                      cursor: 'move'
+                    }}
+                    onClick={() => handleTileClick(tile)}
+                    onMouseEnter={() => handleTileHover(tile.id, true)}
+                    onMouseLeave={() => handleTileHover(tile.id, false)}
+                  >
+                    <span className={styles.vectorTileNumber}>
+                      {tiles.findIndex(t => t.id === tile.id) + 1}
+                    </span>
+                  </div>
+                ) : (
+                  <Tile
+                    key={tile.id}
+                    tile={tile}
+                    isDragging={draggedTile && draggedTile.id === tile.id}
+                    isHovered={hoveredTile && hoveredTile.id === tile.id}
+                    onClick={() => handleTileClick(tile)}
+                    onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                    style={{ zIndex: tile.zIndex }}
+                  />
+                )
+              ))}
+              {viewMode === 'vector' && hoveredTile && (
+                <div 
+                  className={styles.floatingTile}
                   style={{
                     position: 'absolute',
-                    left: tile.x,
-                    top: tile.y,
-                    width: tile.w,
-                    height: tile.h,
-                    zIndex: tile.zIndex,
-                    cursor: 'move'
+                    left: hoveredTile.w + 15,
+                    zIndex: 1000
                   }}
-                  onClick={() => handleTileClick(tile)}
-                  onMouseEnter={() => handleTileHover(tile.id, true)}
-                  onMouseLeave={() => handleTileHover(tile.id, false)}
                 >
-                  <span className={styles.vectorTileNumber}>
-                    {tiles.findIndex(t => t.id === tile.id) + 1}
-                  </span>
+                  <Tile
+                    tile={hoveredTile}
+                    isHovered={true}
+                    onClick={() => handleTileClick(hoveredTile)}
+                    onHover={() => {}}
+                  />
                 </div>
-              ) : (
-                <Tile
-                  key={tile.id}
-                  tile={tile}
-                  isDragging={draggedTile && draggedTile.id === tile.id}
-                  isHovered={hoveredTile && hoveredTile.id === tile.id}
-                  onClick={() => handleTileClick(tile)}
-                  onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
-                  style={{ zIndex: tile.zIndex }}
-                />
-              )
-            ))}
-            {viewMode === 'vector' && hoveredTile && (
-              <div 
-                className={styles.floatingTile}
-                style={{
-                  position: 'absolute',
-                  left: hoveredTile.w + 15,
-                  zIndex: 1000
-                }}
-              >
-                <Tile
-                  tile={hoveredTile}
-                  isHovered={true}
-                  onClick={() => handleTileClick(hoveredTile)}
-                  onHover={() => {}}
-                />
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={styles.noData}>
-            <p>Enter a search term to view artifacts</p>
-          </div>
-        )}
+              )}
+            </>
+          ) : (
+            <div className={styles.noData}>
+              <p>Enter a search term to view artifacts</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import IntroAnimation from './components/IntroAnimation';
 import ArchivePage from './components/ArchivePage';
 import StudentProjectPage from './components/StudentProjectPage';
 import GlossaryPage from './components/GlossaryPage';
+import { LanguageProvider } from './contexts/LanguageContext';
 import './styles/globals.css';
 import styles from './styles/App.module.css';
 
@@ -15,16 +16,18 @@ function App() {
       {showIntro ? (
         <IntroAnimation onComplete={() => setShowIntro(false)} />
       ) : (
-        <Router>
-          <Routes>
-            <Route path="/" element={<ArchivePage />} />
-            <Route path="/archive" element={<ArchivePage />} />
-            <Route path="/archive/artifact/:artifactId" element={<ArchivePage />} />
-            <Route path="/students/:studentId" element={<StudentProjectPage />} />
-            <Route path="/students/:studentId/:projectId" element={<StudentProjectPage />} />
-            <Route path="/glossary" element={<GlossaryPage />} />
-          </Routes>
-        </Router>
+        <LanguageProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<ArchivePage />} />
+              <Route path="/archive" element={<ArchivePage />} />
+              <Route path="/archive/artifact/:artifactId" element={<ArchivePage />} />
+              <Route path="/students/:studentId" element={<StudentProjectPage />} />
+              <Route path="/students/:studentId/:projectId" element={<StudentProjectPage />} />
+              <Route path="/glossary" element={<GlossaryPage />} />
+            </Routes>
+          </Router>
+        </LanguageProvider>
       )}
     </div>
   );

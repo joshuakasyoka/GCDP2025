@@ -642,23 +642,6 @@ export const studentsData = {
                 techniques: ["web_development", "audio_design", "database_design"],
                 categories: ["web_design", "archive_design"]
               }
-            },
-            
-            {
-              artifact_id: "artifact_020",
-              title: "Participatory AI Framework Book",
-              description: "Photo and video documentation of community interview sessions",
-              type: "documentation",
-              file_paths: ["/StudentPhotos/GreenJosh/GJ-9.png"],
-              creation_date: "2024-11-18T14:45:00Z",
-              w: 170,
-              h: 130,
-              tags: {
-                materials: ["photography", "video", "interviews"],
-                themes: ["community", "engagement", "documentation"],
-                techniques: ["photography", "interviewing", "ethnography"],
-                categories: ["documentation", "social_research"]
-              }
             }
           ]
         },
@@ -686,19 +669,19 @@ export const studentsData = {
           ],
           artifacts: [
             {
-              artifact_id: "artifact_019",
+              artifact_id: "artifact_020",
               title: "Playbook for Composting",
-              description: "Web-based archive interface for browsing AI community voices",
-              type: "digital_prototype",
+              description: "Physical guide for community composting workshops",
+              type: "physical_prototype",
               file_paths: ["/StudentPhotos/GreenJosh/GJ-10.png"],
               creation_date: "2024-11-25T17:30:00Z",
               w: 200,
               h: 150,
               tags: {
-                materials: ["web", "audio", "database"],
-                themes: ["artificial_intelligence", "community", "voices"],
-                techniques: ["web_development", "audio_design", "database_design"],
-                categories: ["web_design", "archive_design"]
+                materials: ["paper", "cardboard", "ink"],
+                themes: ["sustainability", "community", "education"],
+                techniques: ["book_design", "workshop_design"],
+                categories: ["educational_design", "sustainable_design"]
               }
             }
           ]
