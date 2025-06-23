@@ -86,3 +86,7 @@ a {
 a:hover {
   color: var(--highlight-color);
 }
+
+img {
+  filter: grayscale(100%);
+}

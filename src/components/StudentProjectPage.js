@@ -6,6 +6,13 @@ import GalleryModal from './GalleryModal';
 import { studentsData } from '../data/studentsData';
 import styles from '../styles/StudentProject.module.css';
 
+function getGoogleDriveImageUrl(link) {
+  const match = link.match(/(?:id=|\/d\/)([a-zA-Z0-9_-]+)/);
+  if (!match) return link;
+  const fileId = match[1];
+  return `https://drive.google.com/uc?export=view&id=${fileId}`;
+}
+
 const StudentProjectPage = () => {
   const { studentId, projectId } = useParams();
   const [selectedProject, setSelectedProject] = useState(null);
@@ -99,7 +106,7 @@ const StudentProjectPage = () => {
                           onClick={() => setSelectedPhoto(photo)}
                         >
                           <img 
-                            src={photo.url} 
+                            src={getGoogleDriveImageUrl(photo.url)} 
                             alt={photo.caption}
                             className={styles.projectPhoto}
                           />

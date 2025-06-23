@@ -142,17 +142,6 @@ const GalleryModal = ({ artifact, onClose }) => {
 
           <div className={styles.tagsSection}>
             <div className={styles.tagGroup}>
-              <h4>MATERIALS</h4>
-              <div className={styles.tags}>
-                {getTranslatedTags(artifact.tags?.materials).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
-                    #{tag.replace(/_/g, '')}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.tagGroup}>
               <h4>THEMES</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.themes).map((tag, index) => (
@@ -164,9 +153,42 @@ const GalleryModal = ({ artifact, onClose }) => {
             </div>
 
             <div className={styles.tagGroup}>
-              <h4>TECHNIQUES</h4>
+              <h4>DESIGN AS</h4>
               <div className={styles.tags}>
-                {getTranslatedTags(artifact.tags?.techniques).map((tag, index) => (
+                {getTranslatedTags(artifact.tags?.design_as).map((tag, index) => (
+                  <span key={index} className={styles.tag}>
+                    #{tag.replace(/_/g, '')}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.tagGroup}>
+              <h4>MATERIALS</h4>
+              <div className={styles.tags}>
+                {getTranslatedTags(artifact.tags?.materials).map((tag, index) => (
+                  <span key={index} className={styles.tag}>
+                    #{tag.replace(/_/g, '')}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.tagGroup}>
+              <h4>METHODS</h4>
+              <div className={styles.tags}>
+                {getTranslatedTags(artifact.tags?.methods).map((tag, index) => (
+                  <span key={index} className={styles.tag}>
+                    #{tag.replace(/_/g, '')}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.tagGroup}>
+              <h4>COLLABORATORS</h4>
+              <div className={styles.tags}>
+                {getTranslatedTags(artifact.tags?.collaborators).map((tag, index) => (
                   <span key={index} className={styles.tag}>
                     #{tag.replace(/_/g, '')}
                   </span>
