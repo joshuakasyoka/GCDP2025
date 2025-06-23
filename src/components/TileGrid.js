@@ -203,8 +203,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     if (!containerRef.current || !draggedTile || !dragStartPosition) return;
     
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+    const mouseX = e.clientX - rect.left + scrollLeft;
+    const mouseY = e.clientY - rect.top + scrollTop;
 
     // Calculate distance moved
     const dx = mouseX - dragStartPosition.x;
@@ -236,8 +238,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     if (!containerRef.current) return;
     
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+    const mouseX = e.clientX - rect.left + scrollLeft;
+    const mouseY = e.clientY - rect.top + scrollTop;
 
     for (let i = tiles.length - 1; i >= 0; i--) {
       const tile = tiles[i];
@@ -353,8 +357,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     
     const touch = e.touches[0];
     const rect = containerRef.current.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+    const touchX = touch.clientX - rect.left + scrollLeft;
+    const touchY = touch.clientY - rect.top + scrollTop;
 
     for (let i = tiles.length - 1; i >= 0; i--) {
       const tile = tiles[i];
@@ -379,8 +385,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     
     const touch = e.touches[0];
     const rect = containerRef.current.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+    const touchX = touch.clientX - rect.left + scrollLeft;
+    const touchY = touch.clientY - rect.top + scrollTop;
 
     // Calculate distance moved
     const dx = touchX - dragStartPosition.x;
