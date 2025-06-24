@@ -54,7 +54,7 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
       <div className={styles.tileContent}>
         <div className={styles.tileImage}>
           {tile.file_paths && tile.file_paths[0] ? (
-            <img src={tile.file_paths[0]} alt={tile.title} />
+            <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" />
           ) : (
             <div className={styles.placeholder}>
               <span>{tile.type}</span>

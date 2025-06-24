@@ -88,6 +88,7 @@ const GalleryModal = ({ artifact, onClose }) => {
                 src={artifact.file_paths[currentImageIndex]} 
                 alt={getTranslatedText(artifact.title)}
                 className={styles.mainImage}
+                loading="lazy"
               />
               {artifact.file_paths.length > 1 && (
                 <div className={styles.imageNavigation}>

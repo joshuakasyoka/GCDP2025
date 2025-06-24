@@ -604,12 +604,14 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           >
             ⊞
           </button>
+          {/*
           <button 
             className={`${styles.listViewBtn} ${viewMode === 'random' ? styles.active : ''}`}
             onClick={() => setViewMode('random')}
           >
             ☰
           </button>
+          */}
           <button 
             className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
             onClick={() => setViewMode('cluster')}
