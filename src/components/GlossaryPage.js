@@ -6,19 +6,29 @@ const GlossaryPage = () => {
   // Define tag categories and their descriptions
   const tagCategories = [
     {
-      title: "Materials & Techniques",
-      description: "Tags related to the physical materials and methods used in the projects",
-      tags: ["paper", "digital", "photography", "video", "installation", "textile", "print", "collage"]
+      title: "Themes",
+      description: "Conceptual and topical focuses explored in the projects, such as social issues, cultural topics, or creative directions.",
+      tags: ["ai", "technology", "participatory_design", "politics", "identity", "community", "futuresthinking", "mapping", "storytelling", "repair", "collage", "zine", "handmaking", "photography", "documentation"]
     },
     {
-      title: "Themes & Concepts",
-      description: "Tags related to the conceptual and thematic elements of the projects",
-      tags: ["activism", "community", "sustainability", "identity", "social-justice", "environment", "culture"]
+      title: "Design As",
+      description: "The role or mode of design practice, such as participatory, speculative, critical, or educational approaches.",
+      tags: ["participatory", "speculative", "critical", "enquiry", "democratic", "discursive", "craft", "inclusive", "visual", "educational", "installation"]
     },
     {
-      title: "Process & Approach",
-      description: "Tags related to the methodology and approach of the projects",
-      tags: ["research", "collaboration", "experimental", "iterative", "participatory", "documentation"]
+      title: "Materials",
+      description: "Physical or digital materials used in the making of artifacts, including traditional and experimental media.",
+      tags: ["paper", "ink", "thread", "wood", "plastic", "metal", "textile", "digital", "film", "thermal_ink", "thermal_paper", "polyethylene", "map", "marker", "sticker"]
+    },
+    {
+      title: "Methods",
+      description: "Processes, techniques, or research methods used to develop and realize the projects.",
+      tags: ["workshops", "collage", "ethnography", "storytelling", "guided_conversation", "participatory_mapping", "installation_engagement", "structured_dialog", "autoethnography", "dataanalysis", "creativewriting", "photography", "sculpting"]
+    },
+    {
+      title: "Collaborators",
+      description: "Organizations, communities, or individuals who contributed to or partnered in the projects.",
+      tags: ["ual", "outlandish", "lj_works", "peckham_library", "communitycenter", "womenssupportgroup", "turinglab", "friendsofruskinpark", "southlondonurbangrowersslug", "camberwellgreen", "multicultural_center", "cultural_groups"]
     }
   ];
 
