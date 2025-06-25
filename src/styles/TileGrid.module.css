@@ -19,7 +19,9 @@
   position: relative;
   width: 100%;
   height: 100%;
+  overflow-x: auto;
   overflow-y: auto;
+  touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -113,9 +115,10 @@
 
 @media (max-width: 768px) {
   .tilesContainer {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    overflow-x: auto;
+    overflow-y: auto;
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 
   .viewControls {

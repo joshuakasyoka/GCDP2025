@@ -27,6 +27,12 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
 
   // Initialize fullscreen state based on device
   const [isFullscreen, setIsFullscreen] = useState(isMobileDevice());
+  // Set default view mode to 'vector' on mobile
+  useEffect(() => {
+    if (isMobileDevice()) {
+      setViewMode('vector');
+    }
+  }, []);
   
   // Responsive tile sizes
   const getTileSize = () => {

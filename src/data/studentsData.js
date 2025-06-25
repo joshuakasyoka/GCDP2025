@@ -931,7 +931,7 @@ export const studentsData = {
               "tags": {
                 "themes": ["placemaking", "futurevisioning"],
                 "design_as": ["participation"],
-                "materials": ["papaer"],
+                "materials": ["paper"],
                 "methods": ["ethnography", "culturalprobes", "workshops"],
                 "collaborators": ["knockshorikawa", "katalab", "dobuitashotengai"]
               }
