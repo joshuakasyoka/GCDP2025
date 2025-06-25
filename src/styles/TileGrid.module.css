@@ -216,6 +216,65 @@
     align-items: center;
     margin-left: var(--spacing-md);
   }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 16px;
+    padding: 8px 12px;
+    margin: 16px 16px 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    min-height: 48px;
+  }
+  .mobileSearchInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    padding: 8px 0 8px 8px;
+    outline: none;
+    color: #222;
+    min-width: 0;
+  }
+  .mobileSearchInput::placeholder {
+    color: #888;
+    font-size: 16px;
+  }
+  .mobileIcons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+  }
+  .mobileIcons button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    background: none;
+    border: none;
+    color: #444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .mobileIcons button.active,
+  .mobileIcons button:focus {
+    background: var(--highlight-color, #FF9900);
+    color: #fff;
+  }
+  .mobileIcons button:active {
+    background: #eee;
+  }
+  .controls {
+    display: none !important;
+  }
 }
 
 .controls {

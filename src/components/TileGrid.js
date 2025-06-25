@@ -4,6 +4,49 @@ import Tile from './Tile';
 import styles from '../styles/TileGrid.module.css';
 import createFuzzySearch from '@nozbe/microfuzz';
 
+// MobileHeader component for mobile view
+const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFullscreen, setIsFullscreen, styles }) => (
+  <div className={styles.mobileHeader}>
+    <input
+      type="text"
+      placeholder="Search..."
+      value={searchQuery}
+      onChange={e => onSearchChange(e.target.value)}
+      className={styles.mobileSearchInput}
+    />
+    <div className={styles.mobileIcons}>
+      <button
+        className={`${styles.gridViewBtn} ${viewMode === 'grid' ? styles.active : ''}`}
+        onClick={() => setViewMode('grid')}
+        aria-label="Grid view"
+      >
+        ⊞
+      </button>
+      <button
+        className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
+        onClick={() => setViewMode('cluster')}
+        aria-label="Cluster view"
+      >
+        ⊙
+      </button>
+      <button
+        className={`${styles.vectorViewBtn} ${viewMode === 'vector' ? styles.active : ''}`}
+        onClick={() => setViewMode('vector')}
+        aria-label="Vector view"
+      >
+        □
+      </button>
+      <button
+        className={`${styles.fullscreenBtn} ${isFullscreen ? styles.active : ''}`}
+        onClick={() => setIsFullscreen(!isFullscreen)}
+        aria-label="Fullscreen"
+      >
+        {isFullscreen ? '⤢' : '⤢'}
+      </button>
+    </div>
+  </div>
+);
+
 const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, onSearchChange }) => {
   const [tiles, setTiles] = useState([]);
   const [draggedTile, setDraggedTile] = useState(null);
@@ -626,7 +669,19 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
 
   return (
     <div className={`${styles.tileGrid} ${isFullscreen ? styles.fullscreen : ''}`}>
-      <div className={styles.controls}>
+      {/* Show mobile header on mobile only */}
+      {isMobileDevice() && (
+        <MobileHeader
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          isFullscreen={isFullscreen}
+          setIsFullscreen={setIsFullscreen}
+          styles={styles}
+        />
+      )}
+      <div className={styles.controls} style={isMobileDevice() ? { display: 'none' } : {}}>
         <div className={styles.sortControls}>
           <div className={styles.searchContainer}>
             <input
