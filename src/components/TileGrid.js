@@ -92,11 +92,42 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           x = clusterX + (Math.cos(angle) * distance);
           y = clusterY + (Math.sin(angle) * distance);
         } else if (viewMode === 'vector') {
-          const tilesPerRow = 8;
-          const row = Math.floor(index / tilesPerRow);
-          const col = index % tilesPerRow;
-          x = canvasPadding + (col * (vectorTileSize + gridGap));
-          y = canvasPadding + (row * (vectorTileSize + gridGap));
+          // Randomly distribute circles within the visible area (no overlap, all in bounds)
+          const circleRadius = 16; // 32px diameter
+          const margin = 8;
+          const maxAttempts = 100;
+          // Keep a list of placed positions to avoid overlap
+          if (!window._vectorPositions || window._vectorPositions.length !== artifacts.length) {
+            window._vectorPositions = [];
+            for (let i = 0; i < artifacts.length; i++) {
+              let placed = false;
+              let attempts = 0;
+              while (!placed && attempts < maxAttempts) {
+                const x = canvasPadding + circleRadius + Math.random() * (availableWidth - 2 * circleRadius);
+                const y = canvasPadding + circleRadius + Math.random() * (availableHeight - 2 * circleRadius);
+                // Check for overlap
+                const overlap = window._vectorPositions.some(pos => {
+                  const dx = pos.x - x;
+                  const dy = pos.y - y;
+                  return Math.sqrt(dx * dx + dy * dy) < 2 * circleRadius + margin;
+                });
+                if (!overlap) {
+                  window._vectorPositions.push({ x, y });
+                  placed = true;
+                }
+                attempts++;
+              }
+              if (!placed) {
+                // fallback: just place it
+                window._vectorPositions.push({
+                  x: canvasPadding + circleRadius + Math.random() * (availableWidth - 2 * circleRadius),
+                  y: canvasPadding + circleRadius + Math.random() * (availableHeight - 2 * circleRadius)
+                });
+              }
+            }
+          }
+          x = window._vectorPositions[index].x;
+          y = window._vectorPositions[index].y;
         }
 
         return {
@@ -104,8 +135,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           id: artifact.artifact_id,
           x: x,
           y: y,
-          w: viewMode === 'vector' ? vectorTileSize : tileSize,
-          h: viewMode === 'vector' ? vectorTileSize : tileSize,
+          w: viewMode === 'vector' ? 32 : tileSize,
+          h: viewMode === 'vector' ? 32 : tileSize,
           targetX: x,
           targetY: y,
           zIndex: index
@@ -170,22 +201,17 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           p5.circle(clusterX, clusterY, clusterRadius * 2);
         }
       } else if (viewMode === 'vector') {
-        p5.stroke(240);
-        p5.strokeWeight(0.5);
-        p5.noFill();
-        
-        // Draw grid lines for vector view
-        const tilesPerRow = 8;
-        const numRows = Math.ceil(artifacts.length / tilesPerRow);
-        
-        for (let i = 0; i <= numRows; i++) {
-          const y = canvasPadding + (i * (vectorTileSize + gridGap));
-          p5.line(0, y, p5.width, y);
+        // Draw lines connecting circles
+        p5.stroke('#FF9900');
+        p5.strokeWeight(2.5);
+        for (let i = 0; i < tiles.length - 1; i++) {
+          p5.line(tiles[i].x + 16, tiles[i].y + 16, tiles[i + 1].x + 16, tiles[i + 1].y + 16);
         }
-        
-        for (let i = 0; i <= tilesPerRow; i++) {
-          const x = canvasPadding + (i * (vectorTileSize + gridGap));
-          p5.line(x, 0, x, p5.height);
+        // Draw circles with highlight color
+        for (let i = 0; i < tiles.length; i++) {
+          p5.noStroke();
+          p5.fill(getComputedStyle(document.documentElement).getPropertyValue('--highlight-color') || '#FF9900');
+          p5.circle(tiles[i].x + 16, tiles[i].y + 16, 32);
         }
       }
     };
@@ -665,16 +691,22 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                       position: 'absolute',
                       left: tile.x,
                       top: tile.y,
-                      width: tile.w,
-                      height: tile.h,
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
                       zIndex: tile.zIndex,
-                      cursor: 'move'
+                      cursor: 'pointer',
+                      background: 'var(--highlight-color)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      pointerEvents: 'auto',
                     }}
                     onClick={() => handleTileClick(tile)}
                     onMouseEnter={() => handleTileHover(tile.id, true)}
                     onMouseLeave={() => handleTileHover(tile.id, false)}
                   >
-                    <span className={styles.vectorTileNumber}>
+                    <span className={styles.vectorTileNumber} style={{ color: '#fff', fontWeight: 600, fontSize: 12 }}>
                       {tiles.findIndex(t => t.id === tile.id) + 1}
                     </span>
                   </div>
