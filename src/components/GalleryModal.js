@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/GalleryModal.module.css';
 
-const GalleryModal = ({ artifact, onClose }) => {
+const GalleryModal = ({ artifact, onClose, onTagClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { language } = useLanguage();
 
@@ -146,7 +146,12 @@ const GalleryModal = ({ artifact, onClose }) => {
               <h4>THEMES</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.themes).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
+                  <span
+                    key={index}
+                    className={styles.tag}
+                    onClick={() => onTagClick && onTagClick(tag)}
+                    style={{ cursor: onTagClick ? 'pointer' : undefined }}
+                  >
                     #{tag.replace(/_/g, '')}
                   </span>
                 ))}
@@ -157,7 +162,12 @@ const GalleryModal = ({ artifact, onClose }) => {
               <h4>DESIGN AS</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.design_as).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
+                  <span
+                    key={index}
+                    className={styles.tag}
+                    onClick={() => onTagClick && onTagClick(tag)}
+                    style={{ cursor: onTagClick ? 'pointer' : undefined }}
+                  >
                     #{tag.replace(/_/g, '')}
                   </span>
                 ))}
@@ -168,7 +178,12 @@ const GalleryModal = ({ artifact, onClose }) => {
               <h4>MATERIALS</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.materials).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
+                  <span
+                    key={index}
+                    className={styles.tag}
+                    onClick={() => onTagClick && onTagClick(tag)}
+                    style={{ cursor: onTagClick ? 'pointer' : undefined }}
+                  >
                     #{tag.replace(/_/g, '')}
                   </span>
                 ))}
@@ -179,7 +194,12 @@ const GalleryModal = ({ artifact, onClose }) => {
               <h4>METHODS</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.methods).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
+                  <span
+                    key={index}
+                    className={styles.tag}
+                    onClick={() => onTagClick && onTagClick(tag)}
+                    style={{ cursor: onTagClick ? 'pointer' : undefined }}
+                  >
                     #{tag.replace(/_/g, '')}
                   </span>
                 ))}
@@ -190,7 +210,12 @@ const GalleryModal = ({ artifact, onClose }) => {
               <h4>COLLABORATORS</h4>
               <div className={styles.tags}>
                 {getTranslatedTags(artifact.tags?.collaborators).map((tag, index) => (
-                  <span key={index} className={styles.tag}>
+                  <span
+                    key={index}
+                    className={styles.tag}
+                    onClick={() => onTagClick && onTagClick(tag)}
+                    style={{ cursor: onTagClick ? 'pointer' : undefined }}
+                  >
                     #{tag.replace(/_/g, '')}
                   </span>
                 ))}

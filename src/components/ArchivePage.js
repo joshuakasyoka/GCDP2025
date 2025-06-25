@@ -97,6 +97,10 @@ const ArchivePage = () => {
           key={`modal-${currentArtifact.artifact_id}-${location.pathname}`}
           artifact={currentArtifact}
           onClose={handleCloseModal}
+          onTagClick={(tag) => {
+            setSearchQuery(tag);
+            handleCloseModal();
+          }}
         />
       )}
     </div>
