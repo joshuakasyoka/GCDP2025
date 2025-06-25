@@ -16,6 +16,7 @@ const IntroAnimation = ({ onComplete }) => {
   return (
     <div className={`${styles.introContainer} ${!isVisible ? styles.fadeOut : ''}`}>
       <div className={styles.content}>
+      <img src="/EntryPhoto.png" style={{ width: '240px', height: '180px', objectFit: 'cover' }} />
         <h1 className={styles.title}>Materials of Soft Activism</h1>
         <h2 className={styles.subtitle}>Global Collaborative Design Practice 2025</h2>
       </div>

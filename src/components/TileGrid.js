@@ -495,19 +495,21 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     const query = searchQuery.toLowerCase();
     
     // Check if the search query is a category name
-    const isCategorySearch = ['materials', 'techniques', 'themes', 'categories'].includes(query);
+    const isCategorySearch = ['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(query);
     
     if (isCategorySearch) {
       // If searching for a category, show all tiles that have any tags in that category
       switch (query) {
         case 'materials':
           return tile.tags.materials && tile.tags.materials.length > 0;
-        case 'techniques':
-          return tile.tags.techniques && tile.tags.techniques.length > 0;
+        case 'methods':
+          return tile.tags.methods && tile.tags.methods.length > 0;
         case 'themes':
           return tile.tags.themes && tile.tags.themes.length > 0;
-        case 'categories':
-          return tile.tags.categories && tile.tags.categories.length > 0;
+        case 'design_as':
+          return tile.tags.design_as && tile.tags.design_as.length > 0;
+        case 'collaborators':
+          return tile.tags.collaborators && tile.tags.collaborators.length > 0;
         default:
           return true;
       }
@@ -518,9 +520,10 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       tile.title.toLowerCase().includes(query) ||
       tile.student?.toLowerCase().includes(query) ||
       (tile.tags.materials || []).some(material => material.toLowerCase().includes(query)) ||
+      (tile.tags.methods || []).some(method => method.toLowerCase().includes(query)) ||
       (tile.tags.themes || []).some(theme => theme.toLowerCase().includes(query)) ||
-      (tile.tags.techniques || []).some(technique => technique.toLowerCase().includes(query)) ||
-      (tile.tags.categories || []).some(category => category.toLowerCase().includes(query))
+      (tile.tags.design_as || []).some(designAs => designAs.toLowerCase().includes(query)) ||
+      (tile.tags.collaborators || []).some(collab => collab.toLowerCase().includes(query))
     );
   });
 
@@ -531,15 +534,17 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     
     // Check if the search query exactly matches a category
     if (query === 'materials') return 'materials';
-    if (query === 'techniques') return 'techniques';
+    if (query === 'methods') return 'methods';
     if (query === 'themes') return 'themes';
-    if (query === 'categories') return 'categories';
+    if (query === 'design_as') return 'design_as';
+    if (query === 'collaborators') return 'collaborators';
     
     // If the search query contains a category name, use that category
     if (query.includes('materials')) return 'materials';
-    if (query.includes('techniques')) return 'techniques';
+    if (query.includes('methods')) return 'methods';
     if (query.includes('themes')) return 'themes';
-    if (query.includes('categories')) return 'categories';
+    if (query.includes('design_as')) return 'design_as';
+    if (query.includes('collaborators')) return 'collaborators';
     
     return 'materials'; // Default to materials if no category match
   };

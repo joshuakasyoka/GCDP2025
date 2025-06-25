@@ -884,7 +884,7 @@ export const studentsData = {
       "name": {
         "first_name": "Teppei",
         "last_name": "Fuma",
-        "display_name": "Teppei FUma"
+        "display_name": "Teppei Fuma"
       },
       "email": "tepeii.fuma@example.edu",
       "student_number": "STU123012",
