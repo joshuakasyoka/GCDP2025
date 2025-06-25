@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import Tile from './Tile';
 import styles from '../styles/TileGrid.module.css';
+import createFuzzySearch from '@nozbe/microfuzz';
 
 const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, onSearchChange }) => {
   const [tiles, setTiles] = useState([]);
@@ -489,43 +490,53 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     };
   }, [handleMouseMove, handleMouseDown, handleMouseUp, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
-  // Filter tiles based on search query
-  const filteredTiles = tiles.filter(tile => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    
-    // Check if the search query is a category name
-    const isCategorySearch = ['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(query);
-    
-    if (isCategorySearch) {
-      // If searching for a category, show all tiles that have any tags in that category
-      switch (query) {
-        case 'materials':
-          return tile.tags.materials && tile.tags.materials.length > 0;
-        case 'methods':
-          return tile.tags.methods && tile.tags.methods.length > 0;
-        case 'themes':
-          return tile.tags.themes && tile.tags.themes.length > 0;
-        case 'design_as':
-          return tile.tags.design_as && tile.tags.design_as.length > 0;
-        case 'collaborators':
-          return tile.tags.collaborators && tile.tags.collaborators.length > 0;
-        default:
-          return true;
-      }
-    }
+  // Prepare a flat list of searchable fields for each tile
+  const getSearchText = (tile) => [
+    tile.title,
+    tile.student,
+    ...(tile.tags?.themes || []),
+    ...(tile.tags?.design_as || []),
+    ...(tile.tags?.materials || []),
+    ...(tile.tags?.methods || []),
+    ...(tile.tags?.collaborators || [])
+  ].filter(Boolean);
 
-    // Regular search for specific tags, titles, or students
-    return (
-      tile.title.toLowerCase().includes(query) ||
-      tile.student?.toLowerCase().includes(query) ||
-      (tile.tags.materials || []).some(material => material.toLowerCase().includes(query)) ||
-      (tile.tags.methods || []).some(method => method.toLowerCase().includes(query)) ||
-      (tile.tags.themes || []).some(theme => theme.toLowerCase().includes(query)) ||
-      (tile.tags.design_as || []).some(designAs => designAs.toLowerCase().includes(query)) ||
-      (tile.tags.collaborators || []).some(collab => collab.toLowerCase().includes(query))
-    );
-  });
+  // Memoize the fuzzy search instance
+  const fuzzySearch = React.useMemo(() =>
+    createFuzzySearch(tiles, {
+      getText: getSearchText
+    }),
+    [tiles]
+  );
+
+  // Debug logs
+  console.log('Tiles:', tiles);
+  if (tiles.length > 0) {
+    console.log('getSearchText for first tile:', getSearchText(tiles[0]));
+  }
+  console.log('Search query:', searchQuery);
+  if (searchQuery && !['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(searchQuery.toLowerCase())) {
+    console.log('Fuzzy search result:', fuzzySearch(searchQuery));
+  }
+
+  // Filter tiles based on search query using microfuzz
+  const filteredTiles = React.useMemo(() => {
+    if (!searchQuery) return tiles;
+    // Category search: show all tiles with tags in that category
+    const query = searchQuery.toLowerCase();
+    const isCategorySearch = ['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(query);
+    if (isCategorySearch) {
+      return tiles.filter(tile =>
+        (query === 'materials' && tile.tags.materials && tile.tags.materials.length > 0) ||
+        (query === 'methods' && tile.tags.methods && tile.tags.methods.length > 0) ||
+        (query === 'themes' && tile.tags.themes && tile.tags.themes.length > 0) ||
+        (query === 'design_as' && tile.tags.design_as && tile.tags.design_as.length > 0) ||
+        (query === 'collaborators' && tile.tags.collaborators && tile.tags.collaborators.length > 0)
+      );
+    }
+    // Fuzzy search for everything else
+    return fuzzySearch(searchQuery).map(result => result.item);
+  }, [tiles, searchQuery, fuzzySearch]);
 
   // Get the active category for tag display
   const getActiveCategory = () => {
