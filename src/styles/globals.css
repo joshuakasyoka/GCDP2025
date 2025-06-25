@@ -16,6 +16,22 @@
   --spacing-xl: 32px;
 }
 
+/* :root {
+  --highlight-color: #D74616;
+  --main-color: #B6BBBA;
+  --text-color: #000000;
+  --border-color: #000000;
+  --gray-light: #B6BBBA;
+  --gray-medium: #cccccc;
+  --transition: 300ms ease;
+  --border-width: 0.5px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+} */
+
 * {
   margin: 0;
   padding: 0;
