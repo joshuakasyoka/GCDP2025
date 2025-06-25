@@ -114,21 +114,107 @@
 }
 
 @media (max-width: 768px) {
+  .tileGrid {
+    padding: 24px 0 0 0;
+  }
+  .controls {
+    padding: 0 32px 24px 32px;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
   .tilesContainer {
     overflow-x: auto;
     overflow-y: auto;
     touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
+    padding: 0 12px 12px 12px;
+  }
+
+  .sortControls {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  .sortByLabel,
+  .desktopOnly,
+  .sortControls select {
+    display: none !important;
+  }
+
+  .searchContainer {
+    margin-right: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex: 1;
+  }
+
+  .searchInput {
+    padding: 14px 18px;
+    border: var(--border-width) solid var(--border-color);
+    background: var(--main-color);
+    font-size: 18px;
+    width: 100%;
+    min-width: 0;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+
+  .searchInput:focus {
+    outline: none;
+    border-color: var(--highlight-color);
+    background: var(--white);
+  }
+
+  .searchInput::placeholder {
+    color: var(--gray-medium);
+    font-style: italic;
+    font-size: 16px;
+  }
+
+  .gridViewBtn,
+  .listViewBtn,
+  .clusterViewBtn,
+  .vectorViewBtn,
+  .fullscreenBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .tileInfo {
+    min-height: 45px;
+    padding: var(--spacing-md);
+    font-size: 16px;
+  }
+
+  .tileTitle {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .tag {
+    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 6px;
   }
 
   .viewControls {
     bottom: var(--spacing-sm);
     right: var(--spacing-sm);
-  }
-
-  .viewControls button {
-    width: 28px;
-    height: 28px;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: var(--spacing-md);
   }
 }
 

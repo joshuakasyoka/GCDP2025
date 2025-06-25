@@ -637,8 +637,14 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
               className={styles.searchInput}
             />
           </div>
-          <span>SORT BY</span>
-          <select value={sortBy} onChange={(e) => onSortChange(e.target.value)}>
+          <span className={styles.sortByLabel}>
+            <span className={styles.desktopOnly}>SORT BY</span>
+          </span>
+          <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value)}
+            className={styles.desktopOnly}
+          >
             <option value="date">DATE ADDED</option>
             <option value="alphabetical">ALPHABETICAL</option>
             <option value="student">STUDENT</option>
@@ -652,14 +658,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           >
             ⊞
           </button>
-          {/*
-          <button 
-            className={`${styles.listViewBtn} ${viewMode === 'random' ? styles.active : ''}`}
-            onClick={() => setViewMode('random')}
-          >
-            ☰
-          </button>
-          */}
           <button 
             className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
             onClick={() => setViewMode('cluster')}
