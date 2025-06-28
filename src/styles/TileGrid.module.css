@@ -76,7 +76,6 @@
   object-fit: cover;
   position: relative;
   z-index: 1;
-  filter: grayscale(1);
 }
 
 .placeholder {

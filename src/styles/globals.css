@@ -104,5 +104,6 @@ a:hover {
 }
 
 img {
-  filter: grayscale(100%);
+  /* Tint all images toward #D74616 using CSS filter */
+  filter: grayscale(1);
 }

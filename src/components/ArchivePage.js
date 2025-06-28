@@ -54,7 +54,7 @@ const ArchivePage = () => {
     <div className={styles.archivePage}>
       <header className={styles.header}>
         <div className={styles.headerLeft}>
-          <h1>MATERIALS OF SOFT ACTIVISMS</h1>
+          <h1>MATERIALS OF SOFT ACTIVISM</h1>
           <button 
             className={styles.initials} 
             onClick={toggleLanguage}

@@ -8,6 +8,7 @@ export const studentsData = {
         "display_name": "Winifred Ahupa"
       },
       "email": "winifred.ahupa@example.edu",
+      "about": "Winifred Ahupa is a Nigerian designer, maker, and researcher whose work sits at the intersection of systems thinking, cultural storytelling, and circularity. She creates playful, participatory experiences that honour ancestral knowledge, challenge dominant sustainability narratives, and centre care.",
       "student_number": "STU123001",
       "enrollment_year": 2023,
       "program": "Design Research",
@@ -85,6 +86,7 @@ export const studentsData = {
         "last_name": "Burbaro",
         "display_name": "Valentina Burbaro"
       },
+      "about": "Valentina Landin is a multidisciplinary design researcher exploring inclusivity and ecological thinking through community engagement, storytelling, and nature-based practices. Using methods like ethnographic research, she investigates disability needs through reflective dialogue and develops frameworks for new narratives addressing social and environmental inequalities.",
       "email": "valentina.burbaro@example.edu",
       "student_number": "STU123002",
       "enrollment_year": 2023,
@@ -94,7 +96,7 @@ export const studentsData = {
         {
           "project_id": "project_002",
           "title": "Walk & Talk: Reimagining Productivity for Neurodiversity",
-          "description": "Walk & Talk is an experience that reimagines productivity for neurodiverse needs, through alternative embodied and reflective practices situated in nature. Through walking conversations, observational practices, and creative documentation, this project explores how embracing slowness, sensory awareness, and natural rhythms can transform our understanding of productivity by centering neurodiverse ways of being.",
+          "description": "The Walk & Talk is an experience that reimagines productivity for neurodiverse needs, through alternative embodied and reflective practices situated in nature. In response to a growing complexity burden: burnout, disconnection, and a dominant system that prioritises productivity over people, this project centres the natural rhythms and diverse ways of being neurodivergent. Through walking conversations in London's parks, we engage in reflective dialogue, observation, and creative documentation to reveal how neurodiverse people mirror themselves in nature, proving that these environments do not merely receive us; it reshapes us. Instead of optimising output, Walk & Talk creates space for slowness, presence, and universal connection guided by relational care. This gentle methodology offers communities a framework for neurodiverse inclusion, positioning rest, reflection, and natural connections as valid forms of productivity that honour individual needs and rhythms.",
           "course_code": "DESIGN401",
           "semester": "Fall 2025",
           "submission_date": "2025-06-19T09:50:43Z",
@@ -164,8 +166,9 @@ export const studentsData = {
       "name": {
         "first_name": "Jasmine",
         "last_name": "Shah",
-        "display_name": "Jasmine Shah"
+        "display_name": "Jasmine Shah",
       },
+      "about": "Jasmine Shah is a multi-disciplinary designer examining relationships between design, humanities and sciences. Her research-oriented practice knits together narrative strategy, cross-cultural communication, and inclusive design methodologies, building environments of shared knowledge exchange.",
       "email": "jasmine.shah@example.edu",
       "student_number": "STU123003",
       "enrollment_year": 2023,
@@ -175,7 +178,7 @@ export const studentsData = {
         {
           "project_id": "project_003",
           "title": "Walk & Talk: Reimagining Productivity for Neurodiversity",
-          "description": "Walk & Talk is an experience that reimagines productivity for neurodiverse needs, through alternative embodied and reflective practices situated in nature. Through walking conversations, observational practices, and creative documentation, this project explores how embracing slowness, sensory awareness, and natural rhythms can transform our understanding of productivity by centering neurodiverse ways of being.",
+          "description": "The Walk & Talk is an experience that reimagines productivity for neurodiverse needs, through alternative embodied and reflective practices situated in nature. In response to a growing complexity burden: burnout, disconnection, and a dominant system that prioritises productivity over people, this project centres the natural rhythms and diverse ways of being neurodivergent. Through walking conversations in London's parks, we engage in reflective dialogue, observation, and creative documentation to reveal how neurodiverse people mirror themselves in nature, proving that these environments do not merely receive us; it reshapes us. Instead of optimising output, Walk & Talk creates space for slowness, presence, and universal connection guided by relational care. This gentle methodology offers communities a framework for neurodiverse inclusion, positioning rest, reflection, and natural connections as valid forms of productivity that honour individual needs and rhythms.",
           "course_code": "DESIGN401",
           "semester": "Fall 2025",
           "submission_date": "2025-06-19T09:50:43Z",
@@ -409,6 +412,7 @@ export const studentsData = {
     "last_name": "He",
     "display_name": "Kaining He"
   },
+  "about": "Born in Hangzhou, China, I explore the intersection of design and the humanities through material and social observation, working across disciplines and collaborating with communities to address social issues with poetic expression.",
   "email": "kaining.he@example.edu",
   "student_number": "STU123006",
   "enrollment_year": 2023,
@@ -418,7 +422,7 @@ export const studentsData = {
     {
       "project_id": "project_006",
       "title": "Incense-side Dialogue",
-      "description": "Incense-side Dialogue is a new feminist practice that combines craft-making and dialogue—particularly focused on giving new creative interpretations to traditional incense—with local women's support groups in Kyoto. The project aims to create safe and warm spaces in collaboration with community organizations, while encouraging women to build opportunities for self-healing and mutual support through enjoyable activities.",
+      "description": "Incense-side Dialogue is a participatory design project addressing women’s depression by building emotional support and social connection through dialogue and creative practices. Based on fieldwork in women’s community spaces in Kyoto, it explores the emotional pressures women face and highlights grassroots support systems. Guided by feminist theory and inspired by Consciousness Raising, the project combines group conversation with incense-making. Incense, traditionally used for rituals and healing, becomes a medium for expressing emotions—its scent, form, and burning process offering space for reflection, storytelling, and connection. By creating safe, sensory-rich environments, the project supports women’s emotional well-being, encourages collective care, and explores how craft can contribute to healing, empowerment, and resilience.",
       "course_code": "DESIGN401",
       "semester": "Fall 2025",
       "submission_date": "2025-06-19T18:19:10Z",
@@ -496,7 +500,7 @@ export const studentsData = {
     {
       "project_id": "project_007",
       "title": "Shared spots, shared city",
-      "description": "Shared Spots Shared City is a practice-based initiative that explores how reproductive labor—such as household labor and childcare—can be brought from the private sphere into public spaces to challenge gendered divisions and conventional role expectations. Through participatory drop-in events across London and Kyoto, we designed \"speculative domestic public spaces\" with the local citizens and shared the insights through an online platform.",
+      "description": "Shared Spots Shared City is a practice-based project that seeks to rethink binary boundaries—such as production & reproduction, public & private spaces, and urban & domestic realms—by relocating household labor and childcare from isolated homes into collective urban spaces. It addresses broader issues of social division and gendered role expectations.Based on the concept of the feminist city, the project employs participatory design across London and Kyoto. Through drop-in events in both cities, we co-designed 'What if?' scenarios with local citizens to explore speculative domestic public spaces. Using visual communication and data visualization, the project invites diverse individuals to engage in meaningful conversations and the design process. Insights and outcomes are shared through an online platform. Blending critical inquiry with playful co-creation, the project fosters cross-cultural learning and challenges gendered spatial norms.",
       "course_code": "DESIGN401",
       "semester": "Fall 2025",
       "submission_date": "2025-06-19T18:31:29Z",
@@ -566,9 +570,10 @@ export const studentsData = {
   "name": {
     "first_name": "Quennie",
     "last_name": "Yan",
-    "display_name": "Quennie Yan"
+    "display_name": "Quennie Yan",
   },
   "email": "quennie.yan@example.edu",
+  "about": "Queenie Yan is a visual communication designer focused on translating complex social systems into participatory experiences. Combining speculative design, data visualization, and co-creation, she builds adaptable visual frameworks for public innovation, tested across cultures in London and Kyoto.",
   "student_number": "STU123008",
   "enrollment_year": 2023,
   "program": "Design Research",
@@ -647,7 +652,8 @@ export const studentsData = {
   "name": {
     "first_name": "Chaahat",
     "last_name": "Thakker",
-    "display_name": "Chaahat Thakker"
+    "display_name": "Chaahat Thakker",
+    "about": "Chaahat Thakker is a designer centering care, empathy, and community. Through ecology-focused research and speculative storytelling, she crafts tangible experiences that cultivate ecoliteracy, provoke critical thinking, and inspire collective action towards complex climate challenges.",
   },
   "email": "chaahat.thakker@example.edu",
   "student_number": "STU123009",
@@ -658,7 +664,7 @@ export const studentsData = {
     {
       "project_id": "project_009",
       "title": "Tending Together",
-      "description": "Tending Together reimagines food-growing as 'making kin' and nurturing reciprocal relationships with living soil systems. Through role-playing and clay sculpting workshops, community members are invited to explore interspecies relationships, sparking dialogue about agency and care. The project seeks to reconnect us with our non-human kin through mutuality, responsibility, and imagination—envisioning resilient food futures amid ecological crisis.",
+      "description": "Tending Together invites us to rethink food growing as kinship, building reciprocal relationships with living soil ecosystems that sustain us. Rather than a mechanistic view that strips food of relational meaning and drives harmful practices contributing to biodiversity loss globally, this work centers local, land-based knowledge to challenge colonial and extractive views that treat land as a passive resource. By expanding our understanding of community to include multispecies networks, the project highlights ongoing interactions between human and non-human life—an urgent perspective amid the climate crisis. Collaborations with community gardens across South London anchor these ideas in local climate insights and seasonal cycles. Through role-play, storytelling, and clay modelling, participants create speculative tools for coexistence with soil species, inviting audiences to explore them alongside audio stories and unexpected garden sounds.",
       "course_code": "DESIGN401",
       "semester": "Fall 2025",
       "submission_date": "2025-06-20T14:03:45Z",
@@ -730,6 +736,7 @@ export const studentsData = {
     last_name: "Green",
     display_name: "Josh Green"
   },
+ about: "Josh is an interdisciplinary designer from Glasgow who explores the critical intersection between technology and civic agency. His practice examines how digital tools and systems can either empower or marginalise communities, with a particular focus on creating more technologically equitable futures",
   email: "josh.green@example.edu",
   student_number: "STU123010",
   enrollment_year: 2023,
@@ -739,7 +746,7 @@ export const studentsData = {
     {
       project_id: "project_010",
       title: "London AI Voices Archive",
-      description: "London AI Voices Archive is a participatory action research framework aimed at providing a proven, open-source model for fostering democratic engagement with AI. It serves as a critical foundation for ensuring that citizen deliberation moves from local conversations to influencing policy, creating pathways toward more equitable technological futures.",
+      description: "London AI Voices Archive is a participatory action research framework using public-facing design experiments to create discursive spaces around technological erasure. These experiments invite participants to interact directly with examined technologies and, through guided conversation, encourage critical reflections on two key questions: How does it feel to witness disappearance? And how should we respond to technologies that facilitate such disappearance? The framework introduces participants to key ethical issues surrounding AI development while making complex technical concepts tangible through structured interactions. By providing forums for generative conversations among diverse publics, it encourages participants to interrogate both the technologies and the language that renders them difficult to comprehend. Theoretically, the project draws on Carl DiSalvo's conceptualization of design experiments as uniquely capable of stimulating public imagination through making practices, fostering collective sense-making necessary for structural change.",
       course_code: "DESIGN401",
       semester: "Fall 2025",
       artifacts: [
