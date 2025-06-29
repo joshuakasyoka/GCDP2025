@@ -56,4 +56,9 @@
   .subtitle {
     font-size: 1rem;
   }
+
+  .content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 } 
