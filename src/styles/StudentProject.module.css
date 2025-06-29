@@ -112,7 +112,7 @@
 }
 
 .studentInfo, .artifactsSection {
-  max-height: auto;
+  max-height: 100%;
   overflow-y: auto;
 }
 
