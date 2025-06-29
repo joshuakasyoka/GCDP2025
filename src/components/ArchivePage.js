@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
@@ -13,6 +13,15 @@ const ArchivePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { language, toggleLanguage } = useLanguage();
+
+  // Helper to detect mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Flatten all artifacts from all students and projects
   const allArtifacts = studentsData.students.flatMap(student =>
@@ -53,21 +62,42 @@ const ArchivePage = () => {
   return (
     <div className={styles.archivePage}>
       <header className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h1>MATERIALS OF SOFT ACTIVISM</h1>
-          <button 
-            className={styles.initials} 
-            onClick={toggleLanguage}
-            aria-label={`Switch to ${language === 'en' ? 'Japanese' : 'English'}`}
-          >
-            {language === 'en' ? 'JP' : 'EN'}
-          </button>
-        </div>
-        <div className={styles.headerRight}>
-          <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
-          <span>ARCHIVE DISPLAY</span>
-          {/* <span>GCDP 2025</span> */}
-        </div>
+        {isMobile ? (
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <h1 style={{ margin: 0 }}>MOSA</h1>
+              <button
+                className={styles.initials}
+                onClick={toggleLanguage}
+                aria-label={`Switch to ${language === 'en' ? 'Japanese' : 'English'}`}
+              >
+                {language === 'en' ? 'JP' : 'EN'}
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: 8 }}>
+              <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
+              <span>ARCHIVE DISPLAY</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className={styles.headerLeft}>
+              <h1>MATERIALS OF SOFT ACTIVISM</h1>
+              <button
+                className={styles.initials}
+                onClick={toggleLanguage}
+                aria-label={`Switch to ${language === 'en' ? 'Japanese' : 'English'}`}
+              >
+                {language === 'en' ? 'JP' : 'EN'}
+              </button>
+            </div>
+            <div className={styles.headerRight}>
+              <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
+              <span>ARCHIVE DISPLAY</span>
+              {/* <span>GCDP 2025</span> */}
+            </div>
+          </>
+        )}
       </header>
       
       <div className={styles.mainContent}>
