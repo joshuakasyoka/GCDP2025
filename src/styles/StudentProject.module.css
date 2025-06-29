@@ -229,4 +229,8 @@
   .photoGrid {
     grid-template-columns: 1fr;
   }
+
+  .studentInfo, .artifactsSection {
+    max-height: none;
+  }
 }
