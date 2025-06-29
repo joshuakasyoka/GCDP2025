@@ -111,6 +111,11 @@
   font-size: 14px;
 }
 
+.studentInfo, .artifactsSection {
+  max-height: 275px;
+  overflow-y: auto;
+}
+
 .studentInfo {
   padding: var(--spacing-lg);
   background: var(--white);
@@ -180,6 +185,7 @@
   height: 300px;
   object-fit: cover;
   border: var(--border-width) solid var(--border-color);
+  filter: none !important;
 }
 
 .photoCaption {

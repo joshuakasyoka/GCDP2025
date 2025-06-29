@@ -76,7 +76,7 @@ const ArchivePage = () => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: 8 }}>
               <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
-              <span>ARCHIVE DISPLAY</span>
+              <Link to="/" className={styles.glossaryLink}>ARCHIVE DISPLAY</Link>
             </div>
           </div>
         ) : (
@@ -93,7 +93,7 @@ const ArchivePage = () => {
             </div>
             <div className={styles.headerRight}>
               <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
-              <span>ARCHIVE DISPLAY</span>
+              <Link to="/" className={styles.glossaryLink}>ARCHIVE DISPLAY</Link>
               {/* <span>GCDP 2025</span> */}
             </div>
           </>

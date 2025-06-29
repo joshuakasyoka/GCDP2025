@@ -238,3 +238,58 @@ const GalleryModal = ({ artifact, onClose, onTagClick }) => {
 };
 
 export default GalleryModal;
+
+// SimplePhotoModal: only shows the photo, no metadata
+export const SimplePhotoModal = ({ photoUrl, onClose }) => {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [onClose]);
+
+  const handleOverlayClick = (e) => {
+    e.preventDefault();
+    onClose();
+  };
+  const handleContentClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 2000,
+        background: 'rgba(0,0,0,0.5)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onClick={handleOverlayClick}
+    >
+      <div
+        onClick={handleContentClick}
+        style={{ background: 'none', boxShadow: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+      >
+        <img
+          src={photoUrl}
+          alt="Project Photo"
+          style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 0, filter: 'none !important', width: 'auto', height: 'auto', display: 'block' }}
+        />
+      </div>
+    </div>
+  );
+};

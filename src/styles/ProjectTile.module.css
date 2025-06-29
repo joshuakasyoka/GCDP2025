@@ -49,7 +49,7 @@
 
 .projectInfo {
   padding: var(--spacing-md);
-  border-top: var(--border-width) solid var(--border-color);
+  /* border-top: var(--border-width) solid var(--border-color); */
 }
 
 .projectInfo h3 {

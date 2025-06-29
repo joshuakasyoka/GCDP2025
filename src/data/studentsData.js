@@ -23,6 +23,10 @@ export const studentsData = {
           "submission_date": "2025-06-18T21:17:06Z",
           "grade": "A",
           "status": "completed",
+          "project_photos": [
+            { "url": "/StudentPhotos/Winnie/WA_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Winnie/WA_05.jpg", "caption": "" }
+          ],
           "artifacts": [
             {
               "artifact_id": "artifact_001_01",
@@ -84,7 +88,7 @@ export const studentsData = {
       "name": {
         "first_name": "Valentina",
         "last_name": "Burbaro",
-        "display_name": "Valentina Burbaro"
+        "display_name": "Valentina Landin"
       },
       "about": "Valentina Landin is a multidisciplinary design researcher exploring inclusivity and ecological thinking through community engagement, storytelling, and nature-based practices. Using methods like ethnographic research, she investigates disability needs through reflective dialogue and develops frameworks for new narratives addressing social and environmental inequalities.",
       "email": "valentina.burbaro@example.edu",
@@ -102,6 +106,10 @@ export const studentsData = {
           "submission_date": "2025-06-19T09:50:43Z",
           "grade": "A",
           "status": "completed",
+          "project_photos": [
+            { "url": "/StudentPhotos/Valentina/VL_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Valentina/VL_05.jpg", "caption": "" }
+          ],
           "artifacts": [
             {
               "artifact_id": "artifact_002_01",
@@ -184,6 +192,10 @@ export const studentsData = {
           "submission_date": "2025-06-19T09:50:43Z",
           "grade": "A",
           "status": "completed",
+          "project_photos": [
+            { "url": "/StudentPhotos/Jasmine/JS_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Jasmine/JS_05.jpg", "caption": "" }
+          ],
           "artifacts": [
             {
               "artifact_id": "artifact_003_01",
@@ -265,6 +277,10 @@ export const studentsData = {
           "submission_date": "2025-06-19T16:55:23Z",
           "grade": "A",
           "status": "completed",
+          "project_photos": [
+            { "url": "/StudentPhotos/Misato/MS_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Misato/MS_05.jpg", "caption": "" }
+          ],
           "artifacts": [
             {
               "artifact_id": "artifact_004_01",
@@ -346,6 +362,10 @@ export const studentsData = {
       "submission_date": "2025-06-19T16:55:23Z",
       "grade": "A",
       "status": "completed",
+      "project_photos": [
+        { "url": "/StudentPhotos/Shione/SA_04.jpg", "caption": "" },
+        { "url": "/StudentPhotos/Shione/SA_05.jpg", "caption": "" }
+      ],
       "artifacts": [
         {
           "artifact_id": "artifact_005_01",
@@ -428,6 +448,10 @@ export const studentsData = {
       "submission_date": "2025-06-19T18:19:10Z",
       "grade": "A",
       "status": "completed",
+      "project_photos": [
+        { "url": "/StudentPhotos/Kaining/KH_04.png", "caption": "" },
+        { "url": "/StudentPhotos/Kaining/KH_05.png", "caption": "" }
+      ],
       "artifacts": [
         {
           "artifact_id": "artifact_006_01",
@@ -653,17 +677,22 @@ export const studentsData = {
     "first_name": "Chaahat",
     "last_name": "Thakker",
     "display_name": "Chaahat Thakker",
-    "about": "Chaahat Thakker is a designer centering care, empathy, and community. Through ecology-focused research and speculative storytelling, she crafts tangible experiences that cultivate ecoliteracy, provoke critical thinking, and inspire collective action towards complex climate challenges.",
   },
   "email": "chaahat.thakker@example.edu",
+  
   "student_number": "STU123009",
   "enrollment_year": 2023,
   "program": "Design Research",
   "year_level": 3,
+  "about": "Chaahat Thakker is a designer centering care, empathy, and community. Through ecology-focused research and speculative storytelling, she crafts tangible experiences that cultivate ecoliteracy, provoke critical thinking, and inspire collective action towards complex climate challenges.",
   "projects": [
     {
       "project_id": "project_009",
       "title": "Tending Together",
+      "project_photos": [
+  { "url": "/StudentPhotos/Chaahat/CT_04.jpg", "caption": "" },
+  { "url": "/StudentPhotos/Chaahat/CT_05.jpg", "caption": "" }
+],
       "description": "Tending Together invites us to rethink food growing as kinship, building reciprocal relationships with living soil ecosystems that sustain us. Rather than a mechanistic view that strips food of relational meaning and drives harmful practices contributing to biodiversity loss globally, this work centers local, land-based knowledge to challenge colonial and extractive views that treat land as a passive resource. By expanding our understanding of community to include multispecies networks, the project highlights ongoing interactions between human and non-human life—an urgent perspective amid the climate crisis. Collaborations with community gardens across South London anchor these ideas in local climate insights and seasonal cycles. Through role-play, storytelling, and clay modelling, participants create speculative tools for coexistence with soil species, inviting audiences to explore them alongside audio stories and unexpected garden sounds.",
       "course_code": "DESIGN401",
       "semester": "Fall 2025",
@@ -749,6 +778,10 @@ export const studentsData = {
       description: "London AI Voices Archive is a participatory action research framework using public-facing design experiments to create discursive spaces around technological erasure. These experiments invite participants to interact directly with examined technologies and, through guided conversation, encourage critical reflections on two key questions: How does it feel to witness disappearance? And how should we respond to technologies that facilitate such disappearance? The framework introduces participants to key ethical issues surrounding AI development while making complex technical concepts tangible through structured interactions. By providing forums for generative conversations among diverse publics, it encourages participants to interrogate both the technologies and the language that renders them difficult to comprehend. Theoretically, the project draws on Carl DiSalvo's conceptualization of design experiments as uniquely capable of stimulating public imagination through making practices, fostering collective sense-making necessary for structural change.",
       course_code: "DESIGN401",
       semester: "Fall 2025",
+      "project_photos": [
+        { "url": "/StudentPhotos/Josh/JG_04.png", "caption": "" },
+        { "url": "/StudentPhotos/Josh/JG_05.jpg", "caption": "" }
+      ],
       artifacts: [
         {
           artifact_id: "artifact_010_01",
@@ -827,6 +860,10 @@ export const studentsData = {
           description: "Personal Atlas: Mapping Personal Identity Beyond Traditional Definition to Mend the Division of Current World....",
           course_code: "DESIGN401",
           semester: "Fall 2025",
+          "project_photos": [
+            { "url": "/StudentPhotos/Luming/LZ_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Luming/LZ_05.jpg", "caption": "" }
+          ],
           artifacts: [
             {
               artifact_id: "artifact_11_01",
@@ -908,6 +945,10 @@ export const studentsData = {
           "submission_date": "2025-06-23T04:12:26Z",
           "grade": "A",
           "status": "completed",
+          "project_photos": [
+            { "url": "/StudentPhotos/Teppei/TF_04.png", "caption": "" },
+            { "url": "/StudentPhotos/Teppei/TF_05.png", "caption": "" }
+          ],
           "artifacts": [
             {
               "artifact_id": "artifact_012_01",
@@ -983,6 +1024,10 @@ export const studentsData = {
           description: "DELULU CLUB is a participatory project that fosters a culture where young people in Japan can enjoy political dialogue more freely and creatively through zine-making. Rather than simply discussing news or policies, we explore social structures through personal experiences and knowledge, asking, 'What kind of society do we want to shape?' We create spaces where diverse perspectives can be shared—and where differences of opinion are not only welcomed but enjoyed.",
           course_code: "DESIGN401",
           semester: "Fall 2025",
+          "project_photos": [
+            { "url": "/StudentPhotos/Kai/KK_04.jpg", "caption": "" },
+            { "url": "/StudentPhotos/Kai/KK_05.jpg", "caption": "" }
+          ],
           artifacts: [
             {
               artifact_id: "artifact_013_01",

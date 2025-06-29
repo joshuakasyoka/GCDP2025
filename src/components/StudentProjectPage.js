@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ProjectTile from './ProjectTile';
 import ArtifactGrid from './ArtifactGrid';
-import GalleryModal from './GalleryModal';
+import GalleryModal, { SimplePhotoModal } from './GalleryModal';
 import { studentsData } from '../data/studentsData';
 import styles from '../styles/StudentProject.module.css';
 
@@ -109,6 +109,7 @@ const StudentProjectPage = () => {
                             src={getGoogleDriveImageUrl(photo.url)} 
                             alt={photo.caption}
                             className={styles.projectPhoto}
+                            style={{ objectFit: 'cover', borderRadius: 0 }}
                           />
                           <p className={styles.photoCaption}>{photo.caption}</p>
                         </div>
@@ -138,12 +139,8 @@ const StudentProjectPage = () => {
       )}
 
       {selectedPhoto && (
-        <GalleryModal
-          artifact={{
-            ...selectedPhoto,
-            student: student.name.display_name,
-            projectTitle: selectedProject?.title
-          }}
+        <SimplePhotoModal
+          photoUrl={getGoogleDriveImageUrl(selectedPhoto.url)}
           onClose={() => setSelectedPhoto(null)}
         />
       )}
