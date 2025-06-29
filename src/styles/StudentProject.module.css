@@ -226,6 +226,13 @@
     gap: var(--spacing-md);
   }
 
+  .artifactsSection, .studentInfo {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   .photoGrid {
     grid-template-columns: 1fr;
   }
