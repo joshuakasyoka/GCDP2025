@@ -146,6 +146,7 @@
     touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
     padding: 0 12px 12px 12px;
+    gap: 20px;
   }
 
   .sortControls {
@@ -297,7 +298,8 @@
   .TileGrid_tilesContainer__uERcT.mobileGrid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 24px;
     padding: 10px;
     position: static;
   }
