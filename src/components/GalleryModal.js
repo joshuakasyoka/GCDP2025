@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Link } from 'react-router-dom';
 import styles from '../styles/GalleryModal.module.css';
 
 const GalleryModal = ({ artifact, onClose, onTagClick }) => {
@@ -133,7 +134,11 @@ const GalleryModal = ({ artifact, onClose, onTagClick }) => {
 
           <div className={styles.studentInfo}>
             <h3>STUDENT</h3>
-            <p>{getTranslatedText(artifact.student)}</p>
+            <p>
+              <Link to={`/students/${artifact.studentId}`} className={styles.studentLink}>
+                {getTranslatedText(artifact.student)}
+              </Link>
+            </p>
           </div>
 
           <div className={styles.projectInfo}>
