@@ -530,13 +530,17 @@ export const studentsData = {
       "submission_date": "2025-06-19T18:31:29Z",
       "grade": "A",
       "status": "completed",
+      "project_photos": [
+        { "url": "/StudentPhotos/Risa/RM_04.jpg", "caption": "" },
+        { "url": "/StudentPhotos/Risa/RM_05.jpg", "caption": "" }
+      ],
       "artifacts": [
         {
           "artifact_id": "artifact_007_01",
           "title": "Household Labor Reflection Worksheets",
           "description": "A drop-in worksheet designed to help participants reflect on and discuss their experiences with household labor.",
           "type": "documentation",
-          "file_paths": ["/StudentPhotos/Risa/RM_01.png"],
+          "file_paths": ["/StudentPhotos/Risa/RM_03.png"],
           "creation_date": "2025-06-19T18:31:29Z",
           "w": 180,
           "h": 130,
@@ -572,7 +576,7 @@ export const studentsData = {
           "title": "Participatory Mapping",
           "description": "Participatory mapping using familiar city maps in London and Kyoto to visualize diverse participant perspectives and lived experiences of the city through a gender lens",
           "type": "documentation",
-          "file_paths": ["/StudentPhotos/Risa/RM_03.png"],
+          "file_paths": ["/StudentPhotos/Risa/RM_01.png"],
           "creation_date": "2025-06-19T18:31:29Z",
           "w": 180,
           "h": 130,
@@ -592,7 +596,7 @@ export const studentsData = {
 {
   "student_id": "student_08",
   "name": {
-    "first_name": "Quennie",
+    "first_name": "Queenie",
     "last_name": "Yan",
     "display_name": "Quennie Yan",
   },
@@ -612,13 +616,17 @@ export const studentsData = {
       "submission_date": "2025-06-19T18:31:29Z",
       "grade": "A",
       "status": "completed",
+      "project_photos": [
+        { "url": "/StudentPhotos/Queenie/QY_04.png", "caption": "" },
+        { "url": "/StudentPhotos/Queenie/QY_05.png", "caption": "" }
+      ],
       "artifacts": [
         {
           "artifact_id": "artifact_008_01",
           "title": "Household Labor Reflection Worksheets",
           "description": "A drop-in worksheet designed to help participants reflect on and discuss their experiences with household labor.",
           "type": "documentation",
-          "file_paths": ["/StudentPhotos/Queenie/QY_01.png"],
+          "file_paths": ["/StudentPhotos/Queenie/QY_03.png"],
           "creation_date": "2025-06-19T18:31:29Z",
           "w": 180,
           "h": 130,
@@ -654,7 +662,7 @@ export const studentsData = {
           "title": "Participatory Mapping",
           "description": "Participatory mapping using familiar city maps in London and Kyoto to visualize diverse participant perspectives and lived experiences of the city through a gender lens",
           "type": "documentation",
-          "file_paths": ["/StudentPhotos/Queenie/QY_03.png"],
+          "file_paths": ["/StudentPhotos/Queenie/QY_01.png"],
           "creation_date": "2025-06-19T18:31:29Z",
           "w": 180,
           "h": 130,
