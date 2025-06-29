@@ -23,13 +23,14 @@ const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFu
       >
         ⊞
       </button>
-      <button
+      {/* Hide cluster view on mobile */}
+      {/* <button
         className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
         onClick={() => setViewMode('cluster')}
         aria-label="Cluster view"
       >
         ⊙
-      </button>
+      </button> */}
       <button
         className={`${styles.vectorViewBtn} ${viewMode === 'vector' ? styles.active : ''}`}
         onClick={() => setViewMode('vector')}
