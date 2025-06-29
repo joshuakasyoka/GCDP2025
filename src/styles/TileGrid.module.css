@@ -292,6 +292,23 @@
   .controls {
     display: none !important;
   }
+
+  .tilesContainer.mobileGrid,
+  .TileGrid_tilesContainer__uERcT.mobileGrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
+    position: static;
+  }
+  .tile.mobileGridTile,
+  .TileGrid_mobileGridTile__* {
+    width: 100% !important;
+    aspect-ratio: 1 / 1;
+    position: static !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+  }
 }
 
 .controls {

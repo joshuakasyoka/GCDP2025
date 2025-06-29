@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/Tile.module.css';
 
-const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags }) => {
+const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(tile);
@@ -37,15 +37,20 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
 
   return (
     <div
-      className={`${styles.tile} ${isDragging ? styles.dragging : ''} ${isHovered ? styles.hovered : ''}`}
+      className={[
+        styles.tile,
+        classNameProp ? styles[classNameProp] : '',
+        isDragging ? styles.dragging : '',
+        isHovered ? styles.hovered : ''
+      ].join(' ')}
       style={{
-        position: 'absolute',
+        position: style?.position ?? 'absolute',
         left: tile.x,
         top: tile.y,
-        width: tileSize,
-        height: tileSize,
+        width: style?.width ?? tileSize,
+        height: style?.height ?? tileSize,
         zIndex: style?.zIndex || 1,
-        transition: isDragging ? 'none' : 'z-index 0.2s ease-in-out'
+        transition: isDragging ? 'none' : 'z-index 0.2s ease-in-out',
       }}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}

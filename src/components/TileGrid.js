@@ -80,8 +80,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   // Responsive tile sizes
   const getTileSize = () => {
     if (typeof window === 'undefined') return 200; // Default for SSR
-    if (window.innerWidth <= 480) return 140; // Mobile
-    if (window.innerWidth <= 768) return 160; // Tablet
+    if (window.innerWidth <= 480) return 90; // Smaller Mobile
+    if (window.innerWidth <= 768) return 130; // Smaller Tablet
     return 200; // Desktop
   };
 
@@ -737,51 +737,75 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       <div className={styles.canvasContainer}>
         <div 
           ref={containerRef} 
-          className={styles.tilesContainer}
+          className={
+            viewMode === 'grid' && isMobileDevice()
+              ? `${styles.tilesContainer} mobileGrid`
+              : styles.tilesContainer
+          }
         >
           {filteredTiles.length > 0 ? (
             <>
-              {filteredTiles.map(tile => (
-                viewMode === 'vector' ? (
-                  <div
-                    key={tile.id}
-                    className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
-                    style={{
-                      position: 'absolute',
-                      left: tile.x,
-                      top: tile.y,
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      zIndex: tile.zIndex,
-                      cursor: 'pointer',
-                      background: 'var(--highlight-color)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      pointerEvents: 'auto',
-                    }}
-                    onClick={() => handleTileClick(tile)}
-                    onMouseEnter={() => handleTileHover(tile.id, true)}
-                    onMouseLeave={() => handleTileHover(tile.id, false)}
-                  >
-                    <span className={styles.vectorTileNumber} style={{ color: '#fff', fontWeight: 600, fontSize: 12 }}>
-                      {tiles.findIndex(t => t.id === tile.id) + 1}
-                    </span>
-                  </div>
-                ) : (
-                  <Tile
-                    key={tile.id}
-                    tile={tile}
-                    isDragging={draggedTile && draggedTile.id === tile.id}
-                    isHovered={hoveredTile && hoveredTile.id === tile.id}
-                    onClick={() => handleTileClick(tile)}
-                    onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
-                    style={{ zIndex: tile.zIndex }}
-                    displayTags={getActiveCategory()}
-                  />
-                )
-              ))}
+              {filteredTiles.map(tile => {
+                if (viewMode === 'vector') {
+                  return (
+                    <div
+                      key={tile.id}
+                      className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
+                      style={{
+                        position: 'absolute',
+                        left: tile.x,
+                        top: tile.y,
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        zIndex: tile.zIndex,
+                        cursor: 'pointer',
+                        background: 'var(--highlight-color)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        pointerEvents: 'auto',
+                      }}
+                      onClick={() => handleTileClick(tile)}
+                      onMouseEnter={() => handleTileHover(tile.id, true)}
+                      onMouseLeave={() => handleTileHover(tile.id, false)}
+                    >
+                      <span className={styles.vectorTileNumber} style={{ color: '#fff', fontWeight: 600, fontSize: 12 }}>
+                        {tiles.findIndex(t => t.id === tile.id) + 1}
+                      </span>
+                    </div>
+                  );
+                } else if (viewMode === 'grid' && isMobileDevice()) {
+                  // Mobile grid: no absolute positioning, use mobileGridTile class
+                  return (
+                    <Tile
+                      key={tile.id}
+                      tile={tile}
+                      isDragging={draggedTile && draggedTile.id === tile.id}
+                      isHovered={hoveredTile && hoveredTile.id === tile.id}
+                      onClick={() => handleTileClick(tile)}
+                      onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                      style={{ position: 'static', width: '100%' }}
+                      displayTags={getActiveCategory()}
+                      classNameProp="mobileGridTile"
+                    />
+                  );
+                } else {
+                  // Default (desktop grid, cluster, etc): absolute positioning
+                  return (
+                    <Tile
+                      key={tile.id}
+                      tile={tile}
+                      isDragging={draggedTile && draggedTile.id === tile.id}
+                      isHovered={hoveredTile && hoveredTile.id === tile.id}
+                      onClick={() => handleTileClick(tile)}
+                      onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                      style={{ zIndex: tile.zIndex }}
+                      displayTags={getActiveCategory()}
+                    />
+                  );
+                }
+              })}
               {viewMode === 'vector' && hoveredTile && (
                 <div 
                   className={styles.floatingTile}
