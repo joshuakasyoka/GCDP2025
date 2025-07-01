@@ -1028,8 +1028,8 @@ export const studentsData = {
       projects: [
         {
           project_id: "project_013",
-          title: "DELULU CLUB",
-          description: "DELULU CLUB is a participatory project that fosters a culture where young people in Japan can enjoy political dialogue more freely and creatively through zine-making. Rather than simply discussing news or policies, we explore social structures through personal experiences and knowledge, asking, 'What kind of society do we want to shape?' We create spaces where diverse perspectives can be shared—and where differences of opinion are not only welcomed but enjoyed.",
+          title: "Living Crafts",
+          description: "Living Crafts is a community project connecting young people with traditional Japanese craftsmen through hands-on and kikigaki workshops—recording personal narratives through deep listening and dialogue. Rather than focusing solely on preserving crafts, it invites participants to engage with the people, values, and processes behind them, offering space for reflection and deeper understanding amid cultural decline.",
           course_code: "DESIGN401",
           semester: "Fall 2025",
           "project_photos": [
@@ -1039,7 +1039,7 @@ export const studentsData = {
           artifacts: [
             {
               artifact_id: "artifact_013_01",
-              title: "Political Glossary",
+              title: "Chopstick Rests",
               description: "This artifact is a simple glossary designed to help users quickly learn about recent policies and news topics",
               type: "documentation",
               file_paths: ["/StudentPhotos/Kai/KK_01.png"],
@@ -1047,47 +1047,47 @@ export const studentsData = {
               w: 190,
               h: 140,
               tags: {
-                themes: ["politics"],
-                design_as: ["justice", "education", "democracy"],
-                materials: ["paper"],
-                methods: ["workshop", "glossary", "opensource"],
-                collaborators: ["kyoto_council", "npo_mielka"],
+                themes: ["Crafts", "Cultural Identity", "Intergenerational Practice"],
+                design_as: ["participation", "education"],
+                materials: ["clay"],
+                methods: ["kikigaki", "workshop" ],
+                collaborators: ["craftsmen", "youth"],
                 "categories": ["themes", "design_as", "materials", "methods", "collaborators"]
               }
             },
             {
               artifact_id: "artifact_013_02",
-              title: "ZINE Workshop Framework",
-              description: "This artifact was created during the earliest prototyping phase, before the workshops began. It laid the foundation for the layered paper structure and the gradient-style template that transitions from personal thoughts to societal perspectives",
+              title: "Workshop Guide",
+              description: "Workshop guide for engaging participants with traditional crafts in Japan",
               type: "physical_prototype",
               file_paths: ["/StudentPhotos/Kai/KK_02.png"],
               creation_date: "2025-06-19T16:55:23Z",
               w: 170,
               h: 130,
               tags: {
-                themes: ["zine", "workshop_frame", "dialogue"],
-                design_as: ["participation", "ethnography", "visual"],
+                themes: ["Cultural Identity", "Intergenerational Practice"],
+                design_as: ["participation", "education"],
                 materials: ["paper"],
-                methods: ["workshop", "zine_making", "auto_ethnography"],
-                collaborators: ["housemate", "gen_z", "zine_making_community"],
+                methods: ["kikigaki"],
+                collaborators: ["craftsmen", "youth"],
                 "categories": ["themes", "design_as", "materials", "methods", "collaborators"]
               }
             },
             {
               artifact_id: "artifact_013_03",
-              title: "Workshop Tools Kit",
-              description: "This artifact—a cutter, ruler, and cutting mat—has been a staple tool throughout all six workshops, used repeatedly to prepare printed materials and support hands-on making in every session",
+              title: "Note Tool",
+              description: "Tool to take notes on the voices of craftsmen",
               type: "physical_prototype",
               file_paths: ["/StudentPhotos/Kai/KK_03.png"],
               creation_date: "2025-06-19T16:55:23Z",
               w: 200,
               h: 120,
               tags: {
-                themes: ["hand_making", "journaling"],
-                design_as: ["craft"],
-                materials: ["paper"],
-                methods: ["workshop", "workshop_tool"],
-                collaborators: ["none"],
+                themes: ["Cultural Identity", "Intergenerational Practice"],
+                design_as: ["participation", "education"],
+                materials: ["paper", "MDF"],
+                methods: ["kikigaki"],
+                collaborators: ["Craftsmen", "youth"],
                 "categories": ["themes", "design_as", "materials", "methods", "collaborators"]
               }
             }
