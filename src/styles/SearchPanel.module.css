@@ -1,6 +1,6 @@
 .searchPanel {
-  width: 40%;
-  min-width: 300px;
+  width: 30%;
+  min-width: 400px;
   border-right: var(--border-width) solid var(--border-color);
   background: var(--main-color);
   display: flex;

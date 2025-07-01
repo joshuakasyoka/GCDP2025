@@ -796,7 +796,7 @@ export const studentsData = {
         {
           artifact_id: "artifact_010_01",
           title: "Design Experiment Manual",
-          description: "Design Experiment Manual",
+          description: "The Design Experiment Manual accompanies a built physical instatllation as part of the London AI Voices Archive. The installation engages communities with critical aspects of AI literacy.",
           type: "documentation",
           file_paths: ["/StudentPhotos/Josh/JG_01.png"],
           creation_date: "2025-06-22T10:06:53Z",
@@ -814,7 +814,7 @@ export const studentsData = {
         {
           artifact_id: "artifact_010_02",
           title: "AI Receipt",
-          description: "AI Receipt",
+          description: "AI Receipts are artifacts which are generated from the installations as part of London AI Voices Archive. This receipt belong to installation number (2) Data Booth - where participants have their facial data extracted and represented",
           type: "digital_prototype",
           file_paths: ["/StudentPhotos/Josh/JG_03.png"],
           creation_date: "2025-06-22T10:06:53Z",
@@ -831,8 +831,8 @@ export const studentsData = {
         },
         {
           artifact_id: "artifact_010_03",
-          title: "AI Installation",
-          description: "AI Installation",
+          title: "Participatory AI Glossary",
+          description: "The Glossary consists of terms citizens have contributed after engagement with the installations as part of London AI Voices Archive. Eeach installation prints a different receipt",
           type: "physical_prototype",
           file_paths: ["/StudentPhotos/Josh/JG_02.png"],
           creation_date: "2025-06-22T10:06:53Z",
@@ -841,7 +841,7 @@ export const studentsData = {
           tags: {
             themes: ["ai", "participatory", "technology"],
             design_as: ["discursive", "democratic", "participatory"],
-            materials: ["wood", "polyethylene", "metal"],
+            materials: ["paper", "polyethylene", "glue"],
             methods: ["structured_dialog", "installation_engagement", "participatory_mapping"],
             collaborators: ["lj_works", "turinglab"],
             "categories": ["themes", "design_as", "materials", "methods", "collaborators"]
