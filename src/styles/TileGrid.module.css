@@ -16,11 +16,6 @@
 }
 
 .tilesContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 24px;
   position: relative;
   width: 100%;
   height: 100%;
@@ -41,12 +36,8 @@
 }
 
 .tile {
-  width: calc((100% - 6 * 24px) / 7);
-  max-width: 1fr;
-  flex: 0 0 calc((100% - 6 * 24px) / 7);
-  height: calc((100vw - 6 * 24px) / 7);
-  aspect-ratio: 1;
   position: relative;
+  aspect-ratio: 1;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -142,7 +133,6 @@
 @media (max-width: 768px) {
   .tileGrid {
     padding: 24px 0 0 0;
-    
   }
   .controls {
     padding: 0 32px 24px 32px;
@@ -548,13 +538,5 @@
   .tag {
     font-size: 8px;
     padding: 1px var(--spacing-xs);
-  }
-}
-
-@media (max-width: 1200px) {
-  .tile {
-    width: 200px;
-    flex: 0 0 200px;
-    height: 200px;
   }
 }
