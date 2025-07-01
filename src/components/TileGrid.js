@@ -120,7 +120,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         let x, y;
         
         if (viewMode === 'grid') {
-          const tilesPerRow = 5;
+          const tilesPerRow = Math.floor((availableWidth + gridGap) / (tileSize + gridGap));
           const row = Math.floor(index / tilesPerRow);
           const col = index % tilesPerRow;
           x = canvasPadding + (col * (tileSize + gridGap));
