@@ -263,6 +263,7 @@ export const studentsData = {
         "display_name": "Misato Shimizu"
       },
       "email": "misato.shimizu@example.edu",
+      "about": "Misato Shimizu is a designer skilled in interdisciplinary design practice and research. She focuses on transforming complex, entrenched systems by intervening practically with design, aiming to bring about change from the ground up.",
       "student_number": "STU123004",
       "enrollment_year": 2023,
       "program": "Design Research",
@@ -348,6 +349,7 @@ export const studentsData = {
     "display_name": "Shione Akazawa"
   },
   "email": "shione.akazawa@example.edu",
+  "about": "Shione is a design researcher from Japan with a background in architecture, exploring interdisciplinary design to enable more people to become self-driven. Her practice provides systems and tools that encourage individuals to take the first step toward social innovation through self-reflection.",
   "student_number": "STU123005",
   "enrollment_year": 2023,
   "program": "Design Research",
@@ -814,7 +816,7 @@ export const studentsData = {
           title: "AI Receipt",
           description: "AI Receipt",
           type: "digital_prototype",
-          file_paths: ["/StudentPhotos/Josh/JG_02.png"],
+          file_paths: ["/StudentPhotos/Josh/JG_03.png"],
           creation_date: "2025-06-22T10:06:53Z",
           w: 120,
           h: 200,
@@ -832,7 +834,7 @@ export const studentsData = {
           title: "AI Installation",
           description: "AI Installation",
           type: "physical_prototype",
-          file_paths: ["/StudentPhotos/Josh/JG_03.png"],
+          file_paths: ["/StudentPhotos/Josh/JG_02.png"],
           creation_date: "2025-06-22T10:06:53Z",
           w: 240,
           h: 160,
