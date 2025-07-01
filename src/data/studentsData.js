@@ -867,7 +867,7 @@ export const studentsData = {
         {
           project_id: "project_011",
           title: "Personal atlas",
-          description: "Personal Atlas: Mapping Personal Identity Beyond Traditional Definition to Mend the Division of Current World....",
+          description: "Personal Atlas invites people to explore and map their evolving identities through tactile and visual methods. Drawing from Kevin Lynch’s urban theory, the project reimagines elements like paths, edges, and landmarks as metaphors for personal experience. By shifting focus from fixed identity labels to lived stories, this work aims to challenge the oversimplification of identity in today’s categorised world.",
           course_code: "DESIGN401",
           semester: "Fall 2025",
           "project_photos": [
