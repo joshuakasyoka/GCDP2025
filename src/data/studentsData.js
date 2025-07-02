@@ -518,6 +518,7 @@ export const studentsData = {
     "display_name": "Risa Miyamoto"
   },
   "email": "risa.miyamoto@example.edu",
+  "about": "Risa Miyamoto is a creative researcher and designer with a background in architecture. Grounded in architectural thinking, her practice integrates fieldwork, participatory workshops, and visual tools to explore wicked problems and engage in collaborative design with diverse stakeholders for inclusive futures.",
   "student_number": "STU123007",
   "enrollment_year": 2023,
   "program": "Design Research",
