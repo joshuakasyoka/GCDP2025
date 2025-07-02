@@ -601,7 +601,7 @@ export const studentsData = {
   "name": {
     "first_name": "Queenie",
     "last_name": "Yan",
-    "display_name": "Quennie Yan",
+    "display_name": "Queenie Yan",
   },
   "email": "quennie.yan@example.edu",
   "about": "Queenie Yan is a visual communication designer focused on translating complex social systems into participatory experiences. Combining speculative design, data visualization, and co-creation, she builds adaptable visual frameworks for public innovation, tested across cultures in London and Kyoto.",
