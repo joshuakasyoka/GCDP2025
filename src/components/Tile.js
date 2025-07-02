@@ -4,7 +4,7 @@ import styles from '../styles/Tile.module.css';
 const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp }) => {
   const handleClick = (e) => {
     e.stopPropagation();
-    onClick(tile);
+    onClick(tile.artifact_id);
   };
 
   const handleMouseEnter = () => {

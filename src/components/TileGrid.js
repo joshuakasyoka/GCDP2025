@@ -401,7 +401,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         }
       } else if (dragDuration < CLICK_THRESHOLD) {
         // This was a click operation
-        onTileClick(draggedTile);
+        onTileClick(draggedTile.id);
       }
     }
     
@@ -411,12 +411,9 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     setDragStartPosition(null);
   }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, onTileClick]);
 
-  const handleTileClick = useCallback((tile) => {
-    // Only trigger click if we're not dragging and it's a quick click
-    if (!isDragging && Date.now() - dragStartTime < CLICK_THRESHOLD) {
-      onTileClick(tile);
-    }
-  }, [isDragging, dragStartTime, onTileClick]);
+  const handleTileClick = (artifact_id) => {
+    onTileClick(artifact_id);
+  };
 
   const handleTileHover = useCallback((tileId, isHovered) => {
     if (isHovered) {
@@ -530,7 +527,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         }
       } else if (dragDuration < CLICK_THRESHOLD) {
         // This was a tap operation
-        onTileClick(draggedTile);
+        onTileClick(draggedTile.id);
       }
     }
     
@@ -774,7 +771,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                           justifyContent: 'center',
                           pointerEvents: 'auto',
                         }}
-                        onClick={() => handleTileClick(tile)}
+                        onClick={() => handleTileClick(tile.id)}
                         onMouseEnter={() => handleTileHover(tile.id, true)}
                         onMouseLeave={() => handleTileHover(tile.id, false)}
                       >
@@ -791,7 +788,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                         tile={tile}
                         isDragging={draggedTile && draggedTile.id === tile.id}
                         isHovered={hoveredTile && hoveredTile.id === tile.id}
-                        onClick={() => handleTileClick(tile)}
+                        onClick={handleTileClick}
                         onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
                         style={{ zIndex: tile.zIndex }}
                         displayTags={getActiveCategory()}
@@ -812,7 +809,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                   <Tile
                     tile={hoveredTile}
                     isHovered={true}
-                    onClick={() => handleTileClick(hoveredTile)}
+                    onClick={() => handleTileClick(hoveredTile.id)}
                     onHover={() => {}}
                   />
                 </div>
