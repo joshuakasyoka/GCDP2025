@@ -943,6 +943,7 @@ export const studentsData = {
       },
       "email": "tepeii.fuma@example.edu",
       "student_number": "STU123012",
+      "about": "A design researcher and strategist with a transdisciplinary background. Focusing on designing participatory processes and tools that empower people to act, with a systems-thinking mindset and deep care for the “why” and “how” behind design.",
       "enrollment_year": 2023,
       "program": "Design Research",
       "year_level": 3,
@@ -1021,7 +1022,7 @@ export const studentsData = {
       name: {
         first_name: "Kai",
         last_name: "Kishta",
-        display_name: "Kai Kishta"
+        display_name: "Kai Kishita"
       },
       email: "kai.kishta@example.edu",
       student_number: "STU123013",

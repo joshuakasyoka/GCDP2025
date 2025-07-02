@@ -1,5 +1,5 @@
 .searchPanel {
-  width: 30%;
+  width: auto;
   min-width: 400px;
   border-right: var(--border-width) solid var(--border-color);
   background: var(--main-color);
