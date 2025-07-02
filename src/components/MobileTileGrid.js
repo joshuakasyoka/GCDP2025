@@ -7,7 +7,7 @@ const MobileTileGrid = ({ tiles, onTileClick, getActiveCategory, draggedTile, ho
     {tiles.map(tile => (
       <Tile
         key={tile.id}
-        tile={{ ...tile, x: undefined, y: undefined }}
+        tile={tile}
         isDragging={draggedTile && draggedTile.id === tile.id}
         isHovered={hoveredTile && hoveredTile.id === tile.id}
         onClick={() => onTileClick(tile)}

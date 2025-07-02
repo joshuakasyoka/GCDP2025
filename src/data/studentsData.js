@@ -8,7 +8,7 @@ export const studentsData = {
         "display_name": "Winifred Ahupa"
       },
       "email": "winifred.ahupa@example.edu",
-      "about": "Winifred Ahupa is a Nigerian designer, maker, and researcher whose work sits at the intersection of systems thinking, cultural storytelling, and circularity. She creates playful, participatory experiences that honour ancestral knowledge, challenge dominant sustainability narratives, and centre care.",
+      "about": "Winifred Ahupa designer, maker and researcher whose practice is rooted in storytelling, co-creation, and cultural continuity. With a background in fashion design and a deep commitment to community-led practices, she works at the intersection of circularity, care, and systems thinking, designing for transitions and for a world where many worlds fit.",
       "student_number": "STU123001",
       "enrollment_year": 2023,
       "program": "Design Research",
@@ -17,7 +17,7 @@ export const studentsData = {
         {
           "project_id": "project_001",
           "title": "Circular Communities",
-          "description": "Circular Communities is a participatory design project that reimagines the circular economy through lived experience, collective wisdom, and everyday action. In response to the climate emergency, it engages people aged 7 to 66 through co-designed workshops, intergenerational storytelling, and a collaborative board and card game. Rather than relying on top-down solutions, the project centres the resourceful practices already embedded in communities – repair traditions, reuse habits, and cultural knowledge, transforming them into accessible, creative tools for climate resilience.\n\nWorkshops like Story of Things and Make, Mend, Stitch & Chat offer space for shared learning through hands-on making, repair, and dialogue. These encounters build toward playful infrastructures that go beyond awareness, encouraging participants to act, imagine, and reflect together. The game, developed through co-design and playtesting, invites players to tell stories rooted in their lived experiences or imagined futures, tackling circular economy challenges through cooperation, knowledge sharing and storytelling.\n\nBy challenging the dominant framing of circularity as technical or elitist, Circular Communities affirms that joy, culture, and plural knowledge systems are essential to climate action. The final outputs, a story collection and a community-developed game, serve not just as artefacts but as frameworks for continuing the work of circularity beyond the project's duration.",
+          "description": "Circular Communities reimagines the circular economy through lived experience, collective wisdom, and everyday action. It engages people through co-designed workshops, storytelling, and play. Rather than relying on top-down solutions, the project centres the resourceful practices already embedded in communities; repair traditions, reuse habits, and cultural knowledge. Through workshops like Story of Things, Make, Mend, Stitch & Chat and collaborative game play, participants reflect on material histories, share circular insights, and co-create alternatives to wasteful systems. By challenging the dominant narratives of circularity as technical or elitist, Circular Communities affirms that joy, culture, and diverse knowledge systems are essential to circular living. The final outputs, a story collection and a serious game, serve not just as artefacts but as frameworks for continuing the work of circularity beyond the project’s duration.",
           "course_code": "DESIGN401",
           "semester": "Fall 2025",
           "submission_date": "2025-06-18T21:17:06Z",
@@ -856,7 +856,7 @@ export const studentsData = {
       student_id: "student_11",
       name: {
         first_name: "Luming",
-        last_name: "Zhou",
+        last_name: "Zhao",
         display_name: "Luming Zhou"
       },
       email: "luming.zhai@example.edu",
