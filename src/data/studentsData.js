@@ -8,7 +8,7 @@ export const studentsData = {
         "display_name": "Winifred Ahupa"
       },
       "email": "winifred.ahupa@example.edu",
-      "about": "Winifred Ahupa designer, maker and researcher whose practice is rooted in storytelling, co-creation, and cultural continuity. With a background in fashion design and a deep commitment to community-led practices, she works at the intersection of circularity, care, and systems thinking, designing for transitions and for a world where many worlds fit.",
+      "about": "Winifred Ahupa designer,, maker and researcher whose practice is rooted in storytelling, co-creation, and cultural continuity. With a background in fashion design and a deep commitment to community-led practices, she works at the intersection of circularity, care, and systems thinking, designing for transitions and for a world where many worlds fit.",
       "student_number": "STU123001",
       "enrollment_year": 2023,
       "program": "Design Research",
