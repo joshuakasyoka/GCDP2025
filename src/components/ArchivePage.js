@@ -46,8 +46,8 @@ const ArchivePage = () => {
     filteredAndSortedArtifacts
   } = useSearch(allArtifacts);
 
-  const handleArtifactClick = (artifact_id) => {
-    navigate(`/archive/artifact/${artifact_id}`);
+  const handleArtifactClick = (artifact) => {
+    navigate(`/archive/artifact/${artifact.artifact_id}`);
   };
 
   const handleCloseModal = () => {

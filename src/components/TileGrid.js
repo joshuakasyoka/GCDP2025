@@ -401,7 +401,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         }
       } else if (dragDuration < CLICK_THRESHOLD) {
         // This was a click operation
-        onTileClick(draggedTile.id);
+        onTileClick(draggedTile);
       }
     }
     
@@ -411,9 +411,12 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     setDragStartPosition(null);
   }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, onTileClick]);
 
-  const handleTileClick = (artifact_id) => {
-    onTileClick(artifact_id);
-  };
+  const handleTileClick = useCallback((tile) => {
+    // Only trigger click if we're not dragging and it's a quick click
+    if (!isDragging && Date.now() - dragStartTime < CLICK_THRESHOLD) {
+      onTileClick(tile);
+    }
+  }, [isDragging, dragStartTime, onTileClick]);
 
   const handleTileHover = useCallback((tileId, isHovered) => {
     if (isHovered) {
@@ -527,7 +530,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         }
       } else if (dragDuration < CLICK_THRESHOLD) {
         // This was a tap operation
-        onTileClick(draggedTile.id);
+        onTileClick(draggedTile);
       }
     }
     
@@ -540,27 +543,32 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    
-    // Mouse events
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mousedown', handleMouseDown);
-    container.addEventListener('mouseup', handleMouseUp);
-    
-    // Touch events
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd);
-    
-    return () => {
+
+    // Only attach manual event listeners if NOT mobile
+    if (!isMobileDevice()) {
       // Mouse events
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mousedown', handleMouseDown);
-      container.removeEventListener('mouseup', handleMouseUp);
-      
+      container.addEventListener('mousemove', handleMouseMove);
+      container.addEventListener('mousedown', handleMouseDown);
+      container.addEventListener('mouseup', handleMouseUp);
+
       // Touch events
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.addEventListener('touchstart', handleTouchStart, { passive: false });
+      container.addEventListener('touchmove', handleTouchMove, { passive: false });
+      container.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      if (!isMobileDevice()) {
+        // Mouse events
+        container.removeEventListener('mousemove', handleMouseMove);
+        container.removeEventListener('mousedown', handleMouseDown);
+        container.removeEventListener('mouseup', handleMouseUp);
+
+        // Touch events
+        container.removeEventListener('touchstart', handleTouchStart);
+        container.removeEventListener('touchmove', handleTouchMove);
+        container.removeEventListener('touchend', handleTouchEnd);
+      }
     };
   }, [handleMouseMove, handleMouseDown, handleMouseUp, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
@@ -771,7 +779,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                           justifyContent: 'center',
                           pointerEvents: 'auto',
                         }}
-                        onClick={() => handleTileClick(tile.id)}
+                        onClick={() => handleTileClick(tile)}
                         onMouseEnter={() => handleTileHover(tile.id, true)}
                         onMouseLeave={() => handleTileHover(tile.id, false)}
                       >
@@ -788,7 +796,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                         tile={tile}
                         isDragging={draggedTile && draggedTile.id === tile.id}
                         isHovered={hoveredTile && hoveredTile.id === tile.id}
-                        onClick={handleTileClick}
+                        onClick={() => handleTileClick(tile)}
                         onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
                         style={{ zIndex: tile.zIndex }}
                         displayTags={getActiveCategory()}
@@ -809,7 +817,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                   <Tile
                     tile={hoveredTile}
                     isHovered={true}
-                    onClick={() => handleTileClick(hoveredTile.id)}
+                    onClick={() => handleTileClick(hoveredTile)}
                     onHover={() => {}}
                   />
                 </div>

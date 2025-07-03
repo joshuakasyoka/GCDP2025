@@ -149,14 +149,6 @@
     gap: 20px;
   }
 
-  /* Ensure mobile grid grows with content and is fully clickable */
-  .tilesContainer.mobileGrid {
-    height: auto !important;
-    min-height: 100vh;
-    overflow: visible !important;
-    position: relative;
-  }
-
   .sortControls {
     flex: 1;
     display: flex;
