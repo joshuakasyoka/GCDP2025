@@ -112,7 +112,9 @@
 }
 
 .studentInfo, .artifactsSection {
-  max-height: 100%;
+  max-height: 260px;
+  min-height: 260px;
+  height: 340px;
   overflow-y: auto;
 }
 
@@ -204,6 +206,14 @@
   grid-column: 1 / -1;
 }
 
+.studentName {
+  font-size: 2.2rem;
+  font-weight: 400;
+  margin-bottom: 0.25em;
+  line-height: 1.1;
+  color: var(--highlight-color, #D74616);
+}
+
 @media (max-width: 768px) {
   .mainContent {
     grid-template-columns: 1fr;
@@ -226,18 +236,13 @@
     gap: var(--spacing-md);
   }
 
-  .artifactsSection, .studentInfo {
-    width: 100%;
-    margin-bottom: var(--spacing-md);
-    max-width: 100%;
-    box-sizing: border-box;
+  .studentInfo, .artifactsSection {
+    max-height: none;
+    min-height: unset;
+    height: auto;
   }
 
   .photoGrid {
     grid-template-columns: 1fr;
-  }
-
-  .studentInfo, .artifactsSection {
-    max-height: none;
   }
 }

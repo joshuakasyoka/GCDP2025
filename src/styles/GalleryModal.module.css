@@ -223,6 +223,19 @@
   font-weight: 500;
 }
 
+.studentLink {
+  color: var(--highlight-color, #D74616);
+  font-weight: 500;
+  font-size: 1.1em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.studentLink:hover {
+  color: #b32c0b;
+}
+
 @media (max-width: 1024px) {
   .modalContent {
     grid-template-columns: 1fr;

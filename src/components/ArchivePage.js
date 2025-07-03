@@ -82,7 +82,9 @@ const ArchivePage = () => {
         ) : (
           <>
             <div className={styles.headerLeft}>
-              <h1>MATERIALS OF SOFT ACTIVISM</h1>
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h1>MATERIALS OF SOFT ACTIVISM</h1>
+              </Link>
               <button
                 className={styles.initials}
                 onClick={toggleLanguage}

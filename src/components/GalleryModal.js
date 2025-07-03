@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/GalleryModal.module.css';
+import { Link } from 'react-router-dom';
 
 const GalleryModal = ({ artifact, onClose, onTagClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -133,7 +134,13 @@ const GalleryModal = ({ artifact, onClose, onTagClick }) => {
 
           <div className={styles.studentInfo}>
             <h3>STUDENT</h3>
-            <p>{getTranslatedText(artifact.student)}</p>
+            {artifact.studentId ? (
+              <Link to={`/students/${artifact.studentId}`} className={styles.studentLink}>
+                {getTranslatedText(artifact.student)}
+              </Link>
+            ) : (
+              <p>{getTranslatedText(artifact.student)}</p>
+            )}
           </div>
 
           <div className={styles.projectInfo}>

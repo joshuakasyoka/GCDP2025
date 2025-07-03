@@ -252,6 +252,17 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           p5.circle(clusterX, clusterY, clusterRadius * 2);
         }
       } else if (viewMode === 'vector') {
+        p5.background(255); // Clear canvas to white
+        // Draw grid background for vector view
+        p5.stroke(220); // Slightly darker for visibility
+        p5.strokeWeight(0.7);
+        const gridSpacing = 40;
+        for (let x = 0; x < p5.width; x += gridSpacing) {
+          p5.line(x, 0, x, p5.height);
+        }
+        for (let y = 0; y < p5.height; y += gridSpacing) {
+          p5.line(0, y, p5.width, y);
+        }
         // Draw lines connecting circles
         p5.stroke('#FF9900');
         p5.strokeWeight(2.5);
@@ -716,13 +727,13 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
             className={`${styles.clusterViewBtn} ${viewMode === 'cluster' ? styles.active : ''}`}
             onClick={() => setViewMode('cluster')}
           >
-            ⊙
+            □
           </button>
           <button 
             className={`${styles.vectorViewBtn} ${viewMode === 'vector' ? styles.active : ''}`}
             onClick={() => setViewMode('vector')}
           >
-            □
+            ⊙
           </button>
           <button 
             className={`${styles.fullscreenBtn} ${isFullscreen ? styles.active : ''}`}

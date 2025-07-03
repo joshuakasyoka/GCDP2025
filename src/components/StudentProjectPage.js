@@ -66,6 +66,7 @@ const StudentProjectPage = () => {
           {selectedProject ? (
             <>
               <div className={styles.projectHeader}>
+                <h1 className={styles.studentName}>{student.name.display_name}</h1>
                 <h2>{selectedProject.title}</h2>
                 <div className={styles.projectMeta}>
                   <span>{selectedProject.course_code}</span>
