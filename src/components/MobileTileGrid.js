@@ -10,7 +10,7 @@ const MobileTileGrid = ({ tiles, onTileClick, getActiveCategory, draggedTile, ho
         tile={tile}
         isDragging={draggedTile && draggedTile.id === tile.id}
         isHovered={hoveredTile && hoveredTile.id === tile.id}
-        onClick={() => onTileClick(tile)}
+        onClick={onTileClick}
         onHover={isHovered => handleTileHover(tile.id, isHovered)}
         style={{ position: 'static', width: '100%' }}
         displayTags={getActiveCategory()}

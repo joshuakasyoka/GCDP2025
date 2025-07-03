@@ -17,7 +17,7 @@ export const studentsData = {
         {
           "project_id": "project_001",
           "title": "Circular Communities",
-          "description": "Circular Communities reimagines the circular economy through lived experience, collective wisdom, and everyday action. It engages people through co-designed workshops, storytelling, and play. Rather than relying on top-down solutions, the project centres the resourceful practices already embedded in communities; repair traditions, reuse habits, and cultural knowledge. Through workshops like Story of Things, Make, Mend, Stitch & Chat and collaborative game play, participants reflect on material histories, share circular insights, and co-create alternatives to wasteful systems. By challenging the dominant narratives of circularity as technical or elitist, Circular Communities affirms that joy, culture, and diverse knowledge systems are essential to circular living. The final outputs, a story collection and a serious game, serve not just as artefacts but as frameworks for continuing the work of circularity beyond the project's duration.",
+          "description": "Circular Communities reimagines the circular economy through lived experience, collective wisdom, and everyday action. It engages people through co-designed workshops, storytelling, and play. Rather than relying on top-down solutions, the project centres the resourceful practices already embedded in communities; repair traditions, reuse habits, and cultural knowledge. Through workshops like Story of Things, Make, Mend, Stitch & Chat and collaborative game play, participants reflect on material histories, share circular insights, and co-create alternatives to wasteful systems. By challenging the dominant narratives of circularity as technical or elitist, Circular Communities affirms that joy, culture, and diverse knowledge systems are essential to circular living. The final outputs, a story collection and a serious game, serve not just as artefacts but as frameworks for continuing the work of circularity beyond the project’s duration.",
           "course_code": "DESIGN401",
           "semester": "Fall 2025",
           "submission_date": "2025-06-18T21:17:06Z",
@@ -288,7 +288,7 @@ export const studentsData = {
               "title": "Political Glossary Tool",
               "description": "This artifact is a simple glossary designed to help users quickly learn about recent policies and news topics.",
               "type": "documentation",
-              "file_paths": ["/StudentPhotos/Misato/MS_02.png"],
+              "file_paths": ["/StudentPhotos/Misato/MS_01.png"],
               "creation_date": "2025-06-19T16:55:23Z",
               "w": 180,
               "h": 130,
@@ -306,7 +306,7 @@ export const studentsData = {
               "title": "Zine Template Prototype",
               "description": "This artifact was created during the earliest prototyping phase, before the workshops began. It laid the foundation for the layered paper structure and the gradient-style template that transitions from personal thoughts to societal perspectives.",
               "type": "documentation",
-              "file_paths": ["/StudentPhotos/Misato/MS_01.png"],
+              "file_paths": ["/StudentPhotos/Misato/MS_02.png"],
               "creation_date": "2025-06-19T16:55:23Z",
               "w": 180,
               "h": 130,
@@ -444,7 +444,7 @@ export const studentsData = {
     {
       "project_id": "project_006",
       "title": "Incense-side Dialogue",
-      "description": "Incense-side Dialogue is a participatory design project addressing women's depression by building emotional support and social connection through dialogue and creative practices. Based on fieldwork in women's community spaces in Kyoto, it explores the emotional pressures women face and highlights grassroots support systems. Guided by feminist theory and inspired by Consciousness Raising, the project combines group conversation with incense-making. Incense, traditionally used for rituals and healing, becomes a medium for expressing emotions—its scent, form, and burning process offering space for reflection, storytelling, and connection. By creating safe, sensory-rich environments, the project supports women's emotional well-being, encourages collective care, and explores how craft can contribute to healing, empowerment, and resilience.",
+      "description": "Incense-side Dialogue is a participatory design project addressing women’s depression by building emotional support and social connection through dialogue and creative practices. Based on fieldwork in women’s community spaces in Kyoto, it explores the emotional pressures women face and highlights grassroots support systems. Guided by feminist theory and inspired by Consciousness Raising, the project combines group conversation with incense-making. Incense, traditionally used for rituals and healing, becomes a medium for expressing emotions—its scent, form, and burning process offering space for reflection, storytelling, and connection. By creating safe, sensory-rich environments, the project supports women’s emotional well-being, encourages collective care, and explores how craft can contribute to healing, empowerment, and resilience.",
       "course_code": "DESIGN401",
       "semester": "Fall 2025",
       "submission_date": "2025-06-19T18:19:10Z",
@@ -868,7 +868,7 @@ export const studentsData = {
         {
           project_id: "project_011",
           title: "Personal atlas",
-          description: "Personal Atlas invites people to explore and map their evolving identities through tactile and visual methods. Drawing from Kevin Lynch's urban theory, the project reimagines elements like paths, edges, and landmarks as metaphors for personal experience. By shifting focus from fixed identity labels to lived stories, this work aims to challenge the oversimplification of identity in today's categorised world.",
+          description: "Personal Atlas invites people to explore and map their evolving identities through tactile and visual methods. Drawing from Kevin Lynch’s urban theory, the project reimagines elements like paths, edges, and landmarks as metaphors for personal experience. By shifting focus from fixed identity labels to lived stories, this work aims to challenge the oversimplification of identity in today’s categorised world.",
           course_code: "DESIGN401",
           semester: "Fall 2025",
           "project_photos": [
@@ -943,7 +943,7 @@ export const studentsData = {
       },
       "email": "tepeii.fuma@example.edu",
       "student_number": "STU123012",
-      "about": "A design researcher and strategist with a transdisciplinary background. Focusing on designing participatory processes and tools that empower people to act, with a systems-thinking mindset and deep care for the why and how behind design.",
+      "about": "A design researcher and strategist with a transdisciplinary background. Focusing on designing participatory processes and tools that empower people to act, with a systems-thinking mindset and deep care for the “why” and “how” behind design.",
       "enrollment_year": 2023,
       "program": "Design Research",
       "year_level": 3,

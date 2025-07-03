@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
@@ -46,8 +46,8 @@ const ArchivePage = () => {
     filteredAndSortedArtifacts
   } = useSearch(allArtifacts);
 
-  const handleArtifactClick = (artifact) => {
-    navigate(`/archive/artifact/${artifact.artifact_id}`);
+  const handleArtifactClick = (artifact_id) => {
+    navigate(`/archive/artifact/${artifact_id}`);
   };
 
   const handleCloseModal = () => {
@@ -58,23 +58,6 @@ const ArchivePage = () => {
   const currentArtifact = artifactId 
     ? allArtifacts.find(a => a.artifact_id === artifactId)
     : null;
-
-  const [viewMode, setViewMode] = useState('grid');
-  const tileGridRef = useRef(null);
-
-  // Function to export the cluster view as an image
-  const handleExportClusterImage = () => {
-    // Find the canvas inside TileGrid
-    const canvas = tileGridRef.current?.querySelector('canvas');
-    if (canvas) {
-      const link = document.createElement('a');
-      link.download = 'cluster-view.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } else {
-      alert('Cluster view canvas not found. Make sure you are in cluster view.');
-    }
-  };
 
   return (
     <div className={styles.archivePage}>
@@ -117,16 +100,7 @@ const ArchivePage = () => {
         )}
       </header>
       
-      {/* Export button only visible in cluster view */}
-      {viewMode === 'cluster' && (
-        <div style={{ textAlign: 'right', margin: '16px 32px 0 0' }}>
-          <button onClick={handleExportClusterImage} style={{ padding: '8px 16px', fontWeight: 'bold', borderRadius: 6, background: '#FF9900', color: '#fff', border: 'none', cursor: 'pointer' }}>
-            Export Cluster View as Image
-          </button>
-        </div>
-      )}
-
-      <div className={styles.mainContent} ref={tileGridRef}>
+      <div className={styles.mainContent}>
         <SearchPanel
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -145,8 +119,6 @@ const ArchivePage = () => {
           onSortChange={setSortBy}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
         />
       </div>
 
