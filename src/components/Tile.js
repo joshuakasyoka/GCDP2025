@@ -71,11 +71,11 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
     >
       <div className={styles.tileContent} style={{ width: '100%', height: '100%' }}>
         <div className={styles.tileImage} style={{ width: '100%', height: '100%' }}>
-          {tile.file_paths && tile.file_paths[0] ? (
+          {isHovered && tile.file_paths && tile.file_paths[0] ? (
             <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <div className={styles.placeholder}>
-              <span>{tile.type}</span>
+              <span>{tile.artifact_id}</span>
             </div>
           )}
         </div>
