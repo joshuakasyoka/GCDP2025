@@ -68,7 +68,13 @@ const ArchivePage = () => {
               <h1 style={{ margin: 0 }}>MOSA</h1>
               <button
                 className={styles.initials}
-                onClick={toggleLanguage}
+                onClick={() => {
+                  if (language === 'en') {
+                    window.location.href = 'https://gcdp-japan.vercel.app/archive';
+                  } else {
+                    toggleLanguage();
+                  }
+                }}
                 aria-label={`Switch to ${language === 'en' ? 'Japanese' : 'English'}`}
               >
                 {language === 'en' ? 'JP' : 'EN'}
@@ -87,7 +93,13 @@ const ArchivePage = () => {
               </Link>
               <button
                 className={styles.initials}
-                onClick={toggleLanguage}
+                onClick={() => {
+                  if (language === 'en') {
+                    window.location.href = 'https://gcdp-japan.vercel.app/archive';
+                  } else {
+                    toggleLanguage();
+                  }
+                }}
                 aria-label={`Switch to ${language === 'en' ? 'Japanese' : 'English'}`}
               >
                 {language === 'en' ? 'JP' : 'EN'}
