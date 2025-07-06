@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/Tile.module.css';
 
-const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp }) => {
+const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp, priorityMode = false }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(tile.artifact_id);
@@ -71,7 +71,9 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
     >
       <div className={styles.tileContent} style={{ width: '100%', height: '100%' }}>
         <div className={styles.tileImage} style={{ width: '100%', height: '100%' }}>
-          {isHovered && tile.file_paths && tile.file_paths[0] ? (
+          {(priorityMode && tile.file_paths && tile.file_paths[0]) ? (
+            <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'none' }} />
+          ) : isHovered && tile.file_paths && tile.file_paths[0] ? (
             <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <div className={styles.placeholder}>

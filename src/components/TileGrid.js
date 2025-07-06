@@ -6,7 +6,7 @@ import createFuzzySearch from '@nozbe/microfuzz';
 import MobileTileGrid from './MobileTileGrid';
 
 // MobileHeader component for mobile view
-const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFullscreen, setIsFullscreen, styles }) => (
+const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFullscreen, setIsFullscreen, styles, priorityOnly, setPriorityOnly }) => (
   <div className={styles.mobileHeader}>
     <input
       type="text"
@@ -16,6 +16,43 @@ const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFu
       className={styles.mobileSearchInput}
     />
     <div className={styles.mobileIcons}>
+      <label style={{ display: 'flex', alignItems: 'center', gap: 2, fontSize: 10, marginRight: 4 }}>
+        <span style={{ position: 'relative', display: 'inline-block', width: 24, height: 14 }}>
+          <input
+            type="checkbox"
+            checked={priorityOnly}
+            onChange={() => setPriorityOnly(v => !v)}
+            style={{ opacity: 0, width: 0, height: 0 }}
+          />
+          <span style={{
+            position: 'absolute',
+            cursor: 'pointer',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: priorityOnly ? 'var(--highlight-color)' : '#ccc',
+            borderRadius: 14,
+            transition: '.2s',
+            width: 24,
+            height: 14,
+            display: 'block'
+          }}></span>
+          <span style={{
+            position: 'absolute',
+            content: '""',
+            height: 10,
+            width: 10,
+            left: priorityOnly ? 12 : 2,
+            bottom: 2,
+            background: 'white',
+            borderRadius: '50%',
+            transition: '.2s',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+            display: 'block'
+          }}></span>
+        </span>
+      </label>
       <button
         className={`${styles.gridViewBtn} ${viewMode === 'grid' ? styles.active : ''}`}
         onClick={() => setViewMode('grid')}
@@ -59,6 +96,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
   const [tilePositions, setTilePositions] = useState({});
+  const [priorityOnly, setPriorityOnly] = useState(false);
   
   // Constants for drag and click detection
   const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
@@ -115,10 +153,23 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       const containerHeight = containerRef.current.clientHeight;
       const availableWidth = containerWidth - (canvasPadding * 2);
       const availableHeight = containerHeight - (canvasPadding * 2);
-      
-      const newTiles = artifacts.map((artifact, index) => {
+
+      // --- FILTER ARTIFACTS FOR GRID LAYOUT IF NEEDED ---
+      let layoutArtifacts = artifacts;
+      // If grid view and priorityOnly, only layout priority artifacts
+      if (viewMode === 'grid' && priorityOnly) {
+        layoutArtifacts = artifacts.filter(a => a.priority === true);
+      }
+      // If grid view and not priorityOnly, sort so priority first
+      else if (viewMode === 'grid') {
+        layoutArtifacts = [...artifacts].sort((a, b) => {
+          if (a.priority === b.priority) return 0;
+          return a.priority ? -1 : 1;
+        });
+      }
+
+      const newTiles = layoutArtifacts.map((artifact, index) => {
         let x, y;
-        
         if (viewMode === 'grid') {
           const tilesPerRow = Math.floor((availableWidth + gridGap) / (tileSize + gridGap));
           const row = Math.floor(index / tilesPerRow);
@@ -136,7 +187,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           const clusterIndex = Math.floor(index / 5);
           const clusterX = canvasPadding + (Math.random() * (availableWidth - tileSize));
           const clusterY = canvasPadding + (Math.random() * (availableHeight - tileSize));
-          
           // Add some randomness within the cluster
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * clusterRadius;
@@ -196,7 +246,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
 
       setTiles(newTiles);
     }
-  }, [artifacts, viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius]);
+  }, [artifacts, viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, priorityOnly]);
 
   const sketch = useCallback(p5 => {
     p5.setup = () => {
@@ -606,22 +656,37 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
 
   // Filter tiles based on search query using microfuzz
   const filteredTiles = React.useMemo(() => {
-    if (!searchQuery) return tiles;
-    // Category search: show all tiles with tags in that category
-    const query = searchQuery.toLowerCase();
-    const isCategorySearch = ['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(query);
-    if (isCategorySearch) {
-      return tiles.filter(tile =>
-        (query === 'materials' && tile.tags.materials && tile.tags.materials.length > 0) ||
-        (query === 'methods' && tile.tags.methods && tile.tags.methods.length > 0) ||
-        (query === 'themes' && tile.tags.themes && tile.tags.themes.length > 0) ||
-        (query === 'design_as' && tile.tags.design_as && tile.tags.design_as.length > 0) ||
-        (query === 'collaborators' && tile.tags.collaborators && tile.tags.collaborators.length > 0)
-      );
+    let result;
+    if (!searchQuery) {
+      result = tiles;
+    } else {
+      // Category search: show all tiles with tags in that category
+      const query = searchQuery.toLowerCase();
+      const isCategorySearch = ['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(query);
+      if (isCategorySearch) {
+        result = tiles.filter(tile =>
+          (query === 'materials' && tile.tags.materials && tile.tags.materials.length > 0) ||
+          (query === 'methods' && tile.tags.methods && tile.tags.methods.length > 0) ||
+          (query === 'themes' && tile.tags.themes && tile.tags.themes.length > 0) ||
+          (query === 'design_as' && tile.tags.design_as && tile.tags.design_as.length > 0) ||
+          (query === 'collaborators' && tile.tags.collaborators && tile.tags.collaborators.length > 0)
+        );
+      } else {
+        result = fuzzySearch(searchQuery).map(result => result.item);
+      }
     }
-    // Fuzzy search for everything else
-    return fuzzySearch(searchQuery).map(result => result.item);
-  }, [tiles, searchQuery, fuzzySearch]);
+    if (priorityOnly) {
+      return result.filter(tile => tile.priority === true);
+    }
+    // If in grid view, sort so priority artifacts are first
+    if (viewMode === 'grid') {
+      return [...result].sort((a, b) => {
+        if (a.priority === b.priority) return 0;
+        return a.priority ? -1 : 1;
+      });
+    }
+    return result;
+  }, [tiles, searchQuery, fuzzySearch, priorityOnly, viewMode]);
 
   // Get the active category for tag display
   const getActiveCategory = () => {
@@ -689,6 +754,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           isFullscreen={isFullscreen}
           setIsFullscreen={setIsFullscreen}
           styles={styles}
+          priorityOnly={priorityOnly}
+          setPriorityOnly={setPriorityOnly}
         />
       )}
       <div className={styles.controls} style={isMobileDevice() ? { display: 'none' } : {}}>
@@ -717,6 +784,44 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           </select>
         </div>
         <div className={styles.viewControls}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, marginRight: 8 }}>
+            <span style={{ marginRight: 4 }}>Priority</span>
+            <span style={{ position: 'relative', display: 'inline-block', width: 24, height: 14 }}>
+              <input
+                type="checkbox"
+                checked={priorityOnly}
+                onChange={() => setPriorityOnly(v => !v)}
+                style={{ opacity: 0, width: 0, height: 0 }}
+              />
+              <span style={{
+                position: 'absolute',
+                cursor: 'pointer',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: priorityOnly ? '#2196F3' : '#ccc',
+                borderRadius: 14,
+                transition: '.2s',
+                width: 24,
+                height: 14,
+                display: 'block'
+              }}></span>
+              <span style={{
+                position: 'absolute',
+                content: '""',
+                height: 10,
+                width: 10,
+                left: priorityOnly ? 12 : 2,
+                bottom: 2,
+                background: 'white',
+                borderRadius: '50%',
+                transition: '.2s',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                display: 'block'
+              }}></span>
+            </span>
+          </label>
           <button 
             className={`${styles.gridViewBtn} ${viewMode === 'grid' ? styles.active : ''}`}
             onClick={() => setViewMode('grid')}
@@ -803,6 +908,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                         onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
                         style={{ zIndex: tile.zIndex }}
                         displayTags={getActiveCategory()}
+                        priorityMode={(priorityOnly && (viewMode === 'grid' || viewMode === 'cluster'))}
                       />
                     );
                   }
