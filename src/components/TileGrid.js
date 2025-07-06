@@ -96,7 +96,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
   const [tilePositions, setTilePositions] = useState({});
-  const [priorityOnly, setPriorityOnly] = useState(false);
+  const [priorityOnly, setPriorityOnly] = useState(true);
   
   // Constants for drag and click detection
   const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
