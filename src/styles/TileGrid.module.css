@@ -305,7 +305,8 @@
   .tilesContainer.mobileGrid,
   .TileGrid_tilesContainer__uERcT.mobileGrid {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    justify-content: start;
     column-gap: 10px;
     row-gap: 24px;
     padding: 10px;
@@ -313,11 +314,13 @@
   }
   .tile.mobileGridTile,
   .TileGrid_mobileGridTile__* {
-    width: 100% !important;
+    width: 120px !important;
+    height: 120px !important;
     aspect-ratio: 1 / 1;
     position: static !important;
     margin: 0 !important;
     box-sizing: border-box;
+    flex: none !important;
   }
 }
 
