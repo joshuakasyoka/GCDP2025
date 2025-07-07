@@ -15,6 +15,7 @@ const MobileTileGrid = ({ tiles, onTileClick, getActiveCategory, draggedTile, ho
         style={{ position: 'static', width: '100%' }}
         displayTags={getActiveCategory()}
         classNameProp="mobileGridTile"
+        priorityMode={tile.priority === true}
       />
     ))}
   </div>
