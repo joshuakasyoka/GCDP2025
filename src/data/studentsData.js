@@ -489,6 +489,23 @@ export const studentsData = {
           }
         },
         {
+          "artifact_id": "artifact_006_04",
+          "title": "Incense Sticks",
+          "description": "Incense sticks made by women's support group members, with soothing words to hold during stress.",
+          "file_paths": ["/StudentPhotos/Kaining/KH_06.jpg"],
+          "creation_date": "2025-06-19T18:19:10Z",
+          "w": 180,
+          "h": 130,
+          "priority": true,
+          "tags": {
+            "themes": ["craft", "therapy", "community"],
+            "design_as": ["product"],
+            "materials": ["incense"],
+            "methods": ["product", "narrative"],
+            "collaborators": ["womenssupportgroup"]
+          }
+        },
+        {
           "artifact_id": "artifact_006_02",
           "title": "Agarwood Chips",
           "description": "Agarwood chips—fragrant pieces formed when trees are intentionally wounded.",
