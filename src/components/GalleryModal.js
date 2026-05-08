@@ -294,7 +294,7 @@ export const SimplePhotoModal = ({ photoUrl, onClose }) => {
       >
         <img
           src={photoUrl}
-          alt="Project Photo"
+          alt="Project"
           style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 0, filter: 'none !important', width: 'auto', height: 'auto', display: 'block' }}
         />
       </div>

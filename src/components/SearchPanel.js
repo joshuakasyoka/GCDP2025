@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getUniqueValues } from '../utils/searchUtils';
 import styles from '../styles/SearchPanel.module.css';
 
 const SearchPanel = ({ 
@@ -23,26 +22,6 @@ const SearchPanel = ({
       return map;
     }, new Map())
   ).map(([_, student]) => student);
-
-  const FilterSection = ({ title, category, items }) => (
-    <div className={styles.filterSection}>
-      <h4>{title}</h4>
-      <div className={styles.filterItems}>
-        {items.map(item => (
-          <label key={item} className={styles.filterItem}>
-            <input
-              type="checkbox"
-              checked={selectedFilters[category].includes(item)}
-              onChange={() => onToggleFilter(category, item)}
-            />
-            <span className={styles.filterLabel}>
-              {item.replace(/_/g, ' ')}
-            </span>
-          </label>
-        ))}
-      </div>
-    </div>
-  );
 
   return (
     <div className={styles.searchPanel}>

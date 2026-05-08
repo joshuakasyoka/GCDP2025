@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { ReactP5Wrapper } from 'react-p5-wrapper';
 import Tile from './Tile';
 import styles from '../styles/TileGrid.module.css';
 import createFuzzySearch from '@nozbe/microfuzz';
@@ -95,7 +94,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   const [dragStartTime, setDragStartTime] = useState(null);
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
-  const [tilePositions, setTilePositions] = useState({});
   const [priorityOnly, setPriorityOnly] = useState(true);
   
   // Constants for drag and click detection
@@ -183,8 +181,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           y = baseY + (index * overlapOffset);
         } else if (viewMode === 'cluster') {
           // Create random clusters
-          const numClusters = Math.ceil(artifacts.length / 5); // 5 items per cluster
-          const clusterIndex = Math.floor(index / 5);
           const clusterX = canvasPadding + (Math.random() * (availableWidth - tileSize));
           const clusterY = canvasPadding + (Math.random() * (availableHeight - tileSize));
           // Add some randomness within the cluster
@@ -247,96 +243,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       setTiles(newTiles);
     }
   }, [artifacts, viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, priorityOnly]);
-
-  const sketch = useCallback(p5 => {
-    p5.setup = () => {
-      const canvas = p5.createCanvas(
-        containerRef.current?.clientWidth || 800,
-        containerRef.current?.clientHeight || 600
-      );
-      canvas.parent(containerRef.current);
-    };
-
-    p5.draw = () => {
-      p5.background(255);
-      
-      if (viewMode === 'grid') {
-        // Draw grid lines for grid view
-        p5.stroke(240);
-        p5.strokeWeight(0.5);
-        for (let x = canvasPadding; x < p5.width; x += tileSize + gridGap) {
-          p5.line(x, 0, x, p5.height);
-        }
-        for (let y = canvasPadding; y < p5.height; y += tileSize + gridGap) {
-          p5.line(0, y, p5.width, y);
-        }
-      } else if (viewMode === 'random') {
-        // Draw diagonal grid lines for list view
-        p5.stroke(240);
-        p5.strokeWeight(0.5);
-        
-        const maxLines = Math.max(
-          Math.ceil((p5.width - canvasPadding) / overlapOffset),
-          Math.ceil((p5.height - canvasPadding) / overlapOffset)
-        );
-
-        for (let i = 0; i < maxLines; i++) {
-          const x = canvasPadding + (i * overlapOffset);
-          const y = canvasPadding + (i * overlapOffset);
-          
-          p5.line(x, 0, x, p5.height);
-          p5.line(0, y, p5.width, y);
-          p5.line(x, 0, 0, y);
-          p5.line(x, p5.height, p5.width, y);
-        }
-      } else if (viewMode === 'cluster') {
-        // Draw cluster visualization
-        p5.stroke(240);
-        p5.strokeWeight(0.5);
-        p5.noFill();
-        
-        const numClusters = Math.ceil(artifacts.length / 5);
-        for (let i = 0; i < numClusters; i++) {
-          const clusterX = canvasPadding + (Math.random() * (p5.width - canvasPadding * 2));
-          const clusterY = canvasPadding + (Math.random() * (p5.height - canvasPadding * 2));
-          p5.circle(clusterX, clusterY, clusterRadius * 2);
-        }
-      } else if (viewMode === 'vector') {
-        p5.background(255); // Clear canvas to white
-        // Draw grid background for vector view
-        p5.stroke(220); // Slightly darker for visibility
-        p5.strokeWeight(0.7);
-        const gridSpacing = 40;
-        for (let x = 0; x < p5.width; x += gridSpacing) {
-          p5.line(x, 0, x, p5.height);
-        }
-        for (let y = 0; y < p5.height; y += gridSpacing) {
-          p5.line(0, y, p5.width, y);
-        }
-        // Draw lines connecting circles
-        p5.stroke('#FF9900');
-        p5.strokeWeight(2.5);
-        for (let i = 0; i < tiles.length - 1; i++) {
-          p5.line(tiles[i].x + 16, tiles[i].y + 16, tiles[i + 1].x + 16, tiles[i + 1].y + 16);
-        }
-        // Draw circles with highlight color
-        for (let i = 0; i < tiles.length; i++) {
-          p5.noStroke();
-          p5.fill(getComputedStyle(document.documentElement).getPropertyValue('--highlight-color') || '#FF9900');
-          p5.circle(tiles[i].x + 16, tiles[i].y + 16, 32);
-        }
-      }
-    };
-
-    p5.windowResized = () => {
-      if (containerRef.current) {
-        p5.resizeCanvas(
-          containerRef.current.clientWidth,
-          containerRef.current.clientHeight
-        );
-      }
-    };
-  }, [viewMode, tileSize, vectorTileSize, gridGap, canvasPadding, overlapOffset, clusterRadius, artifacts.length]);
 
   const handleMouseMove = useCallback(e => {
     if (!containerRef.current || !draggedTile || !dragStartPosition) return;
@@ -710,23 +616,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       canvas.parentNode.removeChild(canvas);
     }
   }, [filteredTiles]);
-
-  const handleTileMount = (id, element) => {
-    if (!element) return;
-    
-    const rect = element.getBoundingClientRect();
-    const containerRect = containerRef.current.getBoundingClientRect();
-    
-    setTilePositions(prev => ({
-      ...prev,
-      [id]: {
-        x: rect.left - containerRect.left,
-        y: rect.top - containerRect.top,
-        width: rect.width,
-        height: rect.height
-      }
-    }));
-  };
 
   return (
     <div className={`${styles.tileGrid} ${isFullscreen ? styles.fullscreen : ''}`}>

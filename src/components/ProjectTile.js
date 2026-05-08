@@ -2,8 +2,6 @@ import React from 'react';
 import styles from '../styles/ProjectTile.module.css';
 
 const ProjectTile = ({ project, isSelected, onClick }) => {
-  const thumbnail = project.artifacts[0]?.file_paths?.[0] || null;
-
   return (
     <div
       className={`${styles.projectTile} ${isSelected ? styles.selected : ''}`}
