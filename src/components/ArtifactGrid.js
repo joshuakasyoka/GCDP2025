@@ -12,7 +12,7 @@ const ArtifactGrid = ({ artifacts, onArtifactClick }) => {
         >
           <div className={styles.artifactThumbnail}>
             {artifact.file_paths && artifact.file_paths[0] ? (
-              <img src={artifact.file_paths[0]} alt={artifact.title} />
+              <img src={artifact.file_paths[0]} alt={artifact.title} loading="lazy" decoding="async" />
             ) : (
               <div className={styles.placeholder}>
                 <span>{artifact.type}</span>

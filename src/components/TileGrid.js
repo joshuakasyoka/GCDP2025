@@ -644,16 +644,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     [tiles]
   );
 
-  // Debug logs
-  console.log('Tiles:', tiles);
-  if (tiles.length > 0) {
-    console.log('getSearchText for first tile:', getSearchText(tiles[0]));
-  }
-  console.log('Search query:', searchQuery);
-  if (searchQuery && !['materials', 'methods', 'themes', 'design_as', 'collaborators'].includes(searchQuery.toLowerCase())) {
-    console.log('Fuzzy search result:', fuzzySearch(searchQuery));
-  }
-
   // Filter tiles based on search query using microfuzz
   const filteredTiles = React.useMemo(() => {
     let result;
@@ -709,10 +699,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     
     return 'materials'; // Default to materials if no category match
   };
-
-  // Debug log to check what's being passed to Tile
-  console.log('Search query:', searchQuery);
-  console.log('Active category:', getActiveCategory());
 
   useEffect(() => {
     const container = containerRef.current;
@@ -909,6 +895,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                         style={{ zIndex: tile.zIndex }}
                         displayTags={getActiveCategory()}
                         priorityMode={(priorityOnly && (viewMode === 'grid' || viewMode === 'cluster'))}
+                        scrollRoot={containerRef.current}
                       />
                     );
                   }

@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from '../styles/Tile.module.css';
 
-const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp, priorityMode = false }) => {
+const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTags, classNameProp, priorityMode = false, scrollRoot = null }) => {
+  const tileRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = tileRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { root: scrollRoot, rootMargin: '300px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [scrollRoot]);
+
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(tile.artifact_id);
   };
 
-  const handleMouseEnter = () => {
-    onHover(true);
-  };
+  const handleMouseEnter = () => onHover(true);
+  const handleMouseLeave = () => onHover(false);
 
-  const handleMouseLeave = () => {
-    onHover(false);
-  };
-
-  // Use fixed square dimensions
-  const tileSize = 200; // pixels
-
-  // Responsive style for mobile vs desktop
+  const tileSize = 200;
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const tileStyle = isMobile
     ? {
@@ -39,25 +50,18 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
         ...style,
       };
 
-  // Get tags to display based on the active category
   const getDisplayTags = () => {
-    console.log('Display tags category:', displayTags);
-    console.log('Tile tags:', tile.tags);
-    
-    if (!displayTags || !tile.tags || !tile.tags[displayTags]) {
-      console.log('No tags to display');
-      return [];
-    }
-    
-    const tags = tile.tags[displayTags];
-    console.log('Tags to display:', tags);
-    return tags.slice(0, 2); // Return only the first two tags
+    if (!displayTags || !tile.tags || !tile.tags[displayTags]) return [];
+    return tile.tags[displayTags].slice(0, 2);
   };
 
   const displayTagsList = getDisplayTags();
+  const shouldShowImage = (isVisible || isHovered) && tile.file_paths && tile.file_paths[0];
+  const imgStyle = { width: '100%', height: '100%', objectFit: 'cover', filter: priorityMode ? 'none' : undefined };
 
   return (
     <div
+      ref={tileRef}
       className={[
         styles.tile,
         classNameProp ? styles[classNameProp] : '',
@@ -71,10 +75,14 @@ const Tile = ({ tile, isDragging, isHovered, onClick, onHover, style, displayTag
     >
       <div className={styles.tileContent} style={{ width: '100%', height: '100%' }}>
         <div className={styles.tileImage} style={{ width: '100%', height: '100%' }}>
-          {(priorityMode && tile.file_paths && tile.file_paths[0]) ? (
-            <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'none' }} />
-          ) : isHovered && tile.file_paths && tile.file_paths[0] ? (
-            <img src={tile.file_paths[0]} alt={tile.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          {shouldShowImage ? (
+            <img
+              src={tile.file_paths[0]}
+              alt={tile.title}
+              loading="lazy"
+              decoding="async"
+              style={imgStyle}
+            />
           ) : (
             <div className={styles.placeholder}>
               <span>{tile.artifact_id}</span>
