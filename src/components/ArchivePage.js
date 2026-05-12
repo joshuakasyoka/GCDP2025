@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
 import GalleryModal from './GalleryModal';
+import CommentsPanel from './CommentsPanel';
 import { studentsData } from '../data/studentsData';
 import { useSearch } from '../hooks/useSearch';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -45,6 +46,45 @@ const ArchivePage = () => {
     toggleFilter,
     filteredAndSortedArtifacts
   } = useSearch(allArtifacts);
+
+  // Comments feature
+  const [comments, setComments] = useState([]);
+  const [activeCommentId, setActiveCommentId] = useState(null);
+  const [commentsPanelOpen, setCommentsPanelOpen] = useState(false);
+  const [panelSelectedId, setPanelSelectedId] = useState(null);
+
+  const handleAddComment = useCallback((x, y) => {
+    const id = Date.now().toString();
+    const newComment = {
+      id,
+      x, y,
+      initials: 'SP',
+      name: 'Samuel',
+      time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      title: 'Comment',
+      status: null,
+      coord: `${x.toFixed(0)}, ${y.toFixed(0)}`,
+      previewText: '',
+      threadComments: [],
+      activities: [],
+    };
+    setComments(prev => [...prev, newComment]);
+    setActiveCommentId(id);
+  }, []);
+
+  const handleCommentSelect = useCallback((id) => {
+    setActiveCommentId(prev => prev === id ? null : id);
+  }, []);
+
+  const handleUpdateComment = useCallback((id, patch) => {
+    setComments(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c));
+  }, []);
+
+  const handleOpenCommentInPanel = useCallback((id) => {
+    setActiveCommentId(null);
+    setCommentsPanelOpen(true);
+    setPanelSelectedId(id);
+  }, []);
 
   const handleArtifactClick = (artifact_id) => {
     navigate(`/archive/artifact/${artifact_id}`);
@@ -108,7 +148,15 @@ const ArchivePage = () => {
             <div className={styles.headerRight}>
               <Link to="/glossary" className={styles.glossaryLink}>GLOSSARY</Link>
               <Link to="/" className={styles.glossaryLink}>ARCHIVE DISPLAY</Link>
-              {/* <span>GCDP 2025</span> */}
+              {comments.length > 0 && (
+                <button
+                  onClick={() => setCommentsPanelOpen(v => !v)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', background: 'none', border: 'none', cursor: 'pointer', color: commentsPanelOpen ? 'var(--highlight-color)' : 'inherit' }}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  COMMENTS ({comments.length})
+                </button>
+              )}
             </div>
           </>
         )}
@@ -125,7 +173,7 @@ const ArchivePage = () => {
           selectedFilters={selectedFilters}
           onToggleFilter={toggleFilter}
         />
-        
+
         <TileGrid
           artifacts={filteredAndSortedArtifacts}
           onTileClick={handleArtifactClick}
@@ -133,6 +181,21 @@ const ArchivePage = () => {
           onSortChange={setSortBy}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          comments={comments}
+          activeCommentId={activeCommentId}
+          onAddComment={handleAddComment}
+          onCommentSelect={handleCommentSelect}
+          onUpdateComment={handleUpdateComment}
+          onOpenCommentInPanel={handleOpenCommentInPanel}
+        />
+
+        <CommentsPanel
+          open={commentsPanelOpen}
+          onClose={() => setCommentsPanelOpen(false)}
+          comments={comments}
+          onUpdateComment={handleUpdateComment}
+          initialSelectedId={panelSelectedId}
+          onClearInitialSelected={() => setPanelSelectedId(null)}
         />
       </div>
 

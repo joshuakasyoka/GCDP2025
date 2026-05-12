@@ -3,6 +3,15 @@ import Tile from './Tile';
 import styles from '../styles/TileGrid.module.css';
 import createFuzzySearch from '@nozbe/microfuzz';
 import MobileTileGrid from './MobileTileGrid';
+import { CommentMarker, CommentCard } from './MapComments';
+
+function IconCommentTool({ active }) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  );
+}
 
 // MobileHeader component for mobile view
 const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFullscreen, setIsFullscreen, styles, priorityOnly, setPriorityOnly }) => (
@@ -85,7 +94,7 @@ const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFu
   </div>
 );
 
-const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, onSearchChange }) => {
+const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, onSearchChange, comments = [], activeCommentId, onAddComment, onCommentSelect, onUpdateComment, onOpenCommentInPanel }) => {
   const [tiles, setTiles] = useState([]);
   const [draggedTile, setDraggedTile] = useState(null);
   const [hoveredTile, setHoveredTile] = useState(null);
@@ -95,7 +104,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
   const [dragStartPosition, setDragStartPosition] = useState(null);
   const containerRef = useRef(null);
   const [priorityOnly, setPriorityOnly] = useState(true);
-  
+  const [commentMode, setCommentMode] = useState(false);
+
   // Constants for drag and click detection
   const DRAG_THRESHOLD = 5; // Minimum pixels to move before considering it a drag
   const CLICK_THRESHOLD = 200; // Maximum milliseconds to consider it a click
@@ -279,21 +289,31 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     }
   }, [draggedTile, isDragging, dragStartPosition]);
 
+  const commentModeRef = useRef(false);
+  useEffect(() => { commentModeRef.current = commentMode; }, [commentMode]);
+
   const handleMouseDown = useCallback(e => {
     if (!containerRef.current) return;
-    
+
     const rect = containerRef.current.getBoundingClientRect();
     const scrollLeft = containerRef.current.scrollLeft;
     const scrollTop = containerRef.current.scrollTop;
     const mouseX = e.clientX - rect.left + scrollLeft;
     const mouseY = e.clientY - rect.top + scrollTop;
 
+    // In comment mode, always record position (for drag detection + placement)
+    if (commentModeRef.current) {
+      setDragStartTime(Date.now());
+      setDragStartPosition({ x: mouseX, y: mouseY });
+      return;
+    }
+
     for (let i = tiles.length - 1; i >= 0; i--) {
       const tile = tiles[i];
       if (
-        mouseX >= tile.x && 
-        mouseX <= tile.x + tile.w && 
-        mouseY >= tile.y && 
+        mouseX >= tile.x &&
+        mouseX <= tile.x + tile.w &&
+        mouseY >= tile.y &&
         mouseY <= tile.y + tile.h
       ) {
         const offsetX = mouseX - tile.x;
@@ -370,13 +390,19 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
         // This was a click operation
         onTileClick(draggedTile.id);
       }
+    } else if (commentModeRef.current && dragStartPosition && !isDragging) {
+      // Comment mode: place a comment at the click position
+      const dragDuration = Date.now() - dragStartTime;
+      if (dragDuration < CLICK_THRESHOLD) {
+        onAddComment?.(dragStartPosition.x, dragStartPosition.y);
+      }
     }
-    
+
     setDraggedTile(null);
     setIsDragging(false);
     setDragStartTime(null);
     setDragStartPosition(null);
-  }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, onTileClick]);
+  }, [draggedTile, isDragging, viewMode, tileSize, gridGap, canvasPadding, overlapOffset, dragStartTime, dragStartPosition, onTileClick, onAddComment]);
 
   const handleTileClick = (artifact_id) => {
     onTileClick(artifact_id);
@@ -715,19 +741,33 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           >
             ⊙
           </button>
-          <button 
+          <button
             className={`${styles.fullscreenBtn} ${isFullscreen ? styles.active : ''}`}
             onClick={() => setIsFullscreen(!isFullscreen)}
           >
             {isFullscreen ? '⤢' : '⤢'}
           </button>
+          <button
+            title={commentMode ? 'Exit comment mode' : 'Add comment'}
+            onClick={() => setCommentMode(m => !m)}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '4px 6px', borderRadius: 4, border: 'none', cursor: 'pointer',
+              background: commentMode ? 'var(--highlight-color)' : 'transparent',
+              color: commentMode ? '#fff' : 'inherit',
+              transition: 'background 0.15s, color 0.15s',
+            }}
+          >
+            <IconCommentTool active={commentMode} />
+          </button>
         </div>
       </div>
       
       <div className={styles.canvasContainer}>
-        <div 
-          ref={containerRef} 
+        <div
+          ref={containerRef}
           className={styles.tilesContainer}
+          style={commentMode ? { cursor: 'crosshair' } : {}}
         >
           {filteredTiles.length > 0 ? (
             <>
@@ -813,6 +853,48 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
               <p>Enter a search term to view artifacts</p>
             </div>
           )}
+
+          {/* Comment markers */}
+          {comments.map(comment => (
+            <CommentMarker
+              key={comment.id}
+              comment={comment}
+              isActive={comment.id === activeCommentId}
+              onClick={onCommentSelect}
+            />
+          ))}
+
+          {/* Active comment popup */}
+          {activeCommentId && (() => {
+            const ac = comments.find(c => c.id === activeCommentId);
+            if (!ac) return null;
+            return (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: ac.x + 10,
+                  top: ac.y - 44,
+                  transform: 'translateY(-100%)',
+                  zIndex: 2100,
+                  pointerEvents: 'auto',
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <CommentCard
+                  title={ac.title}
+                  status={ac.status}
+                  coord={ac.coord}
+                  initialComments={ac.threadComments}
+                  activities={ac.activities}
+                  onClose={() => onCommentSelect(null)}
+                  onSetStatus={s => onUpdateComment?.(ac.id, { status: s })}
+                  onOpenInPanel={() => onOpenCommentInPanel?.(ac.id)}
+                  onReply={c => onUpdateComment?.(ac.id, { threadComments: [...(ac.threadComments || []), c], previewText: c.text })}
+                  onActivity={e => {}}
+                />
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
