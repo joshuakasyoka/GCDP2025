@@ -501,7 +501,6 @@ const EditPage = () => {
 
                 {selected.projects[0] && (
                   <>
-                    <h3>PROJECT — {typeof selected.projects[0].title === 'string' ? selected.projects[0].title : selected.projects[0].title?.en}</h3>
                     <div className={styles.formGroup}>
                       <label>Project title</label>
                       <input value={studentForm.project_title} onChange={e => setStudentForm(f => ({ ...f, project_title: e.target.value }))} />
