@@ -13,9 +13,9 @@ const VENUE_PIN = {
 
 const ArchiveMapView = ({ artifacts = [], onArtifactClick }) => {
   const { data } = useArchiveData();
-  const mapPins = data.map_pins || [];
 
   const pins = useMemo(() => {
+    const mapPins = data.map_pins || [];
     const standalonePins = mapPins
       .filter((pin) => Number.isFinite(pin.lat) && Number.isFinite(pin.lng))
       .map((pin) => ({
@@ -42,7 +42,7 @@ const ArchiveMapView = ({ artifacts = [], onArtifactClick }) => {
       }));
 
     return [VENUE_PIN, ...standalonePins, ...artifactPins];
-  }, [artifacts, mapPins]);
+  }, [artifacts, data.map_pins]);
 
   const handlePinClick = useCallback((pin) => {
     if (pin.isVenue || pin.isMapPin || !onArtifactClick) return;
