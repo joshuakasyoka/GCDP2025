@@ -79,6 +79,10 @@
   color: var(--gray-medium);
 }
 
+.sidebar h2 + .yearSection {
+  margin-top: 0;
+}
+
 .addButton {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -139,6 +143,10 @@
 .studentItem {
   border-bottom: var(--border-width) solid var(--border-color);
   cursor: grab;
+}
+
+.pinItem {
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .studentItemDragging {

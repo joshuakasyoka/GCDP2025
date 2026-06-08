@@ -469,29 +469,31 @@ const EditPage = () => {
             + New pin
           </button>
           <h2>MAP PINS</h2>
-          {mapPins.length === 0 ? (
-            <p className={styles.yearEmpty}>No map pins yet</p>
-          ) : (
-            <ul className={styles.studentList}>
-              {mapPins.map(pin => (
-                <li key={pin.pin_id}>
-                  <button
-                    type="button"
-                    className={`${styles.studentButton} ${selectedPinId === pin.pin_id ? styles.studentButtonActive : ''}`}
-                    onClick={() => {
-                      setSelectedId(null);
-                      setShowNewStudent(false);
-                      setShowNewPin(false);
-                      setShowNewArtifact(false);
-                      setSelectedPinId(pin.pin_id);
-                    }}
-                  >
-                    <span>{pin.title}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className={styles.yearSection}>
+            {mapPins.length === 0 ? (
+              <p className={styles.yearEmpty}>No map pins yet</p>
+            ) : (
+              <ul className={styles.studentList}>
+                {mapPins.map(pin => (
+                  <li key={pin.pin_id} className={styles.pinItem}>
+                    <button
+                      type="button"
+                      className={`${styles.studentButton} ${selectedPinId === pin.pin_id ? styles.studentButtonActive : ''}`}
+                      onClick={() => {
+                        setSelectedId(null);
+                        setShowNewStudent(false);
+                        setShowNewPin(false);
+                        setShowNewArtifact(false);
+                        setSelectedPinId(pin.pin_id);
+                      }}
+                    >
+                      <span>{pin.title}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <h2>STUDENTS</h2>
           {yearGroups.map(year => {
             const yearStudents = students
