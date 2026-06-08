@@ -13,7 +13,11 @@
 
 # misc
 .DS_Store
+.env
 .env.local
+public/uploads/*
+!public/uploads/.gitkeep
+server/data/archive.json
 .env.development.local
 .env.test.local
 .env.production.local

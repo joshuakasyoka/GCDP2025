@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchPanel from './SearchPanel';
 import TileGrid from './TileGrid';
 import GalleryModal from './GalleryModal';
-import { studentsData } from '../data/studentsData';
+import { useArchiveData } from '../contexts/ArchiveDataContext';
 import { useSearch } from '../hooks/useSearch';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/Archive.module.css';
@@ -13,6 +13,7 @@ const ArchivePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { language, toggleLanguage } = useLanguage();
+  const { data: studentsData } = useArchiveData();
 
   // Helper to detect mobile
   const [isMobile, setIsMobile] = useState(false);

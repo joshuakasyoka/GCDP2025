@@ -2,12 +2,18 @@
   "name": "design-archive",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "@nozbe/microfuzz": "^1.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "clsx": "^1.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "multer": "^1.4.5-lts.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-p5-wrapper": "^3.4.0",
@@ -18,7 +24,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "node server/index.js",
+    "sync-data": "node scripts/sync-archive-json.js",
+    "dev": "npm run sync-data && concurrently \"npm run server\" \"npm start\"",
     "build": "react-scripts build",
+    "start:prod": "NODE_ENV=production node server/index.js",
+    "heroku-postbuild": "npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "compress-images": "node scripts/compress-images.js"
@@ -42,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "sharp": "^0.34.5"
   }
 }

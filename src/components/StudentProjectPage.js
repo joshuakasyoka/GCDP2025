@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import ProjectTile from './ProjectTile';
 import ArtifactGrid from './ArtifactGrid';
 import GalleryModal, { SimplePhotoModal } from './GalleryModal';
-import { studentsData } from '../data/studentsData';
+import { useArchiveData } from '../contexts/ArchiveDataContext';
 import styles from '../styles/StudentProject.module.css';
 
 function getGoogleDriveImageUrl(link) {
@@ -15,6 +15,7 @@ function getGoogleDriveImageUrl(link) {
 
 const StudentProjectPage = () => {
   const { studentId, projectId } = useParams();
+  const { data: studentsData } = useArchiveData();
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);

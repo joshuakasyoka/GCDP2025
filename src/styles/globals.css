@@ -76,7 +76,7 @@ h4 { font-size: 12px; }
 }
 
 /* Form elements */
-input, select, button {
+input, select, textarea, button {
   font-family: inherit;
   font-size: inherit;
 }
