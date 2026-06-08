@@ -16,6 +16,7 @@ const { upload } = require('./upload');
 const { storeImage, streamImage, UPLOAD_ROOT } = require('./media');
 
 const app = express();
+const api = express.Router();
 const PORT = process.env.PORT || 3001;
 const isProduction = process.env.NODE_ENV === 'production';
 const isVercel = !!process.env.VERCEL;
@@ -26,8 +27,10 @@ const initPromise = initStorage().catch((err) => {
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+app.use('/uploads', express.static(UPLOAD_ROOT));
+app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(async (req, res, next) => {
+api.use(async (req, res, next) => {
   try {
     await initPromise;
     next();
@@ -36,10 +39,7 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use('/uploads', express.static(UPLOAD_ROOT));
-app.use(express.static(path.join(__dirname, '../public')));
-
-app.get('/api/health', async (req, res) => {
+api.get('/health', async (req, res) => {
   res.json({
     ok: true,
     storage: isUsingMongo() ? 'mongodb' : 'file',
@@ -49,7 +49,7 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
-app.get('/api/media/:fileId', async (req, res) => {
+api.get('/media/:fileId', async (req, res) => {
   try {
     await streamImage(req.params.fileId, res);
   } catch (err) {
@@ -57,7 +57,7 @@ app.get('/api/media/:fileId', async (req, res) => {
   }
 });
 
-app.get('/api/students', async (req, res) => {
+api.get('/students', async (req, res) => {
   try {
     const data = await getAllStudents();
     res.json(data);
@@ -66,7 +66,7 @@ app.get('/api/students', async (req, res) => {
   }
 });
 
-app.get('/api/students/:studentId', async (req, res) => {
+api.get('/students/:studentId', async (req, res) => {
   try {
     const student = await getStudent(req.params.studentId);
     if (!student) return res.status(404).json({ error: 'Student not found' });
@@ -76,7 +76,7 @@ app.get('/api/students/:studentId', async (req, res) => {
   }
 });
 
-app.post('/api/upload', requireAuth, upload.array('files', 10), async (req, res) => {
+api.post('/upload', requireAuth, upload.array('files', 10), async (req, res) => {
   try {
     if (!req.files?.length) {
       return res.status(400).json({ error: 'No files uploaded' });
@@ -92,7 +92,7 @@ app.post('/api/upload', requireAuth, upload.array('files', 10), async (req, res)
   }
 });
 
-app.post('/api/students', requireAuth, async (req, res) => {
+api.post('/students', requireAuth, async (req, res) => {
   try {
     const data = await getAllStudents();
     const studentId = generateId('student_', data.students.map(s => s.student_id));
@@ -131,7 +131,7 @@ app.post('/api/students', requireAuth, async (req, res) => {
   }
 });
 
-app.put('/api/students/:studentId', requireAuth, async (req, res) => {
+api.put('/students/:studentId', requireAuth, async (req, res) => {
   try {
     const existing = await getStudent(req.params.studentId);
     if (!existing) return res.status(404).json({ error: 'Student not found' });
@@ -150,7 +150,7 @@ app.put('/api/students/:studentId', requireAuth, async (req, res) => {
   }
 });
 
-app.delete('/api/students/:studentId', requireAuth, async (req, res) => {
+api.delete('/students/:studentId', requireAuth, async (req, res) => {
   try {
     const existing = await getStudent(req.params.studentId);
     if (!existing) return res.status(404).json({ error: 'Student not found' });
@@ -161,7 +161,7 @@ app.delete('/api/students/:studentId', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/students/:studentId/projects/:projectId/artifacts', requireAuth, async (req, res) => {
+api.post('/students/:studentId/projects/:projectId/artifacts', requireAuth, async (req, res) => {
   try {
     const student = await getStudent(req.params.studentId);
     if (!student) return res.status(404).json({ error: 'Student not found' });
@@ -200,7 +200,7 @@ app.post('/api/students/:studentId/projects/:projectId/artifacts', requireAuth, 
   }
 });
 
-app.put('/api/students/:studentId/projects/:projectId/artifacts/:artifactId', requireAuth, async (req, res) => {
+api.put('/students/:studentId/projects/:projectId/artifacts/:artifactId', requireAuth, async (req, res) => {
   try {
     const student = await getStudent(req.params.studentId);
     if (!student) return res.status(404).json({ error: 'Student not found' });
@@ -225,7 +225,7 @@ app.put('/api/students/:studentId/projects/:projectId/artifacts/:artifactId', re
   }
 });
 
-app.delete('/api/students/:studentId/projects/:projectId/artifacts/:artifactId', requireAuth, async (req, res) => {
+api.delete('/students/:studentId/projects/:projectId/artifacts/:artifactId', requireAuth, async (req, res) => {
   try {
     const student = await getStudent(req.params.studentId);
     if (!student) return res.status(404).json({ error: 'Student not found' });
@@ -240,6 +240,9 @@ app.delete('/api/students/:studentId/projects/:projectId/artifacts/:artifactId',
     res.status(500).json({ error: err.message });
   }
 });
+
+app.use('/api', api);
+if (isVercel) app.use(api);
 
 app.use((err, req, res, next) => {
   if (err) {

@@ -35,7 +35,11 @@ async function initStorage() {
     }
 
     if (!global._mongoosePromise) {
-      global._mongoosePromise = mongoose.connect(uri);
+      global._mongoosePromise = mongoose.connect(uri, {
+        serverSelectionTimeoutMS: 8000,
+        socketTimeoutMS: 15000,
+        maxPoolSize: 5,
+      });
     }
     await global._mongoosePromise;
     useMongo = true;
