@@ -67,7 +67,7 @@ const FileUpload = ({ studentId, value, onChange, label = 'Images' }) => {
           onChange={(e) => uploadFiles([...e.target.files])}
         />
         <span className={styles.dropText}>
-          {uploading ? 'Uploading…' : 'Drop images here or click to browse'}
+          {uploading ? 'Uploading…' : 'Drop images here or click to browse (max 10MB, compressed for web)'}
         </span>
       </div>
 

@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const { GridFSBucket, ObjectId } = require('mongodb');
+const { prepareImageForStorage } = require('./compressImage');
 
 const UPLOAD_ROOT = path.join(__dirname, '../public/uploads');
 
@@ -22,20 +23,22 @@ async function storeImageMongo(file, studentId) {
   const bucket = getBucket();
   if (!bucket) throw new Error('MongoDB not connected');
 
-  const filename = buildFilename(file.originalname);
+  const { buffer, contentType } = await prepareImageForStorage(file.buffer, file.mimetype);
+  const ext = contentType === 'image/png' ? '.png' : contentType === 'image/webp' ? '.webp' : '.jpg';
+  const filename = buildFilename(file.originalname).replace(/\.[^.]+$/, ext);
   const safeStudentId = studentId.replace(/[^a-zA-Z0-9_-]/g, '');
 
   return new Promise((resolve, reject) => {
     const stream = bucket.openUploadStream(filename, {
       metadata: {
         studentId: safeStudentId,
-        contentType: file.mimetype,
+        contentType,
         originalName: file.originalname,
       },
     });
     stream.on('error', reject);
     stream.on('finish', () => resolve(stream.id.toString()));
-    stream.end(file.buffer);
+    stream.end(buffer);
   });
 }
 
@@ -44,9 +47,11 @@ async function storeImageDisk(file, studentId) {
   const dir = path.join(UPLOAD_ROOT, safeStudentId);
   fs.mkdirSync(dir, { recursive: true });
 
-  const filename = buildFilename(file.originalname);
+  const { buffer, contentType } = await prepareImageForStorage(file.buffer, file.mimetype);
+  const ext = contentType === 'image/png' ? '.png' : '.jpg';
+  const filename = buildFilename(file.originalname).replace(/\.[^.]+$/, ext);
   const filepath = path.join(dir, filename);
-  fs.writeFileSync(filepath, file.buffer);
+  fs.writeFileSync(filepath, buffer);
 
   return `/uploads/${safeStudentId}/${filename}`;
 }
