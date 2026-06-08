@@ -10,6 +10,7 @@ const {
   deleteStudent,
   generateId,
   isUsingMongo,
+  getStorageError,
 } = require('./storage');
 const { requireAuth } = require('./auth');
 const { upload } = require('./upload');
@@ -40,12 +41,15 @@ api.use(async (req, res, next) => {
 });
 
 api.get('/health', async (req, res) => {
+  const mongo = isUsingMongo();
+  const err = getStorageError();
   res.json({
-    ok: true,
-    storage: isUsingMongo() ? 'mongodb' : 'file',
-    images: isUsingMongo() ? 'gridfs' : 'disk',
+    ok: mongo || !isVercel,
+    storage: mongo ? 'mongodb' : 'file',
+    images: mongo ? 'gridfs' : 'disk',
     uploads: true,
     auth: !!process.env.CMS_API_KEY,
+    error: err || undefined,
   });
 });
 

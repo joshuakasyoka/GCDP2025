@@ -2,9 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 const DATA_PATH = path.join(__dirname, 'data/archive.json');
+const isVercel = !!process.env.VERCEL;
 
 let useMongo = false;
 let StudentModel = null;
+let storageError = null;
+
+const VERCEL_MONGO_MSG =
+  'MongoDB is required on Vercel. Set MONGODB_URI in Vercel env vars and allow 0.0.0.0/0 in Atlas Network Access.';
 
 function readFileData() {
   if (!fs.existsSync(DATA_PATH)) {
@@ -21,6 +26,10 @@ function writeFileData(data) {
 async function initStorage() {
   const uri = process.env.MONGODB_URI;
   if (!uri) {
+    if (isVercel) {
+      storageError = new Error(VERCEL_MONGO_MSG);
+      throw storageError;
+    }
     console.log('No MONGODB_URI set — using file storage (server/data/archive.json)');
     return;
   }
@@ -109,10 +118,22 @@ async function initStorage() {
 
     console.log('Connected to MongoDB');
   } catch (err) {
-    console.error('MongoDB connection failed, falling back to file storage:', err.message);
+    console.error('MongoDB connection failed:', err.message);
     useMongo = false;
     StudentModel = null;
+    storageError = new Error(
+      isVercel
+        ? `${VERCEL_MONGO_MSG} (${err.message})`
+        : `MongoDB connection failed: ${err.message}`
+    );
+    if (isVercel) throw storageError;
   }
+}
+
+function ensureWritable() {
+  if (useMongo && StudentModel) return;
+  if (storageError) throw storageError;
+  if (isVercel) throw new Error(VERCEL_MONGO_MSG);
 }
 
 async function getAllStudents() {
@@ -131,6 +152,7 @@ async function saveAllStudents(data) {
     }
     return data;
   }
+  ensureWritable();
   writeFileData(data);
   return data;
 }
@@ -170,6 +192,10 @@ function isUsingMongo() {
   return useMongo && !!StudentModel;
 }
 
+function getStorageError() {
+  return storageError?.message || null;
+}
+
 module.exports = {
   initStorage,
   getAllStudents,
@@ -179,4 +205,5 @@ module.exports = {
   deleteStudent,
   generateId,
   isUsingMongo,
+  getStorageError,
 };
