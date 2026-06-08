@@ -75,29 +75,29 @@ const StudentProjectPage = () => {
                 </div>
               </div>
 
-              <div className={styles.projectDescription}>
-                <p>{selectedProject.description}</p>
-              </div>
-
-              <div className={styles.artifactsSection}>
-                <h3>STUDENT INFORMATION</h3>
-                <div className={styles.studentDetails}>
-                  <p> {student.about}</p>
-                  {/* <p><strong>Year:</strong> {student.year_level}</p>
-                  <p><strong>Email:</strong> {student.email}</p> */}
+              <div className={styles.projectBody}>
+                <div className={styles.projectDescription}>
+                  <p>{selectedProject.description}</p>
                 </div>
-              </div>
 
-              <div className={styles.artifactsSection}>
-                <h3>ARTIFACTS ({selectedProject.artifacts.length})</h3>
-                <ArtifactGrid
-                  artifacts={selectedProject.artifacts}
-                  onArtifactClick={setSelectedArtifact}
-                />
-              </div>
+                <div className={styles.infoArtifactsRow}>
+                  <div className={styles.studentInfo}>
+                    <h3>STUDENT INFORMATION</h3>
+                    <div className={styles.studentDetails}>
+                      <p>{student.about}</p>
+                    </div>
+                  </div>
 
-              {selectedProject.project_photos && selectedProject.project_photos.length > 0 && (
-                <>
+                  <div className={styles.artifactsSection}>
+                    <h3>ARTIFACTS ({selectedProject.artifacts.length})</h3>
+                    <ArtifactGrid
+                      artifacts={selectedProject.artifacts}
+                      onArtifactClick={setSelectedArtifact}
+                    />
+                  </div>
+                </div>
+
+                {selectedProject.project_photos && selectedProject.project_photos.length > 0 && (
                   <div className={styles.projectPhotos}>
                     <h3>PROJECT PHOTOS</h3>
                     <div className={styles.photoGrid}>
@@ -118,13 +118,16 @@ const StudentProjectPage = () => {
                       ))}
                     </div>
                   </div>
-                </>
-              )}
+                )}
+              </div>
             </>
           ) : (
-            <div className={styles.noProject}>
-              <p>Select a project to view details</p>
-            </div>
+            <>
+              <div className={styles.projectHeader} aria-hidden="true" />
+              <div className={styles.noProject}>
+                <p>Select a project to view details</p>
+              </div>
+            </>
           )}
         </div>
       </div>

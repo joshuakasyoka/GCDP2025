@@ -64,6 +64,7 @@
 }
 
 .sidebar {
+  --section-padding: var(--spacing-lg);
   width: 280px;
   border-right: var(--border-width) solid var(--border-color);
   padding: var(--spacing-lg);
@@ -91,8 +92,9 @@
 }
 
 .addButton:hover {
-  border-color: var(--highlight-color);
-  color: var(--highlight-color);
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+  background: var(--hover-bg);
   opacity: 1;
 }
 
@@ -105,6 +107,8 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   margin-bottom: var(--spacing-sm);
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
   padding-bottom: var(--spacing-xs);
   border-bottom: var(--border-width) solid var(--border-color);
 }
@@ -123,12 +127,13 @@
 .yearEmpty {
   font-size: 11px;
   color: var(--gray-medium);
-  padding: var(--spacing-sm) 0;
+  padding: var(--spacing-sm) var(--section-padding);
   letter-spacing: 0.02em;
 }
 
 .studentList {
   list-style: none;
+  margin-inline: calc(-1 * var(--section-padding));
 }
 
 .studentItem {
@@ -146,7 +151,7 @@
 
 .studentButton {
   width: 100%;
-  padding: var(--spacing-sm) 0;
+  padding: var(--spacing-sm) var(--section-padding);
   text-align: left;
   font-size: 13px;
   font-weight: 500;
@@ -165,6 +170,7 @@
 }
 
 .main {
+  --section-padding: var(--spacing-lg);
   flex: 1;
   padding: var(--spacing-lg);
   overflow-y: auto;
@@ -204,6 +210,16 @@
   color: var(--gray-medium);
   margin-bottom: var(--spacing-xs);
   text-transform: uppercase;
+}
+
+.fieldHint {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
 }
 
 .formGroup input,
@@ -314,7 +330,7 @@
 
 .artifactHeader:hover {
   opacity: 1;
-  background: var(--gray-light);
+  background: var(--hover-bg);
 }
 
 .artifactMeta {
@@ -332,6 +348,8 @@
   display: flex;
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
   padding-top: var(--spacing-lg);
   border-top: var(--border-width) solid var(--border-color);
 }

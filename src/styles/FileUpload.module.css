@@ -23,8 +23,8 @@
 
 .dropZone:hover,
 .dropZoneActive {
-  border-color: var(--highlight-color);
-  background: var(--gray-light);
+  border-color: var(--text-muted);
+  background: var(--hover-bg);
 }
 
 .dropText {

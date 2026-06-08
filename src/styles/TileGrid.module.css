@@ -11,14 +11,35 @@
 .canvasContainer {
   position: relative;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
   background: var(--main-color);
+}
+
+.mapViewWrap {
+  position: absolute;
+  inset: 0;
+  min-height: 480px;
+}
+
+.tilesContainerMap {
+  overflow: hidden;
+}
+
+.mapTilePreview {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 200px;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .tilesContainer {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 0;
   overflow-x: auto;
   overflow-y: auto;
   touch-action: pan-x pan-y;
@@ -42,11 +63,6 @@
   transition: transform 0.3s ease;
 }
 
-.tile:hover {
-  transform: scale(1.05);
-  z-index: 2;
-}
-
 .tileContent {
   width: 100%;
   height: 100%;
@@ -63,7 +79,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #D74616;
+  background: var(--highlight-color);
   opacity: 0.85;
   pointer-events: none;
   mix-blend-mode: color;
@@ -96,8 +112,6 @@
   gap: var(--spacing-sm);
   background: var(--main-color);
   padding: var(--spacing-sm);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: 4px;
 }
 
 .viewControls button {
@@ -113,12 +127,12 @@
 }
 
 .viewControls button:hover {
-  background: var(--gray-light);
+  background: var(--hover-bg);
 }
 
 .viewControls button.active {
-  background: var(--highlight-color);
-  color: var(--main-color);
+  background: var(--tag-bg);
+  color: var(--tag-text);
 }
 
 .fullscreen {
@@ -268,7 +282,7 @@
     min-width: 0;
   }
   .mobileSearchInput::placeholder {
-    color: #888;
+    color: var(--text-muted);
     font-size: 16px;
   }
   .mobileIcons {
@@ -292,8 +306,8 @@
   }
   .mobileIcons button.active,
   .mobileIcons button:focus {
-    background: var(--highlight-color, #FF9900);
-    color: #fff;
+    background: var(--tag-bg);
+    color: var(--tag-text);
   }
   .mobileIcons button:active {
     background: #eee;
@@ -366,8 +380,8 @@
 
 .searchInput:focus {
   outline: none;
-  border-color: var(--highlight-color);
-  background: var(--white);
+  border-color: var(--text-muted);
+  background: var(--main-color);
 }
 
 .searchInput::placeholder {
@@ -406,7 +420,7 @@
 .clusterViewBtn:hover,
 .vectorViewBtn:hover,
 .fullscreenBtn:hover {
-  background: var(--gray-light);
+  background: var(--hover-bg);
 }
 
 .gridViewBtn.active,
@@ -414,16 +428,13 @@
 .clusterViewBtn.active,
 .vectorViewBtn.active,
 .fullscreenBtn.active {
-  background: var(--highlight-color);
-  color: white;
-  border-color: var(--highlight-color);
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-color: var(--border-color);
 }
 
-.canvasContainer canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
+.canvasContainer :global(.mapboxgl-canvas) {
+  outline: none;
 }
 
 .noData {
@@ -453,18 +464,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--text-color);
   font-weight: 500;
 }
 
 .vectorTileNumber {
   font-size: 12px;
   font-weight: 300;
-}
-
-.vectorTile:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .vectorTile.dragging {
@@ -509,13 +515,19 @@
 }
 
 .tag {
-  background: var(--highlight-color);
-  color: white;
+  background: var(--tag-bg);
+  color: var(--tag-text);
   padding: 1px var(--spacing-xs);
   border-radius: 0;
   font-size: 8px;
   font-weight: 500;
   text-transform: lowercase;
+  transition: var(--transition);
+}
+
+.tag:hover {
+  background: var(--hover-bg);
+  color: var(--tag-text);
 }
 
 @media (max-width: 480px) {

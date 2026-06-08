@@ -8,6 +8,10 @@ const {
   getStudent,
   upsertStudent,
   deleteStudent,
+  getMapPins,
+  getMapPin,
+  upsertMapPin,
+  deleteMapPin,
   generateId,
   isUsingMongo,
   getStorageError,
@@ -18,7 +22,7 @@ const { storeImage, streamImage, UPLOAD_ROOT } = require('./media');
 
 const app = express();
 const api = express.Router();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.API_PORT || process.env.PORT || 3001;
 const isProduction = process.env.NODE_ENV === 'production';
 const isVercel = !!process.env.VERCEL;
 
@@ -203,6 +207,11 @@ api.post('/students/:studentId/projects/:projectId/artifacts', requireAuth, asyn
       },
     };
 
+    if (Number.isFinite(req.body.lat) && Number.isFinite(req.body.lng)) {
+      artifact.lat = req.body.lat;
+      artifact.lng = req.body.lng;
+    }
+
     project.artifacts.push(artifact);
     await upsertStudent(student);
     res.status(201).json(artifact);
@@ -222,12 +231,19 @@ api.put('/students/:studentId/projects/:projectId/artifacts/:artifactId', requir
     const index = project.artifacts.findIndex(a => a.artifact_id === req.params.artifactId);
     if (index < 0) return res.status(404).json({ error: 'Artifact not found' });
 
-    project.artifacts[index] = {
+    const updated = {
       ...project.artifacts[index],
       ...req.body,
       artifact_id: req.params.artifactId,
       tags: { ...project.artifacts[index].tags, ...req.body.tags },
     };
+
+    if (!Number.isFinite(updated.lat) || !Number.isFinite(updated.lng)) {
+      delete updated.lat;
+      delete updated.lng;
+    }
+
+    project.artifacts[index] = updated;
 
     await upsertStudent(student);
     res.json(project.artifacts[index]);
@@ -246,6 +262,82 @@ api.delete('/students/:studentId/projects/:projectId/artifacts/:artifactId', req
 
     project.artifacts = project.artifacts.filter(a => a.artifact_id !== req.params.artifactId);
     await upsertStudent(student);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+api.get('/map-pins', async (req, res) => {
+  try {
+    const map_pins = await getMapPins();
+    res.json({ map_pins });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+api.post('/map-pins', requireAuth, async (req, res) => {
+  try {
+    const existing = await getMapPins();
+    const pinId = generateId('pin_', existing.map(p => p.pin_id));
+    const lat = Number(req.body.lat);
+    const lng = Number(req.body.lng);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return res.status(400).json({ error: 'Latitude and longitude are required' });
+    }
+
+    const pin = {
+      pin_id: pinId,
+      title: req.body.title || 'Untitled pin',
+      description: req.body.description || '',
+      lat,
+      lng,
+      file_paths: req.body.file_paths || [],
+    };
+
+    await upsertMapPin(pin);
+    res.status(201).json(pin);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+api.put('/map-pins/:pinId', requireAuth, async (req, res) => {
+  try {
+    const existing = await getMapPin(req.params.pinId);
+    if (!existing) return res.status(404).json({ error: 'Pin not found' });
+
+    const lat = Number(req.body.lat);
+    const lng = Number(req.body.lng);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return res.status(400).json({ error: 'Latitude and longitude are required' });
+    }
+
+    const updated = {
+      ...existing,
+      title: req.body.title ?? existing.title,
+      description: req.body.description ?? existing.description,
+      lat,
+      lng,
+      file_paths: req.body.file_paths ?? existing.file_paths ?? [],
+      pin_id: existing.pin_id,
+    };
+
+    await upsertMapPin(updated);
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+api.delete('/map-pins/:pinId', requireAuth, async (req, res) => {
+  try {
+    const existing = await getMapPin(req.params.pinId);
+    if (!existing) return res.status(404).json({ error: 'Pin not found' });
+    await deleteMapPin(req.params.pinId);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

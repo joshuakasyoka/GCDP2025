@@ -37,12 +37,17 @@
 .mainContent {
   display: grid;
   grid-template-columns: 300px 1fr;
+  grid-template-rows: auto 1fr;
   flex: 1;
   height: calc(100vh - 60px);
   overflow: hidden;
 }
 
 .projectsPanel {
+  --section-padding: var(--spacing-lg);
+  grid-row: 1 / -1;
+  display: grid;
+  grid-template-rows: subgrid;
   padding: var(--spacing-lg);
   border-right: var(--border-width) solid var(--border-color);
   overflow-y: auto;
@@ -51,43 +56,64 @@
 }
 
 .projectsPanel h2 {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 0;
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.1em;
+  box-sizing: border-box;
 }
 
 .projectGrid {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 0;
+  margin-inline: calc(-1 * var(--section-padding));
 }
 
 .projectLink {
   text-decoration: none;
   color: inherit;
   transition: var(--transition);
-}
-
-.projectLink:hover {
-  transform: translateX(4px);
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .projectDetails {
+  --section-padding: var(--spacing-lg);
+  grid-row: 1 / -1;
+  display: grid;
+  grid-template-rows: subgrid;
   padding: var(--spacing-lg);
   overflow-y: auto;
   background: var(--main-color);
+  height: 100%;
+  min-height: 0;
+}
+
+.projectBody {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto auto;
-  gap: var(--spacing-lg);
-  height: 100%;
+  row-gap: 0;
+  column-gap: var(--spacing-lg);
+  min-height: 0;
 }
 
 .projectHeader {
-  grid-column: 1 / -1;
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
   padding-bottom: var(--spacing-lg);
   border-bottom: var(--border-width) solid var(--border-color);
+  box-sizing: border-box;
+}
+
+.projectHeader[aria-hidden="true"] {
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 .projectHeader h2 {
@@ -105,31 +131,43 @@
 
 .projectDescription {
   grid-column: 1 / -1;
-  padding-bottom: var(--spacing-lg);
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
+  padding-block: var(--spacing-lg);
   border-bottom: var(--border-width) solid var(--border-color);
   line-height: 1.6;
   font-size: 14px;
 }
 
-.studentInfo, .artifactsSection {
-  max-height: 260px;
-  min-height: 260px;
-  height: 340px;
+.infoArtifactsRow {
+  grid-column: 1 / -1;
+  margin-inline: calc(-1 * var(--section-padding));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.studentInfo,
+.artifactsSection {
   overflow-y: auto;
+  padding: var(--spacing-md) var(--section-padding);
+  background: var(--main-color);
 }
 
 .studentInfo {
-  padding: var(--spacing-lg);
-  background: var(--white);
-  border: var(--border-width) solid var(--border-color);
-  height: 100%;
+  border-right: var(--border-width) solid var(--border-color);
 }
 
-.studentInfo h3 {
+.studentInfo h3,
+.artifactsSection h3 {
   margin-bottom: var(--spacing-md);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
+}
+
+.artifactsSection h3 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 14px;
 }
 
 .studentDetails {
@@ -139,25 +177,12 @@
   font-size: 13px;
 }
 
-.artifactsSection {
-  padding: var(--spacing-lg);
-  background: var(--white);
-  border: var(--border-width) solid var(--border-color);
-  height: 100%;
-}
-
-.artifactsSection h3 {
-  margin-bottom: var(--spacing-lg);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-}
-
 .projectPhotos {
   grid-column: 1 / -1;
-  padding: var(--spacing-lg);
-  background: var(--white);
-  border: var(--border-width) solid var(--border-color);
+  margin-inline: calc(-1 * var(--section-padding));
+  padding: var(--spacing-md) var(--section-padding);
+  background: var(--main-color);
+  border-top: var(--border-width) solid var(--border-color);
 }
 
 .projectPhotos h3 {
@@ -176,10 +201,6 @@
 .photoItem {
   cursor: pointer;
   transition: var(--transition);
-}
-
-.photoItem:hover {
-  transform: scale(1.02);
 }
 
 .projectPhoto {
@@ -211,7 +232,7 @@
   font-weight: 400;
   margin-bottom: 0.25em;
   line-height: 1.1;
-  color: var(--highlight-color, #D74616);
+  color: var(--text-color);
 }
 
 @media (max-width: 768px) {
@@ -231,15 +252,19 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
-  .projectDetails {
+  .projectBody {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    row-gap: 0;
+    column-gap: var(--spacing-md);
   }
 
-  .studentInfo, .artifactsSection {
-    max-height: none;
-    min-height: unset;
-    height: auto;
+  .infoArtifactsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .studentInfo {
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--border-color);
   }
 
   .photoGrid {

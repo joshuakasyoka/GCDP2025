@@ -1,0 +1,43 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mapFrame {
+  position: relative;
+  height: 280px;
+  border: var(--border-width) solid var(--border-color);
+  background: var(--hover-bg);
+}
+
+.coordsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.coords {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.clearButton {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: var(--main-color);
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.clearButton:hover {
+  background: var(--hover-bg);
+  border-color: var(--border-hover);
+}

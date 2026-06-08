@@ -40,6 +40,9 @@ export const archiveApi = {
     request(`/api/students/${studentId}/projects/${projectId}/artifacts/${artifactId}`, {
       method: 'DELETE',
     }),
+  createMapPin: (data) => request('/api/map-pins', { method: 'POST', body: JSON.stringify(data) }),
+  updateMapPin: (id, data) => request(`/api/map-pins/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteMapPin: (id) => request(`/api/map-pins/${id}`, { method: 'DELETE' }),
   uploadFiles: async (studentId, files) => {
     const formData = new FormData();
     formData.append('studentId', studentId);

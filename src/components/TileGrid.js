@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Tile from './Tile';
+import ArchiveMapView from './ArchiveMapView';
 import styles from '../styles/TileGrid.module.css';
 import createFuzzySearch from '@nozbe/microfuzz';
 import MobileTileGrid from './MobileTileGrid';
@@ -30,7 +31,7 @@ const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFu
             left: 0,
             right: 0,
             bottom: 0,
-            background: priorityOnly ? 'var(--highlight-color)' : '#ccc',
+            background: priorityOnly ? 'var(--highlight-color)' : 'var(--border-color)',
             borderRadius: 14,
             transition: '.2s',
             width: 24,
@@ -70,7 +71,7 @@ const MobileHeader = ({ searchQuery, onSearchChange, viewMode, setViewMode, isFu
       <button
         className={`${styles.vectorViewBtn} ${viewMode === 'vector' ? styles.active : ''}`}
         onClick={() => setViewMode('vector')}
-        aria-label="Vector view"
+        aria-label="Map view"
       >
         □
       </button>
@@ -189,42 +190,8 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
           x = clusterX + (Math.cos(angle) * distance);
           y = clusterY + (Math.sin(angle) * distance);
         } else if (viewMode === 'vector') {
-          // Randomly distribute circles within the visible area (no overlap, all in bounds)
-          const circleRadius = 16; // 32px diameter
-          const margin = 8;
-          const maxAttempts = 100;
-          // Keep a list of placed positions to avoid overlap
-          if (!window._vectorPositions || window._vectorPositions.length !== artifacts.length) {
-            window._vectorPositions = [];
-            for (let i = 0; i < artifacts.length; i++) {
-              let placed = false;
-              let attempts = 0;
-              while (!placed && attempts < maxAttempts) {
-                const x = canvasPadding + circleRadius + Math.random() * (availableWidth - 2 * circleRadius);
-                const y = canvasPadding + circleRadius + Math.random() * (availableHeight - 2 * circleRadius);
-                // Check for overlap
-                const overlap = window._vectorPositions.some(pos => {
-                  const dx = pos.x - x;
-                  const dy = pos.y - y;
-                  return Math.sqrt(dx * dx + dy * dy) < 2 * circleRadius + margin;
-                });
-                if (!overlap) {
-                  window._vectorPositions.push({ x, y });
-                  placed = true;
-                }
-                attempts++;
-              }
-              if (!placed) {
-                // fallback: just place it
-                window._vectorPositions.push({
-                  x: canvasPadding + circleRadius + Math.random() * (availableWidth - 2 * circleRadius),
-                  y: canvasPadding + circleRadius + Math.random() * (availableHeight - 2 * circleRadius)
-                });
-              }
-            }
-          }
-          x = window._vectorPositions[index].x;
-          y = window._vectorPositions[index].y;
+          x = 0;
+          y = 0;
         }
 
         return {
@@ -606,17 +573,6 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
     return 'materials'; // Default to materials if no category match
   };
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Create canvas element if it doesn't exist
-    let canvas = container.querySelector('canvas');
-    if (canvas && canvas.parentNode) {
-      canvas.parentNode.removeChild(canvas);
-    }
-  }, [filteredTiles]);
-
   return (
     <div className={`${styles.tileGrid} ${isFullscreen ? styles.fullscreen : ''}`}>
       {/* Show mobile header on mobile only */}
@@ -675,7 +631,7 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: priorityOnly ? '#2196F3' : '#ccc',
+                background: priorityOnly ? '#2196F3' : 'var(--border-color)',
                 borderRadius: 14,
                 transition: '.2s',
                 width: 24,
@@ -727,9 +683,16 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
       <div className={styles.canvasContainer}>
         <div 
           ref={containerRef} 
-          className={styles.tilesContainer}
+          className={`${styles.tilesContainer} ${viewMode === 'vector' ? styles.tilesContainerMap : ''}`}
         >
-          {filteredTiles.length > 0 ? (
+          {viewMode === 'vector' ? (
+            <div className={styles.mapViewWrap}>
+              <ArchiveMapView
+                artifacts={artifacts}
+                onArtifactClick={handleTileClick}
+              />
+            </div>
+          ) : filteredTiles.length > 0 ? (
             <>
               {viewMode === 'grid' && isMobileDevice() ? (
                 <MobileTileGrid
@@ -741,71 +704,20 @@ const TileGrid = ({ artifacts, onTileClick, sortBy, onSortChange, searchQuery, o
                   handleTileHover={handleTileHover}
                 />
               ) : (
-                filteredTiles.map(tile => {
-                  if (viewMode === 'vector') {
-                    return (
-                      <div
-                        key={tile.id}
-                        className={`${styles.tile} ${styles.vectorTile} ${draggedTile?.id === tile.id ? styles.dragging : ''}`}
-                        style={{
-                          position: 'absolute',
-                          left: tile.x,
-                          top: tile.y,
-                          width: 32,
-                          height: 32,
-                          borderRadius: '50%',
-                          zIndex: tile.zIndex,
-                          cursor: 'pointer',
-                          background: 'var(--highlight-color)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          pointerEvents: 'auto',
-                        }}
-                        onClick={() => handleTileClick(tile.id)}
-                        onMouseEnter={() => handleTileHover(tile.id, true)}
-                        onMouseLeave={() => handleTileHover(tile.id, false)}
-                      >
-                        <span className={styles.vectorTileNumber} style={{ color: '#fff', fontWeight: 600, fontSize: 12 }}>
-                          {tiles.findIndex(t => t.id === tile.id) + 1}
-                        </span>
-                      </div>
-                    );
-                  } else {
-                    // Default (desktop grid, cluster, etc): absolute positioning
-                    return (
-                      <Tile
-                        key={tile.id}
-                        tile={tile}
-                        isDragging={draggedTile && draggedTile.id === tile.id}
-                        isHovered={hoveredTile && hoveredTile.id === tile.id}
-                        onClick={handleTileClick}
-                        onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
-                        style={{ zIndex: tile.zIndex }}
-                        displayTags={getActiveCategory()}
-                        priorityMode={(priorityOnly && (viewMode === 'grid' || viewMode === 'cluster'))}
-                        scrollRoot={containerRef.current}
-                      />
-                    );
-                  }
-                })
-              )}
-              {viewMode === 'vector' && hoveredTile && (
-                <div 
-                  className={styles.floatingTile}
-                  style={{
-                    position: 'absolute',
-                    left: hoveredTile.w + 15,
-                    zIndex: 1000
-                  }}
-                >
+                filteredTiles.map(tile => (
                   <Tile
-                    tile={hoveredTile}
-                    isHovered={true}
-                    onClick={() => handleTileClick(hoveredTile.id)}
-                    onHover={() => {}}
+                    key={tile.id}
+                    tile={tile}
+                    isDragging={draggedTile && draggedTile.id === tile.id}
+                    isHovered={hoveredTile && hoveredTile.id === tile.id}
+                    onClick={handleTileClick}
+                    onHover={(isHovered) => handleTileHover(tile.id, isHovered)}
+                    style={{ zIndex: tile.zIndex }}
+                    displayTags={getActiveCategory()}
+                    priorityMode={(priorityOnly && (viewMode === 'grid' || viewMode === 'cluster'))}
+                    scrollRoot={containerRef.current}
                   />
-                </div>
+                ))
               )}
             </>
           ) : (

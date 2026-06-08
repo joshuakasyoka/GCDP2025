@@ -6,20 +6,21 @@
   z-index: 1;
 }
 
-.tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-
 .dragging {
   transform: rotate(2deg);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   z-index: 1000;
 }
 
+.tile:hover,
 .hovered {
-  border-color: var(--highlight-color);
+  background: var(--hover-bg);
+  border-color: var(--border-hover);
+}
+
+.tile:hover .tileInfo,
+.hovered .tileInfo {
+  border-top-color: var(--border-hover);
 }
 
 .tileContent {
@@ -43,10 +44,6 @@
   height: 100%;
   object-fit: cover;
   transition: var(--transition);
-}
-
-.tile:hover .tileImage img {
-  transform: scale(1.05);
 }
 
 .placeholder {
@@ -91,13 +88,19 @@
 }
 
 .tag {
-  background: var(--highlight-color);
-  color: white;
+  background: var(--tag-bg);
+  color: var(--tag-text);
   padding: 1px 4px;
   border-radius: 0;
   font-size: 8px;
   font-weight: 500;
   text-transform: lowercase;
+  transition: var(--transition);
+}
+
+.tag:hover {
+  background: var(--hover-bg);
+  color: var(--tag-text);
 }
 
 @media (max-width: 768px) {

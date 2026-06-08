@@ -1,7 +1,7 @@
 .glossaryPage {
   min-height: 100vh;
   padding: 2rem;
-  background-color: #f5f5f5;
+  background-color: var(--main-color);
 }
 
 .header {
@@ -15,14 +15,14 @@
 }
 
 .backLink {
-  color: #666;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.2s;
+  transition: var(--transition);
 }
 
 .backLink:hover {
-  color: #000;
+  color: var(--highlight-color);
 }
 
 .content {
@@ -42,20 +42,18 @@
 }
 
 .category:hover {
-    /* background: rgba(240, 240, 240, 0.8); */
-    filter: blur(0);
-    transform: translateY(-1px);
-  } 
+  filter: blur(0);
+  background: var(--hover-bg);
+}
 
 .category h2 {
   margin: 0 0 1rem 0;
   font-size: 1.rem;
-  color: #333;
-  
+  color: var(--text-color);
 }
 
 .description {
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -68,16 +66,15 @@
 }
 
 .tag {
-  background: #f0f0f0;
+  background: var(--tag-bg);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  color: #333;
-  outline: 0.5px solid rgba(0, 0, 0, 0.2);
+  color: var(--tag-text);
+  border: var(--border-width) solid var(--border-color);
 }
 
 .tag:hover {
-  background: rgba(240, 240, 240, 0.8);
+  background: var(--hover-bg);
+  color: var(--tag-text);
   filter: blur(0);
-  transform: translateY(-1px);
-  outline: 0.5px solid rgba(0, 0, 0, 0.4);
 } 

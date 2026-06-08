@@ -117,6 +117,7 @@
 }
 
 .metadataSection {
+  --section-padding: var(--spacing-xl);
   padding: var(--spacing-xl);
   overflow-y: auto;
   border-left: var(--border-width) solid var(--border-color);
@@ -191,22 +192,25 @@
 }
 
 .tag {
-  background: #e0e0e0;
-  color: #333;
+  background: var(--tag-bg);
+  color: var(--tag-text);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 0px;
   font-size: 10px;
   font-weight: 500;
   text-transform: lowercase;
+  transition: var(--transition);
 }
 
 .tag:hover {
-  background: var(--highlight-color);
-  color: white;
+  background: var(--hover-bg);
+  color: var(--tag-text);
   cursor: pointer;
 }
 
 .metadata {
+  margin-inline: calc(-1 * var(--section-padding));
+  padding-inline: var(--section-padding);
   border-top: var(--border-width) solid var(--border-color);
   padding-top: var(--spacing-lg);
 }
@@ -224,16 +228,16 @@
 }
 
 .studentLink {
-  color: var(--highlight-color, #D74616);
+  color: var(--text-color);
   font-weight: 500;
   font-size: 1.1em;
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: var(--transition);
 }
 
 .studentLink:hover {
-  color: #b32c0b;
+  color: var(--highlight-color);
 }
 
 @media (max-width: 1024px) {

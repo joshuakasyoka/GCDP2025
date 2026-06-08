@@ -1,14 +1,29 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --highlight-color: #D74616;
-  --main-color: #ffffff;
+  /* Text */
   --text-color: #000000;
+  --text-muted: #767676;
+
+  /* Interactive accent — link hovers, focus rings */
+  --highlight-color: var(--text-muted);
+
+  /* Surfaces */
+  --main-color: #ffffff;
+  --hover-bg: #f8f8f8;
+
+  /* Lines & chips */
   --border-color: #e5e5e5;
-  --gray-light: #f8f8f8;
-  --gray-medium: #cccccc;
+  --border-hover: #cccccc;
+  --tag-bg: #e5e5e5;
+  --tag-text: #333333;
+
+  /* Legacy aliases */
+  --gray-light: var(--hover-bg);
+  --gray-medium: var(--text-muted);
+
   --transition: 300ms ease;
-  --border-width: 0.5px;
+  --border-width: 1pt;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -24,7 +39,7 @@
   --gray-light: #B6BBBA;
   --gray-medium: #cccccc;
   --transition: 300ms ease;
-  --border-width: 0.5px;
+  --border-width: 1pt;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -39,7 +54,7 @@
 }
 
 body {
-  font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text-color);
   background-color: var(--main-color);
   line-height: 1.6;
@@ -71,6 +86,12 @@ h4 { font-size: 12px; }
   border: var(--border-width) solid var(--border-color);
 }
 
+/* Extend dividers edge-to-edge inside padded containers */
+.fullWidthDivider {
+  margin-inline: calc(-1 * var(--section-padding, var(--spacing-lg)));
+  padding-inline: var(--section-padding, var(--spacing-lg));
+}
+
 .transition {
   transition: var(--transition);
 }
@@ -86,10 +107,6 @@ button {
   border: none;
   background: none;
   transition: var(--transition);
-}
-
-button:hover {
-  opacity: 0.7;
 }
 
 /* Links */

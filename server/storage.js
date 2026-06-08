@@ -6,6 +6,7 @@ const isVercel = !!process.env.VERCEL;
 
 let useMongo = false;
 let StudentModel = null;
+let MapPinModel = null;
 let storageError = null;
 
 const VERCEL_MONGO_MSG =
@@ -13,9 +14,10 @@ const VERCEL_MONGO_MSG =
 
 function readFileData() {
   if (!fs.existsSync(DATA_PATH)) {
-    return { students: [] };
+    return { students: [], map_pins: [] };
   }
-  return JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+  return { students: data.students || [], map_pins: data.map_pins || [] };
 }
 
 function writeFileData(data) {
@@ -39,8 +41,9 @@ async function initStorage() {
 
     if (mongoose.models.Student) {
       StudentModel = mongoose.models.Student;
+      MapPinModel = mongoose.models.MapPin || null;
       useMongo = true;
-      return;
+      if (MapPinModel) return;
     }
 
     if (!global._mongoosePromise) {
@@ -71,6 +74,8 @@ async function initStorage() {
       creation_date: String,
       w: Number,
       h: Number,
+      lat: Number,
+      lng: Number,
       priority: Boolean,
       tags: artifactTagsSchema,
     }, { _id: false });
@@ -107,12 +112,30 @@ async function initStorage() {
 
     StudentModel = mongoose.model('Student', studentSchema);
 
+    if (!mongoose.models.MapPin) {
+      const mapPinSchema = new mongoose.Schema({
+        pin_id: { type: String, unique: true },
+        title: String,
+        description: String,
+        lat: Number,
+        lng: Number,
+        file_paths: [String],
+      });
+      MapPinModel = mongoose.model('MapPin', mapPinSchema);
+    } else {
+      MapPinModel = mongoose.models.MapPin;
+    }
+
     const count = await StudentModel.countDocuments();
     if (count === 0 && fs.existsSync(DATA_PATH)) {
       const seed = readFileData();
       if (seed.students?.length) {
         await StudentModel.insertMany(seed.students);
         console.log(`Seeded MongoDB with ${seed.students.length} students`);
+      }
+      if (seed.map_pins?.length) {
+        await MapPinModel.insertMany(seed.map_pins);
+        console.log(`Seeded MongoDB with ${seed.map_pins.length} map pins`);
       }
     }
 
@@ -121,6 +144,7 @@ async function initStorage() {
     console.error('MongoDB connection failed:', err.message);
     useMongo = false;
     StudentModel = null;
+    MapPinModel = null;
     storageError = new Error(
       isVercel
         ? `${VERCEL_MONGO_MSG} (${err.message})`
@@ -139,9 +163,53 @@ function ensureWritable() {
 async function getAllStudents() {
   if (useMongo && StudentModel) {
     const students = await StudentModel.find().lean();
-    return { students };
+    const map_pins = MapPinModel ? await MapPinModel.find().lean() : [];
+    return { students, map_pins };
   }
   return readFileData();
+}
+
+async function getMapPins() {
+  if (useMongo && MapPinModel) {
+    return MapPinModel.find().lean();
+  }
+  return readFileData().map_pins;
+}
+
+async function getMapPin(pinId) {
+  const pins = await getMapPins();
+  return pins.find(p => p.pin_id === pinId) || null;
+}
+
+async function upsertMapPin(pin) {
+  if (useMongo && MapPinModel) {
+    await MapPinModel.findOneAndUpdate({ pin_id: pin.pin_id }, pin, { upsert: true, new: true });
+    return pin;
+  }
+  if (useMongo && !MapPinModel) {
+    throw new Error('Map pin storage is not initialized');
+  }
+  ensureWritable();
+  const data = readFileData();
+  const index = data.map_pins.findIndex(p => p.pin_id === pin.pin_id);
+  if (index >= 0) {
+    data.map_pins[index] = pin;
+  } else {
+    data.map_pins.push(pin);
+  }
+  writeFileData(data);
+  return pin;
+}
+
+async function deleteMapPin(pinId) {
+  if (useMongo && MapPinModel) {
+    await MapPinModel.deleteOne({ pin_id: pinId });
+    return;
+  }
+  ensureWritable();
+  const data = readFileData();
+  data.map_pins = data.map_pins.filter(p => p.pin_id !== pinId);
+  writeFileData(data);
 }
 
 async function saveAllStudents(data) {
@@ -203,6 +271,10 @@ module.exports = {
   getStudent,
   upsertStudent,
   deleteStudent,
+  getMapPins,
+  getMapPin,
+  upsertMapPin,
+  deleteMapPin,
   generateId,
   isUsingMongo,
   getStorageError,

@@ -3,6 +3,7 @@ import { useArchiveData } from '../contexts/ArchiveDataContext';
 import { archiveApi } from '../services/archiveApi';
 import { tagCategories, artifactTypes } from '../data/tagCategories';
 import FileUpload from './FileUpload';
+import CmsMapPicker from './CmsMapPicker';
 import styles from '../styles/Edit.module.css';
 
 const DEFAULT_YEARS = [2026, 2025];
@@ -42,8 +43,56 @@ const emptyArtifactForm = {
   file_paths: '',
   w: 180,
   h: 130,
+  lat: '',
+  lng: '',
   priority: false,
   tags: { themes: [], design_as: [], materials: [], methods: [], collaborators: [] },
+};
+
+const emptyPinForm = {
+  title: '',
+  description: '',
+  lat: '',
+  lng: '',
+  file_paths: '',
+};
+
+const buildMapPinPayload = (form) => ({
+  title: form.title,
+  description: form.description,
+  lat: Number(form.lat),
+  lng: Number(form.lng),
+  file_paths: typeof form.file_paths === 'string'
+    ? form.file_paths.split(',').map(s => s.trim()).filter(Boolean)
+    : form.file_paths || [],
+});
+
+const buildArtifactPayload = (form) => {
+  const lat = form.lat === '' || form.lat === null || form.lat === undefined
+    ? null
+    : Number(form.lat);
+  const lng = form.lng === '' || form.lng === null || form.lng === undefined
+    ? null
+    : Number(form.lng);
+
+  const payload = {
+    ...form,
+    file_paths: typeof form.file_paths === 'string'
+      ? form.file_paths.split(',').map(s => s.trim()).filter(Boolean)
+      : form.file_paths,
+    w: Number(form.w),
+    h: Number(form.h),
+  };
+
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    payload.lat = lat;
+    payload.lng = lng;
+  } else {
+    payload.lat = null;
+    payload.lng = null;
+  }
+
+  return payload;
 };
 
 function TagSelector({ categoryKey, selected, onChange }) {
@@ -96,10 +145,13 @@ function TagSelector({ categoryKey, selected, onChange }) {
 const EditPage = () => {
   const { data, loading, source, refresh } = useArchiveData();
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedPinId, setSelectedPinId] = useState(null);
   const [expandedArtifact, setExpandedArtifact] = useState(null);
   const [showNewStudent, setShowNewStudent] = useState(false);
+  const [showNewPin, setShowNewPin] = useState(false);
   const [showNewArtifact, setShowNewArtifact] = useState(false);
   const [studentForm, setStudentForm] = useState(emptyStudentForm);
+  const [pinForm, setPinForm] = useState(emptyPinForm);
   const [artifactForm, setArtifactForm] = useState(emptyArtifactForm);
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
@@ -111,8 +163,30 @@ const EditPage = () => {
   );
 
   const students = data.students || [];
+  const mapPins = data.map_pins || [];
   const yearGroups = buildYearGroups(students, extraYears);
   const selected = students.find(s => s.student_id === selectedId);
+  const selectedPin = mapPins.find(p => p.pin_id === selectedPinId);
+
+  const clearSelection = () => {
+    setSelectedId(null);
+    setSelectedPinId(null);
+    setShowNewStudent(false);
+    setShowNewPin(false);
+    setShowNewArtifact(false);
+  };
+
+  useEffect(() => {
+    if (selectedPin) {
+      setPinForm({
+        title: selectedPin.title || '',
+        description: selectedPin.description || '',
+        lat: selectedPin.lat ?? '',
+        lng: selectedPin.lng ?? '',
+        file_paths: (selectedPin.file_paths || []).join(', '),
+      });
+    }
+  }, [selectedPin]);
 
   useEffect(() => {
     if (selected) {
@@ -263,12 +337,7 @@ const EditPage = () => {
     setSaving(true);
     setStatus('');
     try {
-      await archiveApi.createArtifact(selected.student_id, project.project_id, {
-        ...artifactForm,
-        file_paths: artifactForm.file_paths.split(',').map(s => s.trim()).filter(Boolean),
-        w: Number(artifactForm.w),
-        h: Number(artifactForm.h),
-      });
+      await archiveApi.createArtifact(selected.student_id, project.project_id, buildArtifactPayload(artifactForm));
       await refresh();
       setShowNewArtifact(false);
       setArtifactForm(emptyArtifactForm);
@@ -309,6 +378,56 @@ const EditPage = () => {
     }
   };
 
+  const handleCreatePin = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setStatus('');
+    try {
+      const created = await archiveApi.createMapPin(buildMapPinPayload(pinForm));
+      await refresh();
+      setShowNewPin(false);
+      setSelectedPinId(created.pin_id);
+      setStatus('Pin created');
+    } catch (err) {
+      setStatus(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSavePin = async (e) => {
+    e.preventDefault();
+    if (!selectedPin) return;
+    setSaving(true);
+    setStatus('');
+    try {
+      await archiveApi.updateMapPin(selectedPin.pin_id, buildMapPinPayload(pinForm));
+      await refresh();
+      setStatus('Pin saved');
+    } catch (err) {
+      setStatus(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeletePin = async () => {
+    if (!selectedPin || !window.confirm(`Delete pin "${selectedPin.title}"?`)) return;
+    setSaving(true);
+    setStatus('');
+    try {
+      await archiveApi.deleteMapPin(selectedPin.pin_id);
+      await refresh();
+      setSelectedPinId(null);
+      setPinForm(emptyPinForm);
+      setStatus('Pin deleted');
+    } catch (err) {
+      setStatus(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className={styles.editPage}>
       <header className={styles.header}>
@@ -335,13 +454,44 @@ const EditPage = () => {
           <button
             type="button"
             className={styles.addButton}
-            onClick={() => { setShowNewStudent(true); setSelectedId(null); }}
+            onClick={() => { clearSelection(); setShowNewStudent(true); }}
           >
             + New student
           </button>
           <button type="button" className={styles.addButton} onClick={handleAddYear}>
             + Add year
           </button>
+          <button
+            type="button"
+            className={styles.addButton}
+            onClick={() => { clearSelection(); setShowNewPin(true); setPinForm(emptyPinForm); }}
+          >
+            + New pin
+          </button>
+          <h2>MAP PINS</h2>
+          {mapPins.length === 0 ? (
+            <p className={styles.yearEmpty}>No map pins yet</p>
+          ) : (
+            <ul className={styles.studentList}>
+              {mapPins.map(pin => (
+                <li key={pin.pin_id}>
+                  <button
+                    type="button"
+                    className={`${styles.studentButton} ${selectedPinId === pin.pin_id ? styles.studentButtonActive : ''}`}
+                    onClick={() => {
+                      setSelectedId(null);
+                      setShowNewStudent(false);
+                      setShowNewPin(false);
+                      setShowNewArtifact(false);
+                      setSelectedPinId(pin.pin_id);
+                    }}
+                  >
+                    <span>{pin.title}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
           <h2>STUDENTS</h2>
           {yearGroups.map(year => {
             const yearStudents = students
@@ -372,7 +522,13 @@ const EditPage = () => {
                         <button
                           type="button"
                           className={`${styles.studentButton} ${selectedId === student.student_id ? styles.studentButtonActive : ''}`}
-                          onClick={() => { setSelectedId(student.student_id); setShowNewStudent(false); setShowNewArtifact(false); }}
+                          onClick={() => {
+                            setSelectedId(student.student_id);
+                            setSelectedPinId(null);
+                            setShowNewStudent(false);
+                            setShowNewPin(false);
+                            setShowNewArtifact(false);
+                          }}
                         >
                           <span>{student.name.display_name}</span>
                           <span className={styles.artifactCount}>{artifactCount(student)}</span>
@@ -454,7 +610,35 @@ const EditPage = () => {
             </div>
           )}
 
-          {!showNewStudent && selected && (
+          {showNewPin && (
+            <div className={styles.panel}>
+              <h2>NEW MAP PIN</h2>
+              <form onSubmit={handleCreatePin}>
+                <PinFields form={pinForm} setForm={setPinForm} />
+                <div className={styles.actions}>
+                  <button type="submit" className={styles.saveButton} disabled={saving}>
+                    {saving ? 'Creating…' : 'Create pin'}
+                  </button>
+                  <button type="button" className={styles.deleteButton} onClick={() => setShowNewPin(false)}>Cancel</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {!showNewStudent && !showNewPin && selectedPin && (
+            <div className={styles.panel}>
+              <h2>{selectedPin.title.toUpperCase()}</h2>
+              <form onSubmit={handleSavePin}>
+                <PinFields form={pinForm} setForm={setPinForm} />
+                <div className={styles.actions}>
+                  <button type="submit" className={styles.saveButton} disabled={saving}>Save pin</button>
+                  <button type="button" className={styles.deleteButton} onClick={handleDeletePin}>Delete pin</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {!showNewStudent && !showNewPin && selected && (
             <div className={styles.panel}>
               <h2>{selected.name.display_name.toUpperCase()}</h2>
               <form onSubmit={handleSaveStudent}>
@@ -568,8 +752,8 @@ const EditPage = () => {
             </div>
           )}
 
-          {!showNewStudent && !selected && (
-            <p className={styles.empty}>Select a student or create a new profile.</p>
+          {!showNewStudent && !showNewPin && !selected && !selectedPin && (
+            <p className={styles.empty}>Select a student or map pin, or create a new one.</p>
           )}
 
           {status && <p className={styles.status}>{status}</p>}
@@ -578,6 +762,58 @@ const EditPage = () => {
     </div>
   );
 };
+
+function PinFields({ form, setForm }) {
+  return (
+    <>
+      <div className={styles.formGroup}>
+        <label>Title</label>
+        <input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} required />
+      </div>
+      <div className={styles.formGroup}>
+        <label>Description</label>
+        <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+      </div>
+      <FileUpload
+        studentId="map-pins"
+        value={form.file_paths}
+        onChange={(paths) => setForm(f => ({ ...f, file_paths: paths }))}
+        label="Pin image"
+      />
+      <div className={styles.formGroup}>
+        <label>Map location</label>
+        <CmsMapPicker
+          lat={form.lat}
+          lng={form.lng}
+          title={form.title}
+          onChange={({ lat, lng }) => setForm(f => ({ ...f, lat, lng }))}
+        />
+        <div className={styles.formRow}>
+          <div className={styles.formGroup}>
+            <label>Latitude</label>
+            <input
+              type="number"
+              step="any"
+              value={form.lat ?? ''}
+              onChange={e => setForm(f => ({ ...f, lat: e.target.value }))}
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Longitude</label>
+            <input
+              type="number"
+              step="any"
+              value={form.lng ?? ''}
+              onChange={e => setForm(f => ({ ...f, lng: e.target.value }))}
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 function ArtifactFields({ form, setForm, studentId }) {
   const setTags = (key, tags) => {
@@ -625,6 +861,37 @@ function ArtifactFields({ form, setForm, studentId }) {
         />
         <label htmlFor="priority">Priority (featured in archive)</label>
       </div>
+      <div className={styles.formGroup}>
+        <label>Map pin</label>
+        <CmsMapPicker
+          lat={form.lat}
+          lng={form.lng}
+          title={form.title}
+          onChange={({ lat, lng }) => setForm(f => ({ ...f, lat, lng }))}
+        />
+        <div className={styles.formRow}>
+          <div className={styles.formGroup}>
+            <label>Latitude</label>
+            <input
+              type="number"
+              step="any"
+              placeholder="51.4988"
+              value={form.lat ?? ''}
+              onChange={e => setForm(f => ({ ...f, lat: e.target.value }))}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Longitude</label>
+            <input
+              type="number"
+              step="any"
+              placeholder="-0.1749"
+              value={form.lng ?? ''}
+              onChange={e => setForm(f => ({ ...f, lng: e.target.value }))}
+            />
+          </div>
+        </div>
+      </div>
       {tagCategories.map(cat => (
         <TagSelector
           key={cat.key}
@@ -641,6 +908,8 @@ function ArtifactEditor({ artifact, projectId, studentId, onSave, onDelete, savi
   const [form, setForm] = useState({
     ...artifact,
     file_paths: (artifact.file_paths || []).join(', '),
+    lat: artifact.lat ?? '',
+    lng: artifact.lng ?? '',
     tags: {
       themes: artifact.tags?.themes || [],
       design_as: artifact.tags?.design_as || [],
@@ -652,12 +921,7 @@ function ArtifactEditor({ artifact, projectId, studentId, onSave, onDelete, savi
 
   const handleSave = (e) => {
     e.preventDefault();
-    onSave(studentId, projectId, {
-      ...form,
-      file_paths: form.file_paths.split(',').map(s => s.trim()).filter(Boolean),
-      w: Number(form.w),
-      h: Number(form.h),
-    });
+    onSave(studentId, projectId, buildArtifactPayload(form));
   };
 
   return (

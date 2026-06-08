@@ -12,12 +12,16 @@ export function ArchiveDataProvider({ children }) {
   const refresh = useCallback(async () => {
     try {
       const result = await archiveApi.getStudents();
-      if (result.students?.length) {
-        setData(result);
-        setSource('api');
-      }
+      setData({
+        students: result.students || staticData.students || [],
+        map_pins: result.map_pins || staticData.map_pins || [],
+      });
+      setSource('api');
     } catch {
-      setData(staticData);
+      setData({
+        students: staticData.students || [],
+        map_pins: staticData.map_pins || [],
+      });
       setSource('static');
     } finally {
       setLoading(false);
