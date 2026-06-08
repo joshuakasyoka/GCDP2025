@@ -106,7 +106,9 @@ const EditPage = () => {
   const [extraYears, setExtraYears] = useState([]);
   const [draggingId, setDraggingId] = useState(null);
   const [dropTargetYear, setDropTargetYear] = useState(null);
-  const [apiKeyInput, setApiKeyInput] = useState(sessionStorage.getItem('cms_api_key') || '');
+  const [apiKeyInput, setApiKeyInput] = useState(
+    sessionStorage.getItem('cms_api_key') || process.env.REACT_APP_CMS_API_KEY || ''
+  );
 
   const students = data.students || [];
   const yearGroups = buildYearGroups(students, extraYears);
