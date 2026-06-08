@@ -89,10 +89,34 @@ async function streamImage(fileId, res) {
   }
 
   const file = files[0];
-  res.set('Content-Type', file.metadata?.contentType || 'application/octet-stream');
-  res.set('Cache-Control', 'public, max-age=31536000, immutable');
+  const maxServeBytes = 4 * 1024 * 1024;
 
-  bucket.openDownloadStream(objectId).pipe(res);
+  if (file.length <= maxServeBytes) {
+    res.set('Content-Type', file.metadata?.contentType || 'application/octet-stream');
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    bucket.openDownloadStream(objectId).pipe(res);
+    return;
+  }
+
+  const chunks = [];
+  const stream = bucket.openDownloadStream(objectId);
+  stream.on('data', (chunk) => chunks.push(chunk));
+  stream.on('error', () => res.status(500).json({ error: 'Failed to read image' }));
+  stream.on('end', async () => {
+    try {
+      const buffer = Buffer.concat(chunks);
+      const { prepareImageForStorage } = require('./compressImage');
+      const { buffer: compressed, contentType } = await prepareImageForStorage(
+        buffer,
+        file.metadata?.contentType || 'image/jpeg'
+      );
+      res.set('Content-Type', contentType);
+      res.set('Cache-Control', 'public, max-age=31536000, immutable');
+      res.send(compressed);
+    } catch (err) {
+      res.status(413).json({ error: 'Image too large to display. Re-upload a smaller file.' });
+    }
+  });
 }
 
 module.exports = { storeImage, streamImage, UPLOAD_ROOT };

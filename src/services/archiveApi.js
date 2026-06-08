@@ -52,8 +52,17 @@ export const archiveApi = {
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: res.statusText }));
-      throw new Error(err.error || 'Upload failed');
+      const text = await res.text();
+      let message = res.statusText;
+      try {
+        message = JSON.parse(text).error || message;
+      } catch {
+        if (text) message = text.slice(0, 120);
+      }
+      if (res.status === 413) {
+        message = 'File too large for server (max ~4MB). Image will be compressed automatically — try again.';
+      }
+      throw new Error(message);
     }
     return res.json();
   },

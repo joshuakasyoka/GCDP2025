@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { archiveApi } from '../services/archiveApi';
+import { compressImageFile } from '../utils/compressImageClient';
 import styles from '../styles/FileUpload.module.css';
 
 function parsePaths(value) {
@@ -26,10 +27,13 @@ const FileUpload = ({ studentId, value, onChange, label = 'Images' }) => {
     setUploading(true);
     setError('');
     try {
-      const { urls } = await archiveApi.uploadFiles(studentId, files);
+      const compressed = await Promise.all([...files].map(compressImageFile));
+      const { urls } = await archiveApi.uploadFiles(studentId, compressed);
       onChange([...paths, ...urls].join(', '));
     } catch (err) {
-      setError(err.message);
+      setError(err.message.includes('413') || err.message.includes('Too Large')
+        ? 'Image too large — try a smaller file or take a screenshot at lower resolution'
+        : err.message);
     } finally {
       setUploading(false);
     }
