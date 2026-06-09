@@ -85,7 +85,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-family);
   font-size: 18px;
   font-weight: 500;
   line-height: 1;

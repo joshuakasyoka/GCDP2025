@@ -469,7 +469,7 @@ const EditPage = () => {
             + New pin
           </button>
           <h2>MAP PINS</h2>
-          <div className={styles.yearSection}>
+          <div className={`${styles.yearSection} ${styles.pinSection}`}>
             {mapPins.length === 0 ? (
               <p className={styles.yearEmpty}>No map pins yet</p>
             ) : (

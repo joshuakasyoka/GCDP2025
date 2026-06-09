@@ -66,7 +66,7 @@ const ArchivePage = () => {
         {isMobile ? (
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-              <h1 style={{ margin: 0 }}>MOSA</h1>
+              <h1 style={{ margin: 0 }}>MA GCDP ARCHIVE</h1>
               <button
                 className={styles.initials}
                 onClick={() => {
@@ -90,7 +90,7 @@ const ArchivePage = () => {
           <>
             <div className={styles.headerLeft}>
               <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <h1>MATERIALS OF SOFT ACTIVISM</h1>
+                <h1>MA GCDP ARCHIVE</h1>
               </Link>
               <button
                 className={styles.initials}
